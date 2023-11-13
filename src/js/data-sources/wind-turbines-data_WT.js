@@ -1,6 +1,7 @@
 const DataSource = require("../data-source");
 const { allDistancesToTileType } = require("../lib/distance");
 const { getTileTypeId } = require("../lib/config-helpers");
+const Array2D = require("../lib/array-2d");
 //const { regionAreas } = require("../lib/regions");
 
 class WindTurbinesData extends DataSource {
@@ -9,8 +10,10 @@ class WindTurbinesData extends DataSource {
     this.city = city;
     this.config = config;
 
-    // This arrays will contain a 16 x 16 raster of the distance values from any raster cell to
-    // and other data types (water, road, residential area, wind turbines small and big).
+    // (This arrays will contain a 16 x 16 raster of the distance values from any raster cell to
+    // and other data types (water, road, residential area, wind turbines small and big).)
+    // I don't think the lines above are correct, cause the array just saves positive distance values,
+    // like just the distances from all residential tiles to one Wind Turbine
     this.proximitiesSmallWaterRoad = [];
     this.proximitiesBigWaterRoad = [];
     this.proximitiesSmallResidential = [];
@@ -127,14 +130,22 @@ class WindTurbinesData extends DataSource {
     this.proximitiesSmallWaterRoad = [];
     this.city.map.allCells().forEach(([x, y, tile]) => {
       if (tile === windTurbineSmallId) {
-        this.proximitiesSmallWaterRoad.push(distancesWaterRoad[y][x]);
+        // this.proximitiesSmallWaterRoad will look like this [distance, [x, y]]
+        this.proximitiesSmallWaterRoad.push([
+          distancesWaterRoad[y][x], // saves the distances from all water/road tiles to one small wt
+          [x, y], // saves the locations of the water/road tiles
+        ]);
       }
     });
     // Distance between big wind turbines and water / roads
     this.proximitiesBigWaterRoad = [];
     this.city.map.allCells().forEach(([x, y, tile]) => {
       if (tile === windTurbineBigId) {
-        this.proximitiesBigWaterRoad.push(distancesWaterRoad[y][x]);
+        // this.proximitiesBigWaterRoad will look like this [distance, [x, y]]
+        this.proximitiesBigWaterRoad.push([
+          distancesWaterRoad[y][x], // saves the distances from all water/road tiles to one big wt
+          [x, y], // saves the locations of the water/road tiles
+        ]);
       }
     });
 
@@ -142,14 +153,23 @@ class WindTurbinesData extends DataSource {
     this.proximitiesSmallResidential = [];
     this.city.map.allCells().forEach(([x, y, tile]) => {
       if (tile === windTurbineSmallId) {
-        this.proximitiesSmallResidential.push(distancesResidential[y][x]);
+        // this.proximitiesSmallResidential will look like this [distance, [x, y]]
+        this.proximitiesSmallResidential.push([
+          distancesResidential[y][x], // saves the distances from all residential tiles to one wt
+          [x, y], // saves the locations of the residential tiles
+        ]);
+        console.log(this.proximitiesSmallResidential);
       }
     });
     // Distance between big wind turbines and residentials
     this.proximitiesBigResidential = [];
     this.city.map.allCells().forEach(([x, y, tile]) => {
       if (tile === windTurbineBigId) {
-        this.proximitiesBigResidential.push(distancesResidential[y][x]);
+        // this.proximitiesBigResidential will look like this [distance, [x, y]]
+        this.proximitiesBigResidential.push([
+          distancesResidential[y][x], // saves the distances from all residential tiles to one big wt
+          [x, y], // saves the locations of the residential tiles
+        ]);
       }
     });
 
@@ -194,7 +214,15 @@ class WindTurbinesData extends DataSource {
     this.numWaterRoadsTooClose = 0;
     this.numWindTurbinesTooClose = false;
 
-    this.proximitiesSmallWaterRoad.forEach((distance) => {
+    // This creates a 16x16 matrix, in which the locations of the windturbines,
+    // which do not fullfill the set goals. e.g. if one wind turbine tile is too close
+    // to a residential tile, the coordinates of the windturbine will be saved.
+    const locationsGoalsError = Array2D.create(16, 16, 0);
+
+    this.proximitiesSmallWaterRoad.forEach((distanceAndLocation) => {
+      let distance = distanceAndLocation[0]; //saves the surrent distance
+      let x = distanceAndLocation[1][0];
+      let y = distanceAndLocation[1][1];
       if (distance <= this.wtSmallWaterRoadsDist) {
         // distance <= 1
         if (this.wtSmallWaterRoadsDist > 1) {
@@ -205,15 +233,21 @@ class WindTurbinesData extends DataSource {
           } else {
             // distance < 2
             this.numWaterRoadsTooClose += 1;
+            locationsGoalsError[y][x] = 1;
           }
         } else {
           this.numWaterRoadsTooClose += 1;
+          locationsGoalsError[y][x] = 1;
         }
         this.numWaterRoadsTooClose += 1;
+        locationsGoalsError[y][x] = 1;
       }
     });
     // Goal: > 2; Goodwill: == 2; Bad: <= 2-1
-    this.proximitiesBigWaterRoad.forEach((distance) => {
+    this.proximitiesBigWaterRoad.forEach((distanceAndLocation) => {
+      let distance = distanceAndLocation[0];
+      let x = distanceAndLocation[1][0];
+      let y = distanceAndLocation[1][1];
       if (distance <= this.wtBigWaterRoadsDist) {
         // distance <= 2
         if (this.wtBigWaterRoadsDist > 1) {
@@ -223,14 +257,19 @@ class WindTurbinesData extends DataSource {
           } else {
             // distance < 2
             this.numWaterRoadsTooClose += 1;
+            locationsGoalsError[y][x] = 1;
           }
         } else {
           this.numWaterRoadsTooClose += 1;
+          locationsGoalsError[y][x] = 1;
         }
       }
     });
 
-    this.proximitiesSmallResidential.forEach((distance) => {
+    this.proximitiesSmallResidential.forEach((distanceAndLocation) => {
+      let distance = distanceAndLocation[0];
+      let x = distanceAndLocation[1][0];
+      let y = distanceAndLocation[1][1];
       if (distance <= this.wtSmallResidentialsDist) {
         // distance <= 2
         if (this.wtSmallResidentialsDist > 1) {
@@ -240,15 +279,22 @@ class WindTurbinesData extends DataSource {
           } else {
             // distance < 2
             this.numResidentialsTooClose += 1;
+            locationsGoalsError[y][x] = 1;
+            console.log(locationsGoalsError);
           }
         } else {
           this.numResidentialsTooClose += 1;
+          locationsGoalsError[y][x] = 1;
+          console.log(locationsGoalsError);
         }
       }
     });
-    this.proximitiesBigResidential.forEach((distance) => {
+    this.proximitiesBigResidential.forEach((distanceAndLocation) => {
+      let distance = distanceAndLocation[0];
+      let x = distanceAndLocation[1][0];
+      let y = distanceAndLocation[1][1];
       // In case the amount of big wind turbines that are closer or equal to a fixed value (3)
-      // is bigger than than, it will be differentiated, if it is equal or higher than the same
+      // is bigger than that, it will be differentiated, if it is equal or higher than the same
       // fixed value (3).
       // If it is equal, it will counted as only one violation which will be counted as "acceptable with goodwill".
       if (distance <= this.wtBigResidentialsDist) {
@@ -260,13 +306,14 @@ class WindTurbinesData extends DataSource {
           } else {
             // distance < 3
             this.numResidentialsTooClose += 1;
+            locationsGoalsError[y][x] = 1;
           }
         } else {
           this.numResidentialsTooClose += 1;
+          locationsGoalsError[y][x] = 1;
         }
       }
     });
-
     if (
       this.proximitiesSmallWindTurbines.includes(false) ||
       this.proximitiesBigWindTurbines.includes(false)
