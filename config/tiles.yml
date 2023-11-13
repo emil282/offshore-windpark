@@ -32,3 +32,9 @@ tileTypes:
     name: Wind Turbine Big
     color: "#cfd1c2"
     editorIcon: "static/fa/wind-power-big.svg"
+  6:
+    type: BorderWindTurbineBig
+    name: Border Wind Turbine Big
+  7:
+    type: BorderWindTurbineSmall
+    name: Border Wind Turbine Small

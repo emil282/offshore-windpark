@@ -10,31 +10,33 @@ class MapEditorPalette {
 
     this.$element.addClass("map-editor-palette");
 
-    this.buttons = Object.entries(config.tileTypes).map(([id, typeCfg]) =>
-      $("<button></button>")
-        .attr({
-          type: "button",
-          title: typeCfg.name,
-        })
-        .addClass([
-          "editor-palette-button",
-          "editor-palette-button-tile",
-          `editor-palette-button-tile-${id}`,
-        ])
-        .css({
-          backgroundColor: typeCfg.color,
-          backgroundImage: `url(${typeCfg.editorIcon})`,
-        })
-        .on("click", (ev) => {
-          if (this.activeButton) {
-            this.activeButton.removeClass("active");
-          }
-          this.activeButton = $(ev.target);
-          this.activeButton.addClass("active");
-          this.tileId = Number(id);
-          this.events.emit("change", "tile", Number(id));
-        })
-    );
+    this.buttons = Object.entries(config.tileTypes)
+      .filter((id) => parseInt(id) <= 5) //filters so the Tile types (border) won't be added to the palette
+      .map(([id, typeCfg]) =>
+        $("<button></button>")
+          .attr({
+            type: "button",
+            title: typeCfg.name,
+          })
+          .addClass([
+            "editor-palette-button",
+            "editor-palette-button-tile",
+            `editor-palette-button-tile-${id}`,
+          ])
+          .css({
+            backgroundColor: typeCfg.color,
+            backgroundImage: `url(${typeCfg.editorIcon})`,
+          })
+          .on("click", (ev) => {
+            if (this.activeButton) {
+              this.activeButton.removeClass("active");
+            }
+            this.activeButton = $(ev.target);
+            this.activeButton.addClass("active");
+            this.tileId = Number(id);
+            this.events.emit("change", "tile", Number(id));
+          })
+      );
 
     this.buttons.push($('<div class="separator"></div>'));
 
