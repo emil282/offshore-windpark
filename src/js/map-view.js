@@ -216,6 +216,15 @@ class MapView {
     this.getTextureTile(x, y).visible = true;
   }
 
+  renderRedBorderWindTurbineSmallTile(x, y) {
+    const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 8);
+    this.getTextureTile(x, y).texture =
+      this.textures.redBorder_windturbines_small[
+        `border-wt-small-0${textureNumber}`
+      ];
+    this.getTextureTile(x, y).visible = true;
+  }
+
   renderWindTurbineBigTile(x, y) {
     const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 8);
     this.getTextureTile(x, y).texture =
@@ -304,7 +313,9 @@ class MapView {
     });
     this.updateRedBorders();
   }
-
+  // updates the exclamation marks according to the locationsGoalError 2DArray
+  // which is defined in the wind-turbines-data_WT.js
+  // everytime a new tile is set
   updateRedBorders() {
     this.city.map.allCells().forEach(([x, y]) => {
       if (this.city.map.cells[y][x] == 5) {
@@ -312,6 +323,13 @@ class MapView {
           this.renderRedBorderWindTurbineBigTile(x, y);
         } else {
           this.renderWindTurbineBigTile(x, y);
+        }
+      }
+      if (this.city.map.cells[y][x] == 4) {
+        if (1 == this.dataManager.sources[3].locationsGoalsError[y][x]) {
+          this.renderRedBorderWindTurbineSmallTile(x, y);
+        } else {
+          this.renderWindTurbineSmallTile(x, y);
         }
       }
     });
