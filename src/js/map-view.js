@@ -5,7 +5,7 @@ const { getTileTypeId } = require("./lib/config-helpers");
 const PencilCursor = require("../../static/fa/pencil-alt-solid.svg");
 
 class MapView {
-  constructor(city, config, textures) {
+  constructor(city, config, textures, dataManager) {
     this.city = city;
     this.config = config;
     this.textures = textures;
@@ -18,6 +18,7 @@ class MapView {
     this.roadTextureKey = "roads";
     this.roadTexturePrefix = "road";
     this.basicTileRenderers = {};
+    this.dataManager = dataManager;
 
     this.randomizedTerrain = Array2D.create(
       this.city.map.width,
@@ -186,7 +187,11 @@ class MapView {
       this.renderWindTurbineSmallTile(x, y);
     }
     if (this.city.map.get(x, y) === this.windTurbineBigId) {
-      this.renderWindTurbineBigTile(x, y);
+      if (1 == this.dataManager.sources[3].locationsGoalsError[y][x]) {
+        this.renderRedBorderWindTurbineBigTile(x, y);
+      } else {
+        this.renderWindTurbineBigTile(x, y);
+      }
     }
   }
 
@@ -215,6 +220,15 @@ class MapView {
     const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 8);
     this.getTextureTile(x, y).texture =
       this.textures.windturbines_big[`turbine-big-0${textureNumber}`];
+    this.getTextureTile(x, y).visible = true;
+  }
+
+  renderRedBorderWindTurbineBigTile(x, y) {
+    const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 8);
+    this.getTextureTile(x, y).texture =
+      this.textures.redBorder_windturbines_big[
+        `border-wt-big-0${textureNumber}`
+      ];
     this.getTextureTile(x, y).visible = true;
   }
 
@@ -287,6 +301,19 @@ class MapView {
         .adjacentCells(i, j)
         .filter(([x, y]) => this.city.map.get(x, y) === this.roadTileId)
         .forEach(([x, y]) => this.renderRoadTile(x, y));
+    });
+    this.updateRedBorders();
+  }
+
+  updateRedBorders() {
+    this.city.map.allCells().forEach(([x, y]) => {
+      if (this.city.map.cells[y][x] == 5) {
+        if (1 == this.dataManager.sources[3].locationsGoalsError[y][x]) {
+          this.renderRedBorderWindTurbineBigTile(x, y);
+        } else {
+          this.renderWindTurbineBigTile(x, y);
+        }
+      }
     });
   }
 

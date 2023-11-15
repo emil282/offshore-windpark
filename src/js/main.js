@@ -79,6 +79,8 @@ cfgLoader
     textureLoader.addSpritesheet("water");
     textureLoader.addSpritesheet("windturbines_small");
     textureLoader.addSpritesheet("windturbines_big");
+    textureLoader.addSpritesheet("redBorder_windturbines_big");
+    textureLoader.addSpritesheet("redBorder_windturbines_small");
     textureLoader.addFolder("cars", CarSpawner.allTextureIds(config));
     textureLoader
       .load()

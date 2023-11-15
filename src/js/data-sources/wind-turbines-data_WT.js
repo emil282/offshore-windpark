@@ -21,6 +21,11 @@ class WindTurbinesData extends DataSource {
     this.proximitiesSmallWindTurbines = [];
     this.proximitiesBigWindTurbines = [];
 
+    // This creates a 16x16 matrix, in which the locations of the windturbines,
+    // which do not fullfill the set goals. e.g. if one wind turbine tile is too close
+    // to a residential tile, the coordinates of the windturbine will be saved.
+    this.locationsGoalsError = Array2D.create(16, 16, 0);
+
     // The following variable will contain the distances that have to be kept and are written down in config/goals.yml
     this.wtSmallWaterRoadsDist =
       this.config.goals["distances"]["windTurbineSmall-distance-water-roads"] ||
@@ -158,7 +163,6 @@ class WindTurbinesData extends DataSource {
           distancesResidential[y][x], // saves the distances from all residential tiles to one wt
           [x, y], // saves the locations of the residential tiles
         ]);
-        console.log(this.proximitiesSmallResidential);
       }
     });
     // Distance between big wind turbines and residentials
@@ -213,11 +217,7 @@ class WindTurbinesData extends DataSource {
     this.numWaterRoadsTooCloseWithGoodwill = 0;
     this.numWaterRoadsTooClose = 0;
     this.numWindTurbinesTooClose = false;
-
-    // This creates a 16x16 matrix, in which the locations of the windturbines,
-    // which do not fullfill the set goals. e.g. if one wind turbine tile is too close
-    // to a residential tile, the coordinates of the windturbine will be saved.
-    const locationsGoalsError = Array2D.create(16, 16, 0);
+    Array2D.setAll(this.locationsGoalsError, 0);
 
     this.proximitiesSmallWaterRoad.forEach((distanceAndLocation) => {
       let distance = distanceAndLocation[0]; //saves the surrent distance
@@ -233,14 +233,14 @@ class WindTurbinesData extends DataSource {
           } else {
             // distance < 2
             this.numWaterRoadsTooClose += 1;
-            locationsGoalsError[y][x] = 1;
+            this.locationsGoalsError[y][x] = 1;
           }
         } else {
           this.numWaterRoadsTooClose += 1;
-          locationsGoalsError[y][x] = 1;
+          this.locationsGoalsError[y][x] = 1;
         }
         this.numWaterRoadsTooClose += 1;
-        locationsGoalsError[y][x] = 1;
+        this.locationsGoalsError[y][x] = 1;
       }
     });
     // Goal: > 2; Goodwill: == 2; Bad: <= 2-1
@@ -257,11 +257,11 @@ class WindTurbinesData extends DataSource {
           } else {
             // distance < 2
             this.numWaterRoadsTooClose += 1;
-            locationsGoalsError[y][x] = 1;
+            this.locationsGoalsError[y][x] = 1;
           }
         } else {
           this.numWaterRoadsTooClose += 1;
-          locationsGoalsError[y][x] = 1;
+          this.locationsGoalsError[y][x] = 1;
         }
       }
     });
@@ -279,13 +279,11 @@ class WindTurbinesData extends DataSource {
           } else {
             // distance < 2
             this.numResidentialsTooClose += 1;
-            locationsGoalsError[y][x] = 1;
-            console.log(locationsGoalsError);
+            this.locationsGoalsError[y][x] = 1;
           }
         } else {
           this.numResidentialsTooClose += 1;
-          locationsGoalsError[y][x] = 1;
-          console.log(locationsGoalsError);
+          this.locationsGoalsError[y][x] = 1;
         }
       }
     });
@@ -306,11 +304,11 @@ class WindTurbinesData extends DataSource {
           } else {
             // distance < 3
             this.numResidentialsTooClose += 1;
-            locationsGoalsError[y][x] = 1;
+            this.locationsGoalsError[y][x] = 1;
           }
         } else {
           this.numResidentialsTooClose += 1;
-          locationsGoalsError[y][x] = 1;
+          this.locationsGoalsError[y][x] = 1;
         }
       }
     });
