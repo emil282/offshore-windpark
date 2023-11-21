@@ -1,0 +1,11 @@
+knobs:
+  winddirection:
+    name: "wind_direction"
+    divisions: 8
+    labels: ["N", "NO", "O", "SO", "S", "SW", "W", "NW"]
+    default: "N"
+  windspeed:
+    name: "wind_speed"
+    divisions: null
+    labels: null
+    default: 0

@@ -12,6 +12,11 @@
   <script src="vendor/pixijs-6.0.2/pixi.min.js"></script>
   <script src="vendor/chart.js-3.5.1/chart.min.js"></script>
   <title>Use The Wind</title>
+
+  <script src="src/js/xknob.js" type="text/javascript"></script>
+  <link href="src/css/xknob.css" type="text/css" rel="stylesheet" />
+
+  <!--<script src="src/js/my_xknob.js" type="text/javascript" defer></script>-->
 </head>
 <body>
   <div class="fms-desktop">
@@ -21,6 +26,32 @@
           <div data-component="app-container"></div>
         </div>
         <div class="col-xl-3 col-md-4 mb-4">
+          <!--<div class="wind">
+            <div class="flex" style="height: 200px">
+              <div class="flex" style="height: 200px">
+                <div id="wind_direction">
+                  <x-knob id="wind_direction_knob" divisions="8"></x-knob>
+                </div>
+                <ul id="circle-container">
+                  <li><span></span></li>
+                  <li><span></span></li>
+                  <li><span></span></li>
+                  <li><span></span></li>
+                  <li><span></span></li>
+                  <li><span></span></li>
+                  <li><span></span></li>
+                  <li><span></span></li>
+                </ul>
+              </div>
+              <div id="wind_speed">
+                <x-knob id="wind_speed_knob"></x-knob>
+              </div>
+            </div>
+            Windrichtung: <span id="wind_direction_span">N</span>
+            <br />Windgeschwindigkeit:
+            <span id="wind_speed_span">0</span>
+          </div>-->
+          <div data-component="wind"></div>
           <div class="status" data-component="status"></div>
           <div data-component="citizen-request-container"></div>
         </div>
@@ -95,3 +126,29 @@
     </div>
   </div>
 </body>
+<!--<script>
+  let windDirection = document.getElementById("wind_direction");
+  let windDirectionKnob = document.getElementById("wind_direction_knob");
+  const windDirections = ["N", "NO", "O", "SO", "S", "SW", "W", "NW"];
+
+  let windSpeed = document.getElementById("wind_speed");
+  let windSpeedKnob = document.getElementById("wind_speed_knob");
+
+  windDirection.addEventListener("input", (event) => {
+    let value = (windDirectionKnob.value % 1) * windDirectionKnob.divisions;
+    document.getElementById("wind_direction_span").innerHTML =
+      windDirections[value];
+  });
+
+  let circleContainer = document.querySelectorAll(
+    "#circle-container > li > span"
+  );
+  for (let i = 0; i < circleContainer.length; i++) {
+    circleContainer[i].innerHTML = windDirections[i];
+  }
+
+  windSpeed.addEventListener("input", (event) => {
+    let value = Math.round((windSpeedKnob.value % 1) * 12);
+    document.getElementById("wind_speed_span").innerHTML = value;
+  });
+</script>-->

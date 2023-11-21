@@ -24,6 +24,7 @@ const GoalDebugView = require("./goal-debug-view");
 const DataManager = require("./data-manager");
 const CitizenRequestView = require("./citizen-request-view");
 const CitizenRequestViewMgr = require("./citizen-request-view-mgr");
+const KnobView = require("./knob-view");
 const TextureLoader = require("./texture-loader");
 const CarSpawner = require("./cars/car-spawner");
 
@@ -44,6 +45,7 @@ cfgLoader
     //"config/power-ups.yml",
     "config/default-settings.yml",
     "./settings.yml",
+    "config/wind.yml",
   ])
   .catch((err) => {
     showFatalError("Error loading configuration", err);
@@ -177,6 +179,9 @@ cfgLoader
         $('[data-component="goal-debug-container"]').append(
           goalDebugView.$element
         );
+
+        const knobView = new KnobView(config.knobs);
+        $("[data-component=wind]").append(knobView.$element);
 
         let indexesDirty = true;
         let indexesCooldownTimer = null;

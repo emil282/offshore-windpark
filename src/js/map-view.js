@@ -3,6 +3,7 @@ const EventEmitter = require("events");
 const Array2D = require("./lib/array-2d");
 const { getTileTypeId } = require("./lib/config-helpers");
 const PencilCursor = require("../../static/fa/pencil-alt-solid.svg");
+const DataManager = require("./data-manager");
 
 class MapView {
   constructor(city, config, textures) {
@@ -18,6 +19,7 @@ class MapView {
     this.roadTextureKey = "roads";
     this.roadTexturePrefix = "road";
     this.basicTileRenderers = {};
+    this.stats = new DataManager();
 
     this.randomizedTerrain = Array2D.create(
       this.city.map.width,
