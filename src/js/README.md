@@ -36,7 +36,7 @@ These are helper functions and classes from the original project.
 
 ## power-ups
 
-Power ups are a leftover from the original project. They were use to manipulate the future mobility influencing aspects. In this project they are not used.
+Power ups are a leftover from the original project. They were used to manipulate the future mobility influencing aspects. In this project they are not used.
 
 ## test
 

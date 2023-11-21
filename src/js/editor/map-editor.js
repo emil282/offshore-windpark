@@ -21,7 +21,7 @@ class MapEditor {
     this.dataManager = dataManager;
 
     this.events = new EventEmitter();
-    this.mapView = new MapView(city, config, textures);
+    this.mapView = new MapView(city, config, textures, dataManager);
     this.mapView.enableTileInteractivity();
     this.displayObject = this.mapView.displayObject;
     this.textOverlay = new MapTextOverlay(this.mapView);
