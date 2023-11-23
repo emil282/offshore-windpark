@@ -1,11 +1,15 @@
 knobs:
   winddirection:
-    name: "wind_direction"
+    id: "wind_direction"
+    name_de: "Windrichtung"
+    name_en: "Winddirection"
     divisions: 8
     labels: ["N", "NO", "O", "SO", "S", "SW", "W", "NW"]
     default: "N"
   windspeed:
-    name: "wind_speed"
+    id: "wind_speed"
+    name_de: Windgeschwindigkeit
+    name_en: Windspeed
     divisions: null
     labels: null
-    default: 0
+    default: "0 km/h"

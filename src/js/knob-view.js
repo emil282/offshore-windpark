@@ -13,24 +13,13 @@ class KnobView {
     ];
     this.$element = $("<div></div>")
       .addClass("index-list")
-      .append(
-        $("<div></div>")
-          .addClass("flex")
-          .append(this.knobs[0])
-          .append(this.knobs[1])
-      )
-      .append(
-        'Windrichtung: <span id="' +
-          this.config.winddirection.name +
-          '_span">N</span><br />' +
-          'Windgeschwindigkeit: <span id="' +
-          this.config.windspeed.name +
-          '_span">0</span>'
-      );
+      .append("<h3>Wind</h3>")
+      .append(this.knobs[0])
+      .append(this.knobs[1]);
 
     // Event Listeners for when the knobs change
     $(document).ready(() => {
-      $(`#${this.config.winddirection.name}`).on("input", (event) => {
+      $(`#${this.config.winddirection.id}`).on("input", (event) => {
         // Sets the current winddirection
         let value = (event.target.value % 1) * event.target.divisions;
         $(`#${event.currentTarget.id}_span`).html(
@@ -39,10 +28,10 @@ class KnobView {
         // Calculate the energy gain
         this.tileCounterView.handleUpdate();
       });
-      $(`#${this.config.windspeed.name}`).on("input", (event) => {
+      $(`#${this.config.windspeed.id}`).on("input", (event) => {
         // Sets the current windspeed
-        let value = Math.round((event.target.value % 1) * 12);
-        $(`#${event.currentTarget.id}_span`).html(value);
+        let value = Math.round((event.target.value % 1) * 100);
+        $(`#${event.currentTarget.id}_span`).html(value + " km/h");
         // Calculate the energy gain
         this.tileCounterView.handleUpdate();
       });
@@ -55,22 +44,41 @@ class KnobView {
    * @returns
    */
   makeKnob(config) {
-    let element = $("<div id='" + config.name + "'></div>").addClass("windDiv");
-    let knob =
-      "<x-knob id='" +
-      config.name +
-      "_knob'" +
-      (config.divisions != null ? " divisions='8' " : "") +
-      " class = 'windKnob'></x-knob>";
-
-    element.append(knob);
+    let knob = `<x-knob id='${config.id}_knob'${
+      config.divisions != null ? " divisions='8' " : ""
+    } class = 'windKnob'></x-knob>`;
 
     let label;
 
     if (config.labels != null) {
       label = this.makeLabeling(config);
     }
-    return $("<div></div>").addClass("flex").append(element).append(label);
+
+    let element = $("<div id='" + config.id + "'></div>")
+      .addClass("windDiv")
+      .append($("<div></div>").addClass("flex").append(knob).append(label))
+      .append(
+        $("<div></div>")
+          .append(
+            $("<span></span>")
+              .addClass("beschr")
+              .html(config.name_de)
+              .append("<br>")
+          )
+          .append(
+            $("<span></span>")
+              .addClass("beschr-en")
+              .html(config.name_en)
+              .append("<br>")
+          )
+          .append(
+            $("<span></span>")
+              .attr("id", `${config.id}_span`)
+              .html(config.default)
+          )
+      );
+
+    return element;
   }
 
   /**

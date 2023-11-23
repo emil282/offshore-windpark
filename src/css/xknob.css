@@ -1,12 +1,14 @@
 @charset "utf-8";
 
 :root {
-  --diameter: 6em;
+  --diameter: 8em;
 }
 .windDiv {
   z-index: 100;
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 .windKnob {
   width: calc(var(--diameter) - 20%);
@@ -67,7 +69,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 200px;
+  height: 150px;
+}
+.beschr {
+  font-weight: bold;
+  font-size: 1.3em;
+}
+.beschr-en {
+  font-size: 1.1em;
 }
 
 /*/////////////////////////////////////////////
@@ -83,6 +92,7 @@ x-knob {
   display: inline-block;
   width: 2em;
   height: 2em;
+  z-index: 100;
 
   /* An internal element is target of pointer-events, but not this external x-knob element. */
   pointer-events: none;
