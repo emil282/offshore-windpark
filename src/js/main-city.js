@@ -18,6 +18,11 @@ const VariableMapOverlay = require("./variable-map-overlay");
 //const WalkableCityHandler = require("./power-ups/walkable-city-handler");
 //const DenseCityHandler = require("./power-ups/dense-city-handler");
 //const AutonomousVehicleLidarHandler = require("./power-ups/autonomous-vehicle-lidar-handler");
+const DataManager = require("./data-manager");
+const GreenSpacesData = require("./data-sources/green-spaces-data");
+const WindTurbinesData = require("./data-sources/wind-turbines-data_WT");
+const ZoningData = require("./data-sources/zoning-data");
+const ZoneBalanceData = require("./data-sources/zone-balance-data");
 
 fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
   .then((response) => {
@@ -51,13 +56,24 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
     textureLoader.addSpritesheet("water");
     textureLoader.addSpritesheet("windturbines_small");
     textureLoader.addSpritesheet("windturbines_big");
+    textureLoader.addSpritesheet("redBorder_windturbines_big");
+    textureLoader.addSpritesheet("redBorder_windturbines_small");
     textureLoader.addFolder("cars", CarSpawner.allTextureIds(config));
     textureLoader
       .load()
       .then((textures) => {
         $('[data-component="app-container"]').append(app.view);
+        const stats = new DataManager();
+        stats.registerSource(new ZoningData(city, config));
+        stats.registerSource(new ZoneBalanceData(city, config));
+        stats.registerSource(new GreenSpacesData(city, config));
+        stats.registerSource(new WindTurbinesData(city, config));
+        stats.calculateAll(); // Calculation gets done here once, because the cities default state is no longer only empty cells, but park cells. Therefore the tile count must be calculated here too, default 0 is no longer correct
+        city.map.events.on("update", () => {
+          stats.calculateAll();
+        });
 
-        const mapView = new MapView(city, config, textures);
+        const mapView = new MapView(city, config, textures, stats);
         app.stage.addChild(mapView.displayObject);
         mapView.displayObject.width = 1152;
         mapView.displayObject.height = 1152;

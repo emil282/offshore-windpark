@@ -17,7 +17,7 @@ class TileCounterView {
 
           return (
             (turbinesSmall + turbinesBig * 2) *
-            ($(`#${this.config.knobs.windspeed.id}_knob`).val() % 1)
+            (($(`#${this.config.knobs.windspeed.id}_knob`).val() ?? 0) % 1)
           ).toFixed(2);
         },
       },
