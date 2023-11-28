@@ -1,5 +1,3 @@
-/* globals PIXI */
-
 class TextureLoader {
   constructor(app) {
     this.app = app;
@@ -7,7 +5,10 @@ class TextureLoader {
     this.textures = {};
 
     // Add a pre-load middleware that does cache-busting
-    app.loader.pre((resource, next) => { resource.url += `?t=${Date.now()}`; next(); });
+    app.loader.pre((resource, next) => {
+      resource.url += `?t=${Date.now()}`;
+      next();
+    });
 
     // Add a post-load middleware that sets the scale mode
     app.loader.use((resource, next) => {
@@ -16,7 +17,8 @@ class TextureLoader {
       }
       if (resource.textures !== undefined) {
         Object.keys(resource.textures).forEach((id) => {
-          resource.textures[id].baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+          resource.textures[id].baseTexture.scaleMode =
+            PIXI.SCALE_MODES.NEAREST;
         });
       }
       next();
@@ -32,6 +34,16 @@ class TextureLoader {
       this.textures[name] = resource.textures;
     });
   }
+  // addGif(name, AnimatedGIF) {
+  //   fetch(`./src/textures/${name}.gif`)
+  //     .then((res) => res.arrayBuffer())
+  //     .then(AnimatedGIF.fromBuffer)
+  //     .then((image) => this.app.stage.addChild(image));
+  //   // this.app.loader.add(image, (resource) => {
+  //   //   this.textures[name] = resource.textures;
+  //   // })
+  //   // );
+  // }
 
   addFolder(name, keys) {
     keys.forEach((key) => {
@@ -49,7 +61,7 @@ class TextureLoader {
     return new Promise((resolve, reject) => {
       this.app.loader.load(() => {
         if (this.errors.length > 0) {
-          reject(new Error(this.errors.join('<br>')));
+          reject(new Error(this.errors.join("<br>")));
         } else {
           resolve(this.textures);
         }
