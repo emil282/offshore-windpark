@@ -8,6 +8,11 @@ const ConnectionStateView = require("./connection-state-view");
 const showFatalError = require("./lib/show-fatal-error");
 //const PollutionData = require("./data-sources/pollution-data");
 //const NoiseData = require("./data-sources/noise-data");
+const GreenSpacesData = require("./data-sources/green-spaces-data");
+const WindTurbinesData = require("./data-sources/wind-turbines-data_WT");
+//const TravelTimesData = require("./data-sources/travel-times-data");
+const ZoningData = require("./data-sources/zoning-data");
+const ZoneBalanceData = require("./data-sources/zone-balance-data");
 const DataManager = require("./data-manager");
 const TextureLoader = require("./texture-loader");
 
@@ -35,6 +40,10 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
     const stats = new DataManager();
     //stats.registerSource(new PollutionData(city, config));
     //stats.registerSource(new NoiseData(city, config));
+    stats.registerSource(new ZoningData(city, config));
+    stats.registerSource(new ZoneBalanceData(city, config));
+    stats.registerSource(new GreenSpacesData(city, config));
+    stats.registerSource(new WindTurbinesData(city, config));
     city.map.events.on("update", () => {
       stats.calculateAll();
     });
@@ -50,13 +59,15 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
     textureLoader.addSpritesheet("water");
     textureLoader.addSpritesheet("windturbines_small");
     textureLoader.addSpritesheet("windturbines_big");
+    textureLoader.addSpritesheet("redBorder_windturbines_big");
+    textureLoader.addSpritesheet("redBorder_windturbines_small");
     // MAYBE START OUTCOMMENTING UP FROM HERE
     textureLoader
       .load()
       .then((textures) => {
         $('[data-component="app-container"]').append(app.view);
         // const mapView = new MapView(city, config, textures);
-        const mapView = new MapEditor($("body"), city, config, textures);
+        const mapView = new MapEditor($("body"), city, config, textures, stats);
         app.stage.addChild(mapView.displayObject);
         mapView.displayObject.width = 1920;
         mapView.displayObject.height = 1920;

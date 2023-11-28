@@ -35,6 +35,10 @@ tileTypes:
   6:
     type: BorderWindTurbineBig
     name: Border Wind Turbine Big
+    color: "#000000"
+    editorIcon: ""
   7:
     type: BorderWindTurbineSmall
     name: Border Wind Turbine Small
+    color: "#000000"
+    editorIcon: ""
