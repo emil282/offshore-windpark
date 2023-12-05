@@ -36,6 +36,8 @@ function initApp(config) {
   city.map.events.on("update", () => {
     stats.throttledCalculateAll();
   });
+
+  //const counterView = new TileCounterView(stats, config);
   //const powerUpMgr = new PowerUpManager(config);
   //stats.registerModifier(new PowerUpDataModifier(config, powerUpMgr));
   /*powerUpMgr.events.on("update", () => {
@@ -113,6 +115,34 @@ function initApp(config) {
     );
   }
 
+  /**
+   * Sends a counters update message to the specified socket.
+   * @param {Socket} socket - The socket to send the message to.
+   */
+  function sendCountersMessage(socket) {
+    let counts = {};
+    Object.keys(config.tileTypes).forEach((id) => {
+      if (id == "6" || id == "7") {
+        return;
+      }
+      const { type } = config.tileTypes[id];
+      const count = stats.get(`zones-${type}-count`);
+      // Generate an object with the counts and percentages for each zone type
+      counts[id] = {
+        count: count,
+        percentage: ((count / stats.get("zones-total")) * 100).toFixed(1),
+      };
+      //fields[id].text(`${count} (${((count / this.total) * 100).toFixed(1)}%)`);
+    });
+    console.log(counts);
+    socket.send(
+      JSON.stringify({
+        type: "counters_update",
+        data: counts,
+      })
+    );
+  }
+
   function sendViewShowMapVar(socket, variable) {
     socket.send(
       JSON.stringify({
@@ -161,6 +191,9 @@ function initApp(config) {
             break;
           case "get_goals":
             sendGoalsMessage(socket);
+            break;
+          case "get_counters":
+            sendCountersMessage(socket);
             break;
           case "view_show_map_var":
             viewRepeater.emit("view_show_map_var", message.variable);
@@ -220,6 +253,7 @@ function initApp(config) {
   stats.events.on("update", () => {
     wss.clients.forEach((socket) => sendVariablesMessage(socket));
     wss.clients.forEach((socket) => sendGoalsMessage(socket));
+    wss.clients.forEach((socket) => sendCountersMessage(socket));
   });
 
   /*powerUpMgr.events.on("update", () => {

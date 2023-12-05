@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const EventEmitter = require('events');
+const EventEmitter = require("events");
 
 const PING_TIME = 1000 * 10;
 const PONG_WAIT_TIME = 1000 * 10;
@@ -22,7 +22,7 @@ class ServerSocketConnector {
     this.cancelPing();
     this.cancelReconnect();
 
-    this.events.emit('connecting');
+    this.events.emit("connecting");
     console.log(`Connecting to ${this.uri}...`);
     this.ws = new WebSocket(this.uri);
     this.ws.onopen = this.handleOpen.bind(this);
@@ -47,8 +47,10 @@ class ServerSocketConnector {
       this.reconnectTimeout = null;
       this.connect();
     }, RECONNECT_TIME);
-    this.events.emit('connectWait');
-    console.log(`Will attempt to reconnect in ${RECONNECT_TIME / 1000} seconds...`);
+    this.events.emit("connectWait");
+    console.log(
+      `Will attempt to reconnect in ${RECONNECT_TIME / 1000} seconds...`
+    );
   }
 
   handleOpen() {
@@ -57,8 +59,8 @@ class ServerSocketConnector {
 
     this.connected = true;
     this.isClosing = false;
-    console.log('Connected.');
-    this.events.emit('connect');
+    console.log("Connected.");
+    this.events.emit("connect");
     this.schedulePing();
   }
 
@@ -71,26 +73,28 @@ class ServerSocketConnector {
     // but according to people the only code one normally gets is 1006 (Abnormal Closure)
     console.error(
       `Disconnected with code ${ev.code}`,
-      ev.code === 1006 ? ': Abnormal closure' : '',
-      ev.reason ? `(reason: ${ev.reason})` : ''
+      ev.code === 1006 ? ": Abnormal closure" : "",
+      ev.reason ? `(reason: ${ev.reason})` : ""
     );
-    this.events.emit('disconnect');
+    this.events.emit("disconnect");
     this.reconnect();
   }
 
   handleMessage(ev) {
     const message = JSON.parse(ev.data);
-    if (message.type === 'map_update') {
-      this.events.emit('map_update', message.cells);
-    } else if (message.type === 'vars_update') {
-      this.events.emit('vars_update', message.variables);
-    } else if (message.type === 'goals_update') {
-      this.events.emit('goals_update', message.goals);
-    } else if (message.type === 'view_show_map_var') {
-      this.events.emit('view_show_map_var', message.variable, message.data);
-    } else if (message.type === 'power_ups_update') {
-      this.events.emit('power_ups_update', message.powerUps);
-    } else if (message.type === 'pong') {
+    if (message.type === "map_update") {
+      this.events.emit("map_update", message.cells);
+    } else if (message.type === "vars_update") {
+      this.events.emit("vars_update", message.variables);
+    } else if (message.type === "goals_update") {
+      this.events.emit("goals_update", message.goals);
+    } else if (message.type === "counters_update") {
+      this.events.emit("counters_update", message.data);
+    } else if (message.type === "view_show_map_var") {
+      this.events.emit("view_show_map_var", message.variable, message.data);
+    } else if (message.type === "power_ups_update") {
+      this.events.emit("power_ups_update", message.powerUps);
+    } else if (message.type === "pong") {
       this.handlePong();
     }
   }
@@ -101,7 +105,7 @@ class ServerSocketConnector {
   }
 
   send(data) {
-    const message = typeof data === 'string' ? { type: data } : data;
+    const message = typeof data === "string" ? { type: data } : data;
     this.ws.send(JSON.stringify(message));
   }
 
@@ -132,62 +136,66 @@ class ServerSocketConnector {
     this.pongTimeout = setTimeout(() => {
       this.pongTimeout = null;
       console.warn(`PONG not received after ${PONG_WAIT_TIME / 1000} seconds`);
-      console.warn('Closing connection');
+      console.warn("Closing connection");
       if (!this.isClosing) {
         this.isClosing = true;
-        this.events.emit('closing');
+        this.events.emit("closing");
       }
       this.ws.close();
     }, PONG_WAIT_TIME);
   }
 
   ping() {
-    this.send('ping');
+    this.send("ping");
     this.startPongTimeout();
   }
 
   getMap() {
-    this.send('get_map');
+    this.send("get_map");
   }
 
   setMap(cells) {
     this.send({
-      type: 'set_map',
+      type: "set_map",
       cells,
     });
   }
 
   getVars() {
-    this.send('get_vars');
+    this.send("get_vars");
   }
 
   getGoals() {
-    this.send('get_goals');
+    this.send("get_goals");
+  }
+
+  getCounters() {
+    this.send("get_counters");
   }
 
   viewShowMapVariable(variable) {
     this.send({
-      type: 'view_show_map_var',
+      type: "view_show_map_var",
       variable,
     });
   }
 
   enablePowerUp(powerUpId) {
     this.send({
-      type: 'enable_power_up',
+      type: "enable_power_up",
       powerUpId,
     });
   }
 
   disablePowerUp(powerUpId) {
     this.send({
-      type: 'disable_power_up',
+      type: "disable_power_up",
       powerUpId,
     });
   }
 
   getActivePowerUps() {
-    this.send('get_active_power_ups');
+    this.send("get_active_power_ups");
   }
 }
 

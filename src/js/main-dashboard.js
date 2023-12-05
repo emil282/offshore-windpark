@@ -8,6 +8,13 @@ const CitizenRequestViewMgr = require("./citizen-request-view-mgr");
 //const ActionsPane = require("./dashboard/actions-pane");
 const { createTitle } = require("./dashboard/titles");
 //const PowerUpSelector = require("./dashboard/power-up-selector");
+const TileCounterView = require("./tile-counter-view");
+const GreenSpacesData = require("./data-sources/green-spaces-data");
+const WindTurbinesData = require("./data-sources/wind-turbines-data_WT");
+const ZoningData = require("./data-sources/zoning-data");
+const ZoneBalanceData = require("./data-sources/zone-balance-data");
+const DataManager = require("./data-manager");
+const City = require("./city");
 
 fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
   .then((response) => {
@@ -49,6 +56,24 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
     });
 
     // $("#col-3").append(createTitle(config.dashboard.powerUps.title));
+
+    const city = new City(config.cityWidth, config.cityHeight);
+
+    const stats = new DataManager();
+    stats.registerSource(new ZoningData(city, config));
+    stats.registerSource(new ZoneBalanceData(city, config));
+    stats.registerSource(new GreenSpacesData(city, config));
+    stats.registerSource(new WindTurbinesData(city, config));
+    stats.calculateAll(); // Calculation gets done here once, because the cities default state is no longer only empty cells, but park cells. Therefore the tile count must be calculated here too, default 0 is no longer correct
+    city.map.events.on("update", () => {
+      stats.calculateAll();
+    });
+
+    const counterView = new TileCounterView(stats, config);
+    //const zoneBalanceView = new ZoneBalanceView(stats, config);
+    $("#col-3")
+      .append(createTitle(config.dashboard.counters.title))
+      .append(counterView.$element);
 
     /*const actionsPane = new ActionsPane(config);
     $("#col-actions").append(actionsPane.$element);
@@ -94,8 +119,14 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
     connector.events.on("connect", () => {
       connector.getVars();
       connector.getGoals();
+      connector.getCounters();
       //connector.getActivePowerUps();
       //actionsPane.enableAll();
+    });
+
+    connector.events.on("counters_update", (stats) => {
+      console.log(stats);
+      counterView.updateCounters(stats);
     });
 
     const connStateView = new ConnectionStateView(connector);
