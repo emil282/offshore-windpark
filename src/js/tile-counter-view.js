@@ -66,25 +66,28 @@ class TileCounterView {
       )
     );
 
+    //Here gets the Counters View created
     this.$element.append(
       $("<ul></ul>")
         .addClass("tile-counter-counts")
         .append(
-          Object.keys(config.tileTypes).map((id) =>
-            $("<li></li>")
-              .append(
-                $("<span></span>")
-                  .addClass("label")
-                  .html(
-                    `${
-                      config.tileTypes[id].name ||
-                      config.tileTypes[id].type ||
-                      id
-                    }: `
-                  )
-              )
-              .append(this.fields[id])
-          )
+          Object.keys(config.tileTypes)
+            .filter((id) => id < 6)
+            .map((id) =>
+              $("<li></li>")
+                .append(
+                  $("<span></span>")
+                    .addClass("label")
+                    .html(
+                      `${
+                        config.tileTypes[id].name ||
+                        config.tileTypes[id].type ||
+                        id
+                      }: `
+                    )
+                )
+                .append(this.fields[id])
+            )
         )
         .append(
           this.computedFieldDefs.map((field) =>

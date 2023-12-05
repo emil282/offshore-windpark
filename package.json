@@ -33,10 +33,13 @@
     "webpack-cli": "^4.5.0"
   },
   "dependencies": {
+    "@pixi/gif": "^2.1.0",
     "deepmerge": "^4.3.1",
     "global": "^4.4.0",
     "http-server": "^14.1.1",
     "js-yaml": "^4.0.0",
+    "pixi": "^0.3.1",
+    "pixi.js": "^7.3.2",
     "vec2": "^1.6.1"
   }
 }

@@ -1,5 +1,3 @@
-/* globals PIXI */
-
 class TextureLoader {
   constructor(app) {
     this.app = app;
@@ -36,6 +34,16 @@ class TextureLoader {
       this.textures[name] = resource.textures;
     });
   }
+  // addGif(name, AnimatedGIF) {
+  //   fetch(`./src/textures/${name}.gif`)
+  //     .then((res) => res.arrayBuffer())
+  //     .then(AnimatedGIF.fromBuffer)
+  //     .then((image) => this.app.stage.addChild(image));
+  //   // this.app.loader.add(image, (resource) => {
+  //   //   this.textures[name] = resource.textures;
+  //   // })
+  //   // );
+  // }
 
   addFolder(name, keys) {
     keys.forEach((key) => {
