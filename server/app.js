@@ -134,7 +134,6 @@ function initApp(config) {
       };
       //fields[id].text(`${count} (${((count / this.total) * 100).toFixed(1)}%)`);
     });
-    console.log(counts);
     socket.send(
       JSON.stringify({
         type: "counters_update",

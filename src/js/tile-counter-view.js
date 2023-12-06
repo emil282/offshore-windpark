@@ -15,14 +15,10 @@ class TileCounterView {
           const turbinesSmall = this.stats.get("zones-windTurbineSmall-count");
           const turbinesBig = this.stats.get("zones-windTurbineBig-count");
 
-          if (this.config.wind) {
-            return (
-              (turbinesSmall + turbinesBig * 2) *
-              (($(`#${this.config.wind.windspeed.id}_knob`).val() ?? 0) % 1)
-            ).toFixed(2);
-          } else {
-            return (turbinesSmall + turbinesBig * 2).toFixed(2);
-          }
+          return (
+            (turbinesSmall + turbinesBig * 2) *
+            (($(`#${this.config.knobs.windspeed.id}_knob`).val() ?? 0) % 1)
+          ).toFixed(2);
         },
       },
       /*{
