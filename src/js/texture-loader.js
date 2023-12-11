@@ -34,16 +34,24 @@ class TextureLoader {
       this.textures[name] = resource.textures;
     });
   }
-  // addGif(name, AnimatedGIF) {
-  //   fetch(`./src/textures/${name}.gif`)
-  //     .then((res) => res.arrayBuffer())
-  //     .then(AnimatedGIF.fromBuffer)
-  //     .then((image) => this.app.stage.addChild(image));
-  //   // this.app.loader.add(image, (resource) => {
-  //   //   this.textures[name] = resource.textures;
-  //   // })
-  //   // );
-  // }
+  addGIF(animatedWT, app) {
+    this.app.loader.add(`./textures/${animatedWT}.json`, (resource) => {
+      this.textures[animatedWT] = new PIXI.AnimatedSprite(
+        resource.spritesheet.animations.wt
+      );
+      // console.log(this.textures.animatedWT);
+      // this.textures.animatedWT["baseTexture"] =
+      //   this.textures.animatedWT._texture.baseTexture;
+      // this.textures.animatedWT["orig"] = this.textures.animatedWT._texture.orig;
+      // this.textures.animatedWT["_uvs"] = this.textures.animatedWT._texture._uvs;
+      app.stage.addChild(this.textures.animatedWT);
+      app.ticker.add(this.animate(this.textures.animatedWT, app));
+    });
+  }
+  animate(animatedWT, app) {
+    animatedWT.x = app.renderer.screen.width / 2;
+    animatedWT.y = app.renderer.screen.height / 2;
+  }
 
   addFolder(name, keys) {
     keys.forEach((key) => {

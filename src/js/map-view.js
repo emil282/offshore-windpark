@@ -5,10 +5,11 @@ const { getTileTypeId } = require("./lib/config-helpers");
 const PencilCursor = require("../../static/fa/pencil-alt-solid.svg");
 
 class MapView {
-  constructor(city, config, textures, dataManager) {
+  constructor(city, config, textures, dataManager, animatedTextures) {
     this.city = city;
     this.config = config;
     this.textures = textures;
+    this.animatedTextures = animatedTextures;
     this.events = new EventEmitter();
     this.roadTileId = getTileTypeId(config, "road");
     this.parkTileId = getTileTypeId(config, "park");
@@ -38,6 +39,11 @@ class MapView {
       this.city.map.height,
       null
     );
+    this.animatedTiles = Array2D.create(
+      this.city.map.width,
+      this.city.map.height,
+      null
+    );
 
     this.city.map.allCells().forEach(([x, y]) => {
       const bgTile = new PIXI.Graphics();
@@ -53,6 +59,15 @@ class MapView {
       textureTile.roundPixels = true;
       this.textureTiles[y][x] = textureTile;
       this.renderTile(x, y);
+
+      const animatedTiles = new PIXI.Sprite();
+      animatedTiles.x = x * MapView.TILE_SIZE;
+      animatedTiles.y = y * MapView.TILE_SIZE;
+      animatedTiles.width = MapView.TILE_SIZE;
+      animatedTiles.height = MapView.TILE_SIZE;
+      animatedTiles.roundPixels = true;
+      this.animatedTiles[x][y] = animatedTiles;
+      this.renderTile(x, y);
     });
 
     this.zoningLayer = new PIXI.Container();
@@ -61,6 +76,9 @@ class MapView {
     this.tileTextureLayer = new PIXI.Container();
     this.tileTextureLayer.addChild(...Array2D.flatten(this.textureTiles));
     this.displayObject.addChild(this.tileTextureLayer);
+    this.animatedTileLayer = new PIXI.Container();
+    this.animatedTileLayer.addChild(...Array2D.flatten(this.animatedTiles));
+    this.displayObject.addChild(this.animatedTileLayer);
     this.overlayContainer = new PIXI.Container();
     this.displayObject.addChild(this.overlayContainer);
     this.gridOverlay = this.createGridOverlay();
@@ -210,10 +228,18 @@ class MapView {
   }
 
   renderWindTurbineSmallTile(x, y) {
-    const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 8);
-    this.getTextureTile(x, y).texture =
-      this.textures.windturbines_small[`turbine-0${textureNumber}`];
-    this.getTextureTile(x, y).visible = true;
+    // this.animatedTiles[y][x] = this.animatedTextures.animatedWT;
+    this.animatedTextures.animatedWT.x = x;
+    this.animatedTextures.animatedWT.y = y;
+
+    // this.textureTiles[y][x] = animatedWT;
+    // this.textureTiles[y][x] = this.textures.animatedWT;
+    // this.getTextureTile(x, y).texture = this.textures.animatedWT.texture;
+    // this.getTextureTile(x, y).texture = this.textures.animatedWT.textures;
+    // const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 8);
+    // this.getTextureTile(x, y).texture =
+    //   this.textures.windturbines_small[`turbine-0${textureNumber}`];
+    // this.getTextureTile(x, y).visible = true;
   }
 
   renderRedBorderWindTurbineSmallTile(x, y) {

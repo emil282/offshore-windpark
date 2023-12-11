@@ -1,0 +1,47 @@
+{"frames": {
+
+"wt1.png":
+{
+	"frame": {"x":0,"y":0,"w":72,"h":72},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":72},
+	"sourceSize": {"w":72,"h":72}
+},
+"wt2.png":
+{
+	"frame": {"x":72,"y":0,"w":72,"h":72},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":72},
+	"sourceSize": {"w":72,"h":72}
+},
+"wt3.png":
+{
+	"frame": {"x":0,"y":72,"w":72,"h":72},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":72},
+	"sourceSize": {"w":72,"h":72}
+},
+"wt4.png":
+{
+	"frame": {"x":72,"y":72,"w":72,"h":72},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":72,"h":72},
+	"sourceSize": {"w":72,"h":72}
+}},
+"animations": {
+	"wt": ["wt1.png","wt2.png","wt3.png","wt4.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "animatedWT.png",
+	"format": "RGBA8888",
+	"size": {"w":144,"h":144},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:11679a5566d7f64fe2a648dcd7ee9107:cd3569348d06082e95cf14df37fe1bf3:d807192215a8ab88d955d69e2dbe949c$"
+}
+}
