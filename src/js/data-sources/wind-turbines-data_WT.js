@@ -56,6 +56,9 @@ class WindTurbinesData extends DataSource {
     // This index will be used e.g. for choosing the correct smiley and citizen requests
     // for distance constraints. 5 is the default value, it says "happy"
     this.distancesIndex = 5;
+
+    this.winddirection = this.config.wind.winddirection.default;
+    this.windspeed = this.config.wind.windspeed.default;
   }
 
   /**
@@ -65,6 +68,8 @@ class WindTurbinesData extends DataSource {
   getVariables() {
     return {
       "distances-index": () => this.distancesIndex,
+      "wind-direction": () => this.winddirection,
+      "wind-speed": () => this.windspeed,
     };
   }
 
@@ -208,6 +213,7 @@ class WindTurbinesData extends DataSource {
   calculate() {
     this.calculateProximities();
     this.calculateIndex();
+    //this.calculateWind();
   }
 
   //
@@ -329,6 +335,15 @@ class WindTurbinesData extends DataSource {
       (this.numWindTurbinesTooClose == true ? 4 : 0);
     // In case the index value falls below 1, it has to be corrected to 1 because 0 is neutral, 1 ist worst
     this.distancesIndex = this.distancesIndex <= 0 ? 1 : this.distancesIndex;
+  }
+
+  calculateWind() {
+    this.winddirection =
+      ($(`#${this.config.wind.winddirection.id}_knob`).val() % 1) *
+        $(`#${this.config.wind.winddirection.id}_knob`).attr("divisions") +
+      " km/h";
+    this.windspeed =
+      ($(`#${this.config.wind.windspeed.id}_knob`).val() % 1) * 100;
   }
 
   /**

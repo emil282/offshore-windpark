@@ -18,6 +18,10 @@ const WindTurbinesData = require("../src/js/data-sources/wind-turbines-data_WT")
 //const PowerUpManager = require("../src/js/power-up-manager");
 //const PowerUpDataModifier = require("../src/js/power-up-data-modifier");
 
+var wind;
+const wss = new ws.Server({ noServer: true, clientTracking: true });
+const viewRepeater = new EventEmitter();
+
 function initApp(config) {
   console.log(`Initializing ${config.cityWidth} x ${config.cityHeight} city.`);
   const city = new City(config.cityWidth, config.cityHeight);
@@ -69,6 +73,12 @@ function initApp(config) {
     }
     city.map.replace(req.body.cells);
     res.json({ status: "ok" });
+  });
+
+  app.post("/wind", (req, res) => {
+    wind = req.body;
+    res.json({ status: "ok" });
+    wss.clients.forEach((socket) => sendCountersMessage(socket));
   });
 
   app.use((err, req, res, next) => {
@@ -137,7 +147,8 @@ function initApp(config) {
     socket.send(
       JSON.stringify({
         type: "counters_update",
-        data: counts,
+        stats: counts,
+        wind: wind,
       })
     );
   }
@@ -169,9 +180,6 @@ function initApp(config) {
     );
   }
 
-  const wss = new ws.Server({ noServer: true, clientTracking: true });
-  const viewRepeater = new EventEmitter();
-
   wss.on("connection", (socket) => {
     console.log(`Connected (${wss.clients.size} clients)`);
 
@@ -197,6 +205,7 @@ function initApp(config) {
           case "view_show_map_var":
             viewRepeater.emit("view_show_map_var", message.variable);
             break;
+
           /*case "get_active_power_ups":
             sendPowerUpsUpdate(socket);
             break;

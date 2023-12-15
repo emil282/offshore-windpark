@@ -28,6 +28,7 @@ cfgLoader
     "../config/dashboard.yml",
     "../config/traffic.yml",
     "../config/cars.yml",
+    "../config/wind.yml",
     //"../config/power-ups.yml",
     "../config/default-settings.yml",
     settingsFile,

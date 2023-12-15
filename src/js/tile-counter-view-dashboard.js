@@ -9,18 +9,14 @@ class TileCounterViewDashboard {
       {
         id: "energy-gain",
         label: "Energy gain",
-        calculate: () => {
+        calculate: (wind) => {
           const turbinesSmall = this.counters[4].count;
           const turbinesBig = this.counters[5].count;
 
-          if (this.config.wind) {
-            return (
-              (turbinesSmall + turbinesBig * 2) *
-              (($(`#${this.config.wind.windspeed.id}_knob`).val() ?? 0) % 1)
-            ).toFixed(2);
-          } else {
-            return (turbinesSmall + turbinesBig * 2).toFixed(2);
-          }
+          return (
+            ((turbinesSmall + turbinesBig * 2) * wind.windspeed) /
+            100
+          ).toFixed(2);
         },
       },
     ];
@@ -79,7 +75,7 @@ class TileCounterViewDashboard {
    * Updates the counters in the dashboard.
    * @param {*} counters
    */
-  updateCounters(counters) {
+  updateCounters(counters, wind) {
     this.counters = counters;
     Object.keys(this.counters).forEach((id) => {
       this.fields[id].text(
@@ -88,7 +84,7 @@ class TileCounterViewDashboard {
     });
 
     this.computedFieldDefs.forEach(({ id, calculate }) => {
-      this.fields[id].text(`${calculate()} kWh`);
+      this.fields[id].text(`${calculate(wind)} kWh`);
     });
   }
 }

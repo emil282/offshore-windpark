@@ -89,7 +89,7 @@ class ServerSocketConnector {
     } else if (message.type === "goals_update") {
       this.events.emit("goals_update", message.goals);
     } else if (message.type === "counters_update") {
-      this.events.emit("counters_update", message.data);
+      this.events.emit("counters_update", message);
     } else if (message.type === "view_show_map_var") {
       this.events.emit("view_show_map_var", message.variable, message.data);
     } else if (message.type === "power_ups_update") {

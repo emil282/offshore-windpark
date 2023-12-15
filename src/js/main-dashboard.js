@@ -106,9 +106,8 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
       //actionsPane.enableAll();
     });
 
-    connector.events.on("counters_update", (stats) => {
-      console.log(stats);
-      counterView.updateCounters(stats);
+    connector.events.on("counters_update", (data) => {
+      counterView.updateCounters(data.stats, data.wind);
     });
 
     const connStateView = new ConnectionStateView(connector);

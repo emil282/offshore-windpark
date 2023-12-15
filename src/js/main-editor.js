@@ -15,6 +15,9 @@ const ZoningData = require("./data-sources/zoning-data");
 const ZoneBalanceData = require("./data-sources/zone-balance-data");
 const DataManager = require("./data-manager");
 const TextureLoader = require("./texture-loader");
+const KnobView = require("./knob-view");
+
+console.log(`${process.env.SERVER_HTTP_URI}/config`);
 
 fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
   .then((response) => {
@@ -112,9 +115,12 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
         });
         connector.events.on("connect", () => {
           connector.getMap();
+          knobView.updateCalculation();
         });
         const connStateView = new ConnectionStateView(connector);
         $("body").append(connStateView.$element);
+        const knobView = new KnobView(config.wind);
+        $("[data-component=wind]").append(knobView.$element);
       })
       .catch((err) => {
         showFatalError("Error loading textures", err);
