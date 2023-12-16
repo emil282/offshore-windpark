@@ -211,7 +211,12 @@ class MapView {
           this.renderRedBorderWindTurbineSmallTile(x, y);
         } else {
           this.renderWindTurbineSmallTile(x, y);
-          this.storeCoordinate(x, y, this.smallWindturbines);
+          if (
+            this.smallWindturbines.length == 0 ||
+            this.filterCoordinates(x, y, this.smallWindturbines) == false
+          ) {
+            this.storeCoordinate(x, y, this.smallWindturbines);
+          }
         }
         break;
       case this.parkTileId:
@@ -300,24 +305,7 @@ class MapView {
     }
   }
   renderWindTurbineSmallTile(x, y) {
-    // to loop through coordinate values
-
     this.animate(this.animatedSprite, x, y);
-
-    // Für das animierte gif:
-    // this.animatedApp.stage.addChild(this.displayObject);
-    // this.animatedApp.stage.addChild(img);
-
-    // this.animatedApp.ticker.add(this.animate(img, x, y));
-
-    // this.textureTiles[y][x] = animatedWT;
-    // this.textureTiles[y][x] = this.textures.animatedWT;
-    // this.getTextureTile(x, y).texture =
-    //   this.animatedTextures.animatedWT.textures["wt1.png"];
-    // this.getTextureTile(x, y).texture = this.textures.animatedWT.textures;
-    // const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 8);
-    // this.getTextureTile(x, y).texture =
-    //   this.textures.windturbines_small[`turbine-0${textureNumber}`];
   }
   animate(img, x, y) {
     img.animationSpeed = 0.1;
@@ -334,7 +322,7 @@ class MapView {
         this.getTextureTile(x, y).texture =
           //  this.animatedTextures.animatedWT.animations.wt;
           this.animatedTextures.animatedWT.textures[
-            `wt${img.currentFrame}.png`
+            `wt${img.currentFrame + 1}`
           ];
       }
     }; // s[`wt${img.currentFrame}.png`]
@@ -345,11 +333,9 @@ class MapView {
   }
 
   renderRedBorderWindTurbineSmallTile(x, y) {
-    const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 8);
+    const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 3);
     this.getTextureTile(x, y).texture =
-      this.textures.redBorder_windturbines_small[
-        `border-wt-small-0${textureNumber}`
-      ];
+      this.textures.markedWT[`markedWT${textureNumber}`];
     this.getTextureTile(x, y).visible = true;
   }
 
@@ -459,7 +445,12 @@ class MapView {
           this.renderRedBorderWindTurbineSmallTile(x, y);
         } else {
           this.renderWindTurbineSmallTile(x, y);
-          this.storeCoordinate(x, y, this.smallWindturbines);
+          if (
+            this.smallWindturbines.length == 0 ||
+            this.filterCoordinates(x, y, this.smallWindturbines) == false
+          ) {
+            this.storeCoordinate(x, y, this.smallWindturbines);
+          }
         }
       }
     });

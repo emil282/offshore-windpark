@@ -92,7 +92,7 @@ cfgLoader
     textureLoader.addSpritesheet("windturbines_small");
     textureLoader.addSpritesheet("windturbines_big");
     textureLoader.addSpritesheet("redBorder_windturbines_big");
-    textureLoader.addSpritesheet("redBorder_windturbines_small");
+    textureLoader.addSpritesheet("markedWT");
     textureLoader.addSpritesheet("textureWT");
     textureLoader.addFolder("cars", CarSpawner.allTextureIds(config));
     // textureLoader.addGIF("animatedWT", app);
