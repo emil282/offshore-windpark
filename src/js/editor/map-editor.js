@@ -14,7 +14,15 @@ const VariableMapOverlay = require("../variable-map-overlay");
 //const TravelTimeCalculator = require("../lib/travel-times");
 
 class MapEditor {
-  constructor($element, city, config, textures, dataManager, animatedTextures) {
+  constructor(
+    $element,
+    city,
+    config,
+    textures,
+    dataManager,
+    animatedTextures,
+    animatedApp
+  ) {
     this.$element = $element;
     this.city = city;
     this.config = config;
@@ -26,7 +34,8 @@ class MapEditor {
       config,
       textures,
       dataManager,
-      animatedTextures
+      animatedTextures,
+      animatedApp
     );
     this.mapView.enableTileInteractivity();
     this.displayObject = this.mapView.displayObject;

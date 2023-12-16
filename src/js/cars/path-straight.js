@@ -1,7 +1,7 @@
-const Vec2 = require('vec2');
-const RoadTile = require('./road-tile');
-const Dir = require('../lib/cardinal-directions');
-const MapView = require('../map-view');
+const Vec2 = require("vec2");
+const RoadTile = require("./road-tile");
+const Dir = require("../lib/cardinal-directions");
+const MapView = require("../map-view");
 
 class PathStraight {
   constructor(lane, entrySide) {
@@ -22,7 +22,9 @@ class PathStraight {
     }
     this.progress = this.distance / MapView.TILE_SIZE;
 
-    this.position = Vec2(0, this.distance).rotate(this.rotation).add(this.entryPoint);
+    this.position = Vec2(0, this.distance)
+      .rotate(this.rotation)
+      .add(this.entryPoint);
   }
 }
 

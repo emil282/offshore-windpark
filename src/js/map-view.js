@@ -5,11 +5,20 @@ const { getTileTypeId } = require("./lib/config-helpers");
 const PencilCursor = require("../../static/fa/pencil-alt-solid.svg");
 
 class MapView {
-  constructor(city, config, textures, dataManager, animatedTextures) {
+  constructor(
+    city,
+    config,
+    textures,
+    dataManager,
+    animatedTextures,
+    animatedApp
+  ) {
     this.city = city;
     this.config = config;
     this.textures = textures;
     this.animatedTextures = animatedTextures;
+
+    this.animatedApp = animatedApp;
     this.events = new EventEmitter();
     this.roadTileId = getTileTypeId(config, "road");
     this.parkTileId = getTileTypeId(config, "park");
@@ -20,7 +29,6 @@ class MapView {
     this.roadTexturePrefix = "road";
     this.basicTileRenderers = {};
     this.dataManager = dataManager;
-
     this.randomizedTerrain = Array2D.create(
       this.city.map.width,
       this.city.map.height
@@ -39,11 +47,15 @@ class MapView {
       this.city.map.height,
       null
     );
-    this.animatedTiles = Array2D.create(
-      this.city.map.width,
-      this.city.map.height,
-      null
+    this.smallWindturbines = [];
+    this.animatedSprite = new PIXI.AnimatedSprite(
+      this.animatedTextures.animatedWT.animations.wt
     );
+    // this.animatedTiles = Array2D.create(
+    //   this.city.map.width,
+    //   this.city.map.height,
+    //   null
+    // );
 
     this.city.map.allCells().forEach(([x, y]) => {
       const bgTile = new PIXI.Graphics();
@@ -60,14 +72,14 @@ class MapView {
       this.textureTiles[y][x] = textureTile;
       this.renderTile(x, y);
 
-      const animatedTiles = new PIXI.Sprite();
-      animatedTiles.x = x * MapView.TILE_SIZE;
-      animatedTiles.y = y * MapView.TILE_SIZE;
-      animatedTiles.width = MapView.TILE_SIZE;
-      animatedTiles.height = MapView.TILE_SIZE;
-      animatedTiles.roundPixels = true;
-      this.animatedTiles[x][y] = animatedTiles;
-      this.renderTile(x, y);
+      // const animatedTiles = new PIXI.Sprite();
+      // animatedTiles.x = x * MapView.TILE_SIZE;
+      // animatedTiles.y = y * MapView.TILE_SIZE;
+      // animatedTiles.width = MapView.TILE_SIZE;
+      // animatedTiles.height = MapView.TILE_SIZE;
+      // animatedTiles.roundPixels = true;
+      // this.animatedTiles[x][y] = animatedTiles;
+      // this.renderTile(x, y);
     });
 
     this.zoningLayer = new PIXI.Container();
@@ -76,9 +88,9 @@ class MapView {
     this.tileTextureLayer = new PIXI.Container();
     this.tileTextureLayer.addChild(...Array2D.flatten(this.textureTiles));
     this.displayObject.addChild(this.tileTextureLayer);
-    this.animatedTileLayer = new PIXI.Container();
-    this.animatedTileLayer.addChild(...Array2D.flatten(this.animatedTiles));
-    this.displayObject.addChild(this.animatedTileLayer);
+    // this.animatedTileLayer = new PIXI.Container();
+    // this.animatedTileLayer.addChild(...Array2D.flatten(this.animatedTiles));
+    // this.displayObject.addChild(this.animatedTileLayer);
     this.overlayContainer = new PIXI.Container();
     this.displayObject.addChild(this.overlayContainer);
     this.gridOverlay = this.createGridOverlay();
@@ -192,28 +204,63 @@ class MapView {
 
   renderTile(x, y) {
     this.renderBasicTile(x, y);
-    if (this.city.map.get(x, y) === this.parkTileId) {
-      this.renderParkTile(x, y);
+    switch (this.city.map.get(x, y)) {
+      case this.windTurbineSmallId:
+        if (1 == this.dataManager.sources[3].locationsGoalsError[y][x]) {
+          this.deleteFromArray(x, y, this.smallWindturbines);
+          this.renderRedBorderWindTurbineSmallTile(x, y);
+        } else {
+          this.renderWindTurbineSmallTile(x, y);
+          this.storeCoordinate(x, y, this.smallWindturbines);
+        }
+        break;
+      case this.parkTileId:
+        this.deleteFromArray(x, y, this.smallWindturbines);
+        this.renderParkTile(x, y);
+        break;
+      case this.waterTileId:
+        this.deleteFromArray(x, y, this.smallWindturbines);
+        this.renderWaterTile(x, y);
+        break;
+      case this.roadTileId:
+        this.deleteFromArray(x, y, this.smallWindturbines);
+        this.renderRoadTile(x, y);
+        break;
+      case this.windTurbineBigId:
+        this.deleteFromArray(x, y, this.smallWindturbines);
+        if (1 == this.dataManager.sources[3].locationsGoalsError[y][x]) {
+          this.renderRedBorderWindTurbineBigTile(x, y);
+        } else {
+          this.renderWindTurbineBigTile(x, y);
+        }
+        break;
     }
-    if (this.city.map.get(x, y) === this.waterTileId) {
-      this.renderWaterTile(x, y);
-    }
-    if (this.city.map.get(x, y) === this.roadTileId) {
-      this.renderRoadTile(x, y);
-    }
-    if (this.city.map.get(x, y) === this.windTurbineSmallId) {
-      this.renderWindTurbineSmallTile(x, y);
-    }
-    if (this.city.map.get(x, y) === this.windTurbineBigId) {
-      if (1 == this.dataManager.sources[3].locationsGoalsError[y][x]) {
-        this.renderRedBorderWindTurbineBigTile(x, y);
-      } else {
-        this.renderWindTurbineBigTile(x, y);
-      }
-    }
+
+    //   this.renderBasicTile(x, y);
+    //   if (this.city.map.get(x, y) === this.windTurbineSmallId) {
+    //     this.renderWindTurbineSmallTile(x, y);
+    //   }
+    //   if (this.city.map.get(x, y) === this.parkTileId) {
+    //     this.renderParkTile(x, y);
+    //   }
+    //   if (this.city.map.get(x, y) === this.waterTileId) {
+    //     this.renderWaterTile(x, y);
+    //   }
+    //   if (this.city.map.get(x, y) === this.roadTileId) {
+    //     this.renderRoadTile(x, y);
+    //   }
+
+    //   if (this.city.map.get(x, y) === this.windTurbineBigId) {
+    //     if (1 == this.dataManager.sources[3].locationsGoalsError[y][x]) {
+    //       this.renderRedBorderWindTurbineBigTile(x, y);
+    //     } else {
+    //       this.renderWindTurbineBigTile(x, y);
+    //     }
+    //   }
   }
 
   renderParkTile(x, y) {
+    this.deleteFromArray(x, y, this.smallWindturbines);
     const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 8);
     this.getTextureTile(x, y).texture =
       this.textures.parks[`park-0${textureNumber}`];
@@ -227,19 +274,74 @@ class MapView {
     this.getTextureTile(x, y).visible = true;
   }
 
+  filterCoordinates(xVal, yVal, array) {
+    for (var i = 0; i <= array.length; i++) {
+      if (array[i].x === xVal && array[i].y === yVal) {
+        return true;
+      }
+      return false;
+    }
+  }
+  storeCoordinate(xVal, yVal, array) {
+    if (
+      array.length == 0 ||
+      this.filterCoordinates(xVal, yVal, array) == false
+    ) {
+      array.push({ x: xVal, y: yVal });
+    }
+  }
+
+  deleteFromArray(xVal, yVal, array) {
+    for (var i = 0; i < array.length; i++) {
+      if (array[i].x === xVal && array[i].y === yVal) array.splice(i, 1); // 2nd parameter means remove one item only
+    }
+    if (array.length <= 0) {
+      this.animatedSprite.stop();
+    }
+  }
   renderWindTurbineSmallTile(x, y) {
-    // this.animatedTiles[y][x] = this.animatedTextures.animatedWT;
-    this.animatedTextures.animatedWT.x = x;
-    this.animatedTextures.animatedWT.y = y;
+    // to loop through coordinate values
+
+    this.animate(this.animatedSprite, x, y);
+
+    // Für das animierte gif:
+    // this.animatedApp.stage.addChild(this.displayObject);
+    // this.animatedApp.stage.addChild(img);
+
+    // this.animatedApp.ticker.add(this.animate(img, x, y));
 
     // this.textureTiles[y][x] = animatedWT;
     // this.textureTiles[y][x] = this.textures.animatedWT;
-    // this.getTextureTile(x, y).texture = this.textures.animatedWT.texture;
+    // this.getTextureTile(x, y).texture =
+    //   this.animatedTextures.animatedWT.textures["wt1.png"];
     // this.getTextureTile(x, y).texture = this.textures.animatedWT.textures;
     // const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 8);
     // this.getTextureTile(x, y).texture =
     //   this.textures.windturbines_small[`turbine-0${textureNumber}`];
-    // this.getTextureTile(x, y).visible = true;
+  }
+  animate(img, x, y) {
+    img.animationSpeed = 0.1;
+    img.play();
+
+    img.onLoop = () => {
+      console.log("loop");
+    };
+    img.onFrameChange = () => {
+      console.log("currentFrame", img.currentFrame);
+      for (var i = 0; i < this.smallWindturbines.length; i++) {
+        var x = this.smallWindturbines[i].x;
+        var y = this.smallWindturbines[i].y;
+        this.getTextureTile(x, y).texture =
+          //  this.animatedTextures.animatedWT.animations.wt;
+          this.animatedTextures.animatedWT.textures[
+            `wt${img.currentFrame}.png`
+          ];
+      }
+    }; // s[`wt${img.currentFrame}.png`]
+    this.getTextureTile(x, y).visible = true;
+    img.onComplete = () => {
+      console.log("done");
+    };
   }
 
   renderRedBorderWindTurbineSmallTile(x, y) {

@@ -93,6 +93,7 @@ cfgLoader
     textureLoader.addSpritesheet("windturbines_big");
     textureLoader.addSpritesheet("redBorder_windturbines_big");
     textureLoader.addSpritesheet("redBorder_windturbines_small");
+    textureLoader.addSpritesheet("textureWT");
     textureLoader.addFolder("cars", CarSpawner.allTextureIds(config));
     // textureLoader.addGIF("animatedWT", app);
 
@@ -109,7 +110,8 @@ cfgLoader
     let textures = {};
     Promise.all([promiseAnimatedtextures, promiseTextures])
       .then((response) => {
-        animatedTextures = response[0];
+        animatedTextures = response[0][0];
+        AnimatedApp = response[0][1];
         textures = response[1];
         $('[data-component="app-container"]').append(app.view);
 
@@ -119,7 +121,8 @@ cfgLoader
           config,
           textures,
           stats,
-          animatedTextures
+          animatedTextures,
+          AnimatedApp
         );
         app.stage.addChild(mapEditor.displayObject);
         mapEditor.displayObject.width = 1920;

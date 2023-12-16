@@ -1,13 +1,13 @@
 /* globals PIXI */
-const Vec2 = require('vec2');
-const CarDriver = require('./car-driver');
-const Dir = require('../lib/cardinal-directions');
-const RoadTile = require('./road-tile');
-const { TILE_SIZE } = require('../map-view');
-const SpriteFader = require('../lib/sprite-fader');
-const PathStraight = require('./path-straight');
-const PathArc = require('./path-arc');
-const PulledCarDriver = require('./pulled-car-driver');
+const Vec2 = require("vec2");
+const CarDriver = require("./car-driver");
+const Dir = require("../lib/cardinal-directions");
+const RoadTile = require("./road-tile");
+const { TILE_SIZE } = require("../map-view");
+const SpriteFader = require("../lib/sprite-fader");
+const PathStraight = require("./path-straight");
+const PathArc = require("./path-arc");
+const PulledCarDriver = require("./pulled-car-driver");
 
 // Max lifetime of cars
 const MAX_LIFETIME = 2 * 60 * 60; // Approx. 2 minutes
@@ -17,7 +17,16 @@ const SPRITE_ANCHOR_X = 0.5;
 const SPRITE_ANCHOR_Y = 0.75;
 
 class Car {
-  constructor(carOverlay, texture, tileX, tileY, entrySide, lane, maxSpeed = 1, DriverClass = CarDriver) {
+  constructor(
+    carOverlay,
+    texture,
+    tileX,
+    tileY,
+    entrySide,
+    lane,
+    maxSpeed = 1,
+    DriverClass = CarDriver
+  ) {
     this.overlay = carOverlay;
     this.lane = lane;
     this.maxSpeed = maxSpeed;
@@ -36,7 +45,9 @@ class Car {
     this.sprite = Car.createSprite(texture);
     this.fader = new SpriteFader(this.sprite);
     this.setTile(tileX, tileY, entrySide);
-    this.setSpritePosition(this.tilePosition().add(RoadTile.entryPoint(this.lane, this.entrySide)));
+    this.setSpritePosition(
+      this.tilePosition().add(RoadTile.entryPoint(this.lane, this.entrySide))
+    );
     this.sprite.rotation = Dir.asAngle(Dir.opposite(this.entrySide));
   }
 
@@ -125,9 +136,10 @@ class Car {
     this.exitSide = exitSide;
 
     const remainder = this.path !== null ? this.path.remainder : 0;
-    this.path = this.exitSide === Dir.opposite(this.entrySide)
-      ? new PathStraight(this.lane, this.entrySide)
-      : new PathArc(this.lane, this.entrySide, this.exitSide);
+    this.path =
+      this.exitSide === Dir.opposite(this.entrySide)
+        ? new PathStraight(this.lane, this.entrySide)
+        : new PathArc(this.lane, this.entrySide, this.exitSide);
     this.path.advance(remainder);
 
     this.onEnterTile();
@@ -174,20 +186,29 @@ class Car {
   }
 
   hasCarsOverlapping() {
-    const cheapDistance = (v1, v2) => Math.max(Math.abs(v1.x - v2.x), Math.abs(v1.y - v2.y));
+    const cheapDistance = (v1, v2) =>
+      Math.max(Math.abs(v1.x - v2.x), Math.abs(v1.y - v2.y));
     const position = this.getSpritePosition();
     return this.overlay.getCarsAround(this).some((carAround) => {
-      const overlapDistance = this.sprite.height / 2 + carAround.sprite.height / 2;
-      return cheapDistance(carAround.getSpritePosition(), position) < overlapDistance
-        && !this.isPulling(carAround) && !carAround.isPulling(this);
+      const overlapDistance =
+        this.sprite.height / 2 + carAround.sprite.height / 2;
+      return (
+        cheapDistance(carAround.getSpritePosition(), position) <
+          overlapDistance &&
+        !this.isPulling(carAround) &&
+        !carAround.isPulling(this)
+      );
     });
   }
 
   animate(time) {
     this.driver.adjustCarSpeed();
 
-    if (this.isSpawning && !this.hasCarsOverlapping()
-      && (!this.frontWagon || this.speed > 0)) {
+    if (
+      this.isSpawning &&
+      !this.hasCarsOverlapping() &&
+      (!this.frontWagon || this.speed > 0)
+    ) {
       this.isSpawning = false;
     }
 
@@ -205,16 +226,20 @@ class Car {
 
     this.lifetime += time;
     if (!this.frontWagon) {
-      if ((this.lifetime > MAX_LIFETIME || this.timeStopped > MAX_TIME_STOPPED)
-        && this.overlay.options.maxLifetime) {
+      if (
+        (this.lifetime > MAX_LIFETIME || this.timeStopped > MAX_TIME_STOPPED) &&
+        this.overlay.options.maxLifetime
+      ) {
         this.despawn();
         this.despawnWagons();
       }
     }
 
-    if (this.isDespawning
-      || this.isSpawning
-      || !this.overlay.roads.isRoad(this.tile.x, this.tile.y)) {
+    if (
+      this.isDespawning ||
+      this.isSpawning ||
+      !this.overlay.roads.isRoad(this.tile.x, this.tile.y)
+    ) {
       this.fader.fadeOut();
     } else {
       this.fader.fadeIn();

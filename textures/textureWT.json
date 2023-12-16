@@ -1,36 +1,33 @@
 {
   "frames": {
-    "wt0.png": {
+    "wt1": {
       "frame": { "x": 0, "y": 0, "w": 72, "h": 72 },
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
       "sourceSize": { "w": 72, "h": 72 }
     },
-    "wt1.png": {
+    "wt2": {
       "frame": { "x": 72, "y": 0, "w": 72, "h": 72 },
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
       "sourceSize": { "w": 72, "h": 72 }
     },
-    "wt2.png": {
+    "wt3": {
       "frame": { "x": 0, "y": 72, "w": 72, "h": 72 },
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
       "sourceSize": { "w": 72, "h": 72 }
     },
-    "wt3.png": {
+    "wt4": {
       "frame": { "x": 72, "y": 72, "w": 72, "h": 72 },
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
       "sourceSize": { "w": 72, "h": 72 }
     }
-  },
-  "animations": {
-    "wt": ["wt0.png", "wt1.png", "wt2.png", "wt3.png"]
   },
   "meta": {
     "app": "https://www.codeandweb.com/texturepacker",
