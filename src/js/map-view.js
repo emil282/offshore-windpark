@@ -455,9 +455,11 @@ class MapView {
       }
       if (this.city.map.cells[y][x] == 4) {
         if (1 == this.dataManager.sources[3].locationsGoalsError[y][x]) {
+          this.deleteFromArray(x, y, this.smallWindturbines);
           this.renderRedBorderWindTurbineSmallTile(x, y);
         } else {
           this.renderWindTurbineSmallTile(x, y);
+          this.storeCoordinate(x, y, this.smallWindturbines);
         }
       }
     });
