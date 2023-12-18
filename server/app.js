@@ -23,6 +23,11 @@ const wss = new ws.Server({ noServer: true, clientTracking: true });
 const viewRepeater = new EventEmitter();
 
 function initApp(config) {
+  wind = {
+    winddirection: config.wind.winddirection.default,
+    windspeed: config.wind.windspeed.default,
+  };
+
   console.log(`Initializing ${config.cityWidth} x ${config.cityHeight} city.`);
   const city = new City(config.cityWidth, config.cityHeight);
   const stats = new DataManager({

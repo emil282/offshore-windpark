@@ -14,9 +14,25 @@ class TileCounterViewDashboard {
           const turbinesBig = this.counters[5].count;
 
           return (
-            ((turbinesSmall + turbinesBig * 2) * wind.windspeed) /
-            100
-          ).toFixed(2);
+            (
+              ((turbinesSmall + turbinesBig * 2) * wind.windspeed) /
+              100
+            ).toFixed(2) + " kWh"
+          );
+        },
+      },
+      {
+        id: "winddirection",
+        label: "Winddirection",
+        calculate: (wind) => {
+          return wind.winddirection;
+        },
+      },
+      {
+        id: "windspeed",
+        label: "Windspeed",
+        calculate: (wind) => {
+          return wind.windspeed.toFixed(2) + " km/h";
         },
       },
     ];
@@ -84,7 +100,7 @@ class TileCounterViewDashboard {
     });
 
     this.computedFieldDefs.forEach(({ id, calculate }) => {
-      this.fields[id].text(`${calculate(wind)} kWh`);
+      this.fields[id].text(`${calculate(wind)}`);
     });
   }
 }
