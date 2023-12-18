@@ -47,10 +47,12 @@ class MapView {
       this.city.map.height,
       null
     );
+    this.bigWindturbines = [];
     this.smallWindturbines = [];
     this.animatedSprite = new PIXI.AnimatedSprite(
-      this.animatedTextures.animatedWT.animations.wt
+      this.animatedTextures.wt_small_texture.animations.wt
     );
+
     // this.animatedTiles = Array2D.create(
     //   this.city.map.width,
     //   this.city.map.height,
@@ -211,9 +213,10 @@ class MapView {
           this.renderRedBorderWindTurbineSmallTile(x, y);
         } else {
           this.renderWindTurbineSmallTile(x, y);
+          this.deleteFromArray(x, y, this.bigWindturbines);
           if (
             this.smallWindturbines.length == 0 ||
-            this.filterCoordinates(x, y, this.smallWindturbines) == false
+            this.filterCoordinates(x, y, this.smallWindturbines) == true
           ) {
             this.storeCoordinate(x, y, this.smallWindturbines);
           }
@@ -232,40 +235,27 @@ class MapView {
         this.renderRoadTile(x, y);
         break;
       case this.windTurbineBigId:
-        this.deleteFromArray(x, y, this.smallWindturbines);
+        this.deleteFromArray(x, y, this.bigWindturbines);
         if (1 == this.dataManager.sources[3].locationsGoalsError[y][x]) {
+          this.deleteFromArray(x, y, this.bigWindturbines);
           this.renderRedBorderWindTurbineBigTile(x, y);
         } else {
           this.renderWindTurbineBigTile(x, y);
+          this.deleteFromArray(x, y, this.smallWindturbines);
+          if (
+            this.bigWindturbines.length == 0 ||
+            this.filterCoordinates(x, y, this.bigWindturbines) == true
+          ) {
+            this.storeCoordinate(x, y, this.bigWindturbines);
+          }
         }
         break;
     }
-
-    //   this.renderBasicTile(x, y);
-    //   if (this.city.map.get(x, y) === this.windTurbineSmallId) {
-    //     this.renderWindTurbineSmallTile(x, y);
-    //   }
-    //   if (this.city.map.get(x, y) === this.parkTileId) {
-    //     this.renderParkTile(x, y);
-    //   }
-    //   if (this.city.map.get(x, y) === this.waterTileId) {
-    //     this.renderWaterTile(x, y);
-    //   }
-    //   if (this.city.map.get(x, y) === this.roadTileId) {
-    //     this.renderRoadTile(x, y);
-    //   }
-
-    //   if (this.city.map.get(x, y) === this.windTurbineBigId) {
-    //     if (1 == this.dataManager.sources[3].locationsGoalsError[y][x]) {
-    //       this.renderRedBorderWindTurbineBigTile(x, y);
-    //     } else {
-    //       this.renderWindTurbineBigTile(x, y);
-    //     }
-    //   }
   }
 
   renderParkTile(x, y) {
     this.deleteFromArray(x, y, this.smallWindturbines);
+    this.deleteFromArray(x, y, this.bigWindturbines);
     const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 8);
     this.getTextureTile(x, y).texture =
       this.textures.parks[`park-0${textureNumber}`];
@@ -280,17 +270,19 @@ class MapView {
   }
 
   filterCoordinates(xVal, yVal, array) {
-    for (var i = 0; i <= array.length; i++) {
-      if (array[i].x === xVal && array[i].y === yVal) {
-        return true;
-      }
+    let duplicates = array.filter(
+      (coords) => coords.x == xVal && coords.y == yVal
+    );
+    if (duplicates.length == 0) {
+      return true;
+    } else {
       return false;
     }
   }
   storeCoordinate(xVal, yVal, array) {
     if (
       array.length == 0 ||
-      this.filterCoordinates(xVal, yVal, array) == false
+      this.filterCoordinates(xVal, yVal, array) == true
     ) {
       array.push({ x: xVal, y: yVal });
     }
@@ -300,7 +292,11 @@ class MapView {
     for (var i = 0; i < array.length; i++) {
       if (array[i].x === xVal && array[i].y === yVal) array.splice(i, 1); // 2nd parameter means remove one item only
     }
-    if (array.length <= 0) {
+    console.log(array);
+    if (
+      this.smallWindturbines.length <= 0 &&
+      this.bigWindturbines.length <= 0
+    ) {
       this.animatedSprite.stop();
     }
   }
@@ -312,20 +308,27 @@ class MapView {
     img.play();
 
     img.onLoop = () => {
-      console.log("loop");
+      // console.log("loop");
     };
     img.onFrameChange = () => {
-      console.log("currentFrame", img.currentFrame);
+      // console.log("currentFrame", img.currentFrame);
       for (var i = 0; i < this.smallWindturbines.length; i++) {
         var x = this.smallWindturbines[i].x;
         var y = this.smallWindturbines[i].y;
         this.getTextureTile(x, y).texture =
           //  this.animatedTextures.animatedWT.animations.wt;
-          this.animatedTextures.animatedWT.textures[
+          this.animatedTextures.wt_small_texture.textures[
             `wt${img.currentFrame + 1}`
           ];
       }
-    }; // s[`wt${img.currentFrame}.png`]
+      for (var i = 0; i < this.bigWindturbines.length; i++) {
+        var x = this.bigWindturbines[i].x;
+        var y = this.bigWindturbines[i].y;
+        this.getTextureTile(x, y).texture =
+          //  this.animatedTextures.animatedWT.animations.wt;
+          this.textures.wt_big_texture[`wt${img.currentFrame + 1}`];
+      } // s[`wt${img.currentFrame}.png`]
+    };
     this.getTextureTile(x, y).visible = true;
     img.onComplete = () => {
       console.log("done");
@@ -335,23 +338,22 @@ class MapView {
   renderRedBorderWindTurbineSmallTile(x, y) {
     const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 3);
     this.getTextureTile(x, y).texture =
-      this.textures.markedWT[`markedWT${textureNumber}`];
+      this.textures.marked_small_wt[`marked_small_wt${textureNumber}`];
     this.getTextureTile(x, y).visible = true;
   }
 
   renderWindTurbineBigTile(x, y) {
-    const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 8);
-    this.getTextureTile(x, y).texture =
-      this.textures.windturbines_big[`turbine-big-0${textureNumber}`];
-    this.getTextureTile(x, y).visible = true;
+    this.animate(this.animatedSprite, x, y);
+    // const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 8);
+    // this.getTextureTile(x, y).texture =
+    //   this.textures.windturbines_big[`turbine-big-0${textureNumber}`];
+    // this.getTextureTile(x, y).visible = true;
   }
 
   renderRedBorderWindTurbineBigTile(x, y) {
-    const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 8);
+    const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 3);
     this.getTextureTile(x, y).texture =
-      this.textures.redBorder_windturbines_big[
-        `border-wt-big-0${textureNumber}`
-      ];
+      this.textures.marked_big_wt[`marked_big_wt${textureNumber}`];
     this.getTextureTile(x, y).visible = true;
   }
 
@@ -434,9 +436,16 @@ class MapView {
     this.city.map.allCells().forEach(([x, y]) => {
       if (this.city.map.cells[y][x] == 5) {
         if (1 == this.dataManager.sources[3].locationsGoalsError[y][x]) {
+          this.deleteFromArray(x, y, this.bigWindturbines);
           this.renderRedBorderWindTurbineBigTile(x, y);
         } else {
           this.renderWindTurbineBigTile(x, y);
+          if (
+            this.bigWindturbines.length == 0 ||
+            this.filterCoordinates(x, y, this.bigWindturbines) == true
+          ) {
+            this.storeCoordinate(x, y, this.bigWindturbines);
+          }
         }
       }
       if (this.city.map.cells[y][x] == 4) {
@@ -447,7 +456,7 @@ class MapView {
           this.renderWindTurbineSmallTile(x, y);
           if (
             this.smallWindturbines.length == 0 ||
-            this.filterCoordinates(x, y, this.smallWindturbines) == false
+            this.filterCoordinates(x, y, this.smallWindturbines) == true
           ) {
             this.storeCoordinate(x, y, this.smallWindturbines);
           }

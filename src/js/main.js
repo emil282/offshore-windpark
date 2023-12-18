@@ -89,16 +89,15 @@ cfgLoader
     textureLoader.addSpritesheet("roads-walkable");
     textureLoader.addSpritesheet("parks");
     textureLoader.addSpritesheet("water");
-    textureLoader.addSpritesheet("windturbines_small");
-    textureLoader.addSpritesheet("windturbines_big");
-    textureLoader.addSpritesheet("redBorder_windturbines_big");
-    textureLoader.addSpritesheet("markedWT");
-    textureLoader.addSpritesheet("textureWT");
+    // textureLoader.addSpritesheet("wt_small_texture");
+    textureLoader.addSpritesheet("wt_big_texture");
+    textureLoader.addSpritesheet("marked_big_wt");
+    textureLoader.addSpritesheet("marked_small_wt");
     textureLoader.addFolder("cars", CarSpawner.allTextureIds(config));
     // textureLoader.addGIF("animatedWT", app);
 
     const promiseAnimatedtextures = animatedTextureLoader.loadAnimatedTextures(
-      "animatedWT",
+      "wt_small_texture",
       "wt"
     );
     // .then((textures) => {
