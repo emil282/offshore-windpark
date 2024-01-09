@@ -37,28 +37,29 @@ class MapView {
 
     this.displayObject = new PIXI.Container();
 
+    // map layer with background Tiles
     this.bgTiles = Array2D.create(
       this.city.map.width,
       this.city.map.height,
       null
     );
+    // map layer with Texture Tiles
     this.textureTiles = Array2D.create(
       this.city.map.width,
       this.city.map.height,
       null
     );
+    // TODO:
+    // array for saving the coords of big windturbines
     this.bigWindturbines = [];
+    // array for saving the coords of small windturbines
     this.smallWindturbines = [];
+    // animated sprite
     this.animatedSprite = new PIXI.AnimatedSprite(
       this.animatedTextures.wt_small_texture.animations.wt
     );
 
-    // this.animatedTiles = Array2D.create(
-    //   this.city.map.width,
-    //   this.city.map.height,
-    //   null
-    // );
-
+    // creates backround tiles with PIXI Graphics for each cell in the map
     this.city.map.allCells().forEach(([x, y]) => {
       const bgTile = new PIXI.Graphics();
       bgTile.x = x * MapView.TILE_SIZE;
@@ -73,15 +74,6 @@ class MapView {
       textureTile.roundPixels = true;
       this.textureTiles[y][x] = textureTile;
       this.renderTile(x, y);
-
-      // const animatedTiles = new PIXI.Sprite();
-      // animatedTiles.x = x * MapView.TILE_SIZE;
-      // animatedTiles.y = y * MapView.TILE_SIZE;
-      // animatedTiles.width = MapView.TILE_SIZE;
-      // animatedTiles.height = MapView.TILE_SIZE;
-      // animatedTiles.roundPixels = true;
-      // this.animatedTiles[x][y] = animatedTiles;
-      // this.renderTile(x, y);
     });
 
     this.zoningLayer = new PIXI.Container();
@@ -90,9 +82,6 @@ class MapView {
     this.tileTextureLayer = new PIXI.Container();
     this.tileTextureLayer.addChild(...Array2D.flatten(this.textureTiles));
     this.displayObject.addChild(this.tileTextureLayer);
-    // this.animatedTileLayer = new PIXI.Container();
-    // this.animatedTileLayer.addChild(...Array2D.flatten(this.animatedTiles));
-    // this.displayObject.addChild(this.animatedTileLayer);
     this.overlayContainer = new PIXI.Container();
     this.displayObject.addChild(this.overlayContainer);
     this.gridOverlay = this.createGridOverlay();
@@ -196,29 +185,65 @@ class MapView {
     this.zoningLayer.on("pointercancel", onEndPointer);
   }
 
+  /**
+   *
+   * @param {*} x the x coordinate. measured in tiles.
+   * @param {*} y the y coordinate. measured in tiles.
+   * @returns the background Tile
+   */
   getBgTile(x, y) {
     return this.bgTiles[y][x];
   }
-
+  /**
+   *
+   * @param {*} x the x coordinate. measured in tiles.
+   * @param {*} y the y coordinate. measured in tiles.
+   * @returns the Texture Tile
+   */
   getTextureTile(x, y) {
     return this.textureTiles[y][x];
   }
 
+  /**
+   * renders the new Tile after an Update on the map
+   * @param {*} x the x coordinate. measured in tiles.
+   * @param {*} y the y coordinate. measured in tiles.
+   */
   renderTile(x, y) {
     this.renderBasicTile(x, y);
     switch (this.city.map.get(x, y)) {
       case this.windTurbineSmallId:
+        // if the type of the tily is small Windturbine and the WT has a location error
         if (1 == this.dataManager.sources[3].locationsGoalsError[y][x]) {
           this.deleteFromArray(x, y, this.smallWindturbines);
+          // renders texture with attention symbol
           this.renderRedBorderWindTurbineSmallTile(x, y);
         } else {
+          // else: renders animation for small WT and deletes the coordinates from the array, which saves the big WTs
           this.renderWindTurbineSmallTile(x, y);
           this.deleteFromArray(x, y, this.bigWindturbines);
-          if (
-            this.smallWindturbines.length == 0 ||
-            this.filterCoordinates(x, y, this.smallWindturbines) == true
-          ) {
+          // if they array which saves the small WTs is empty or the the coords aren't in it
+          // they will be added to the array
+          {
             this.storeCoordinate(x, y, this.smallWindturbines);
+          }
+        }
+        break;
+      case this.windTurbineBigId:
+        this.deleteFromArray(x, y, this.bigWindturbines);
+        // if the type of the tily is big Windturbine and the WT has a location error
+        if (1 == this.dataManager.sources[3].locationsGoalsError[y][x]) {
+          this.deleteFromArray(x, y, this.bigWindturbines);
+          // renders texture with attention symbol
+          this.renderRedBorderWindTurbineBigTile(x, y);
+        } else {
+          // else: renders animation for big WT and deletes the coordinates from the array, which saves the small WTs
+          this.renderWindTurbineBigTile(x, y);
+          this.deleteFromArray(x, y, this.smallWindturbines);
+          // if they array which saves the big WTs is empty or the the coords aren't in it
+          // they will be added to the array
+          {
+            this.storeCoordinate(x, y, this.bigWindturbines);
           }
         }
         break;
@@ -233,22 +258,6 @@ class MapView {
       case this.roadTileId:
         this.deleteFromArray(x, y, this.smallWindturbines);
         this.renderRoadTile(x, y);
-        break;
-      case this.windTurbineBigId:
-        this.deleteFromArray(x, y, this.bigWindturbines);
-        if (1 == this.dataManager.sources[3].locationsGoalsError[y][x]) {
-          this.deleteFromArray(x, y, this.bigWindturbines);
-          this.renderRedBorderWindTurbineBigTile(x, y);
-        } else {
-          this.renderWindTurbineBigTile(x, y);
-          this.deleteFromArray(x, y, this.smallWindturbines);
-          if (
-            this.bigWindturbines.length == 0 ||
-            this.filterCoordinates(x, y, this.bigWindturbines) == true
-          ) {
-            this.storeCoordinate(x, y, this.bigWindturbines);
-          }
-        }
         break;
     }
   }
@@ -268,7 +277,14 @@ class MapView {
       this.textures.water[`water-0${textureNumber}`];
     this.getTextureTile(x, y).visible = true;
   }
-
+  // TODO:
+  /**
+   * searches if given coords are already in the array
+   * @param {*} xVal the x coordinate. measured in tiles.
+   * @param {*} yVal the y coordinate. measured in tiles.
+   * @param {*} array an array. containing coordinates for either small or big WTs
+   * @returns true: xVal and yVal are in the array. false: xVal and yVal are already in the array
+   */
   filterCoordinates(xVal, yVal, array) {
     let duplicates = array.filter(
       (coords) => coords.x == xVal && coords.y == yVal
@@ -279,6 +295,12 @@ class MapView {
       return false;
     }
   }
+  /**
+   * stores new coordinates as an pbject with x- and y-Value
+   * @param {*} xVal the x coordinate. measured in tiles.
+   * @param {*} yVal the y coordinate. measured in tiles.
+   * @param {*} array an array. containing coordinates for either small or big WTs
+   */
   storeCoordinate(xVal, yVal, array) {
     if (
       array.length == 0 ||
@@ -287,12 +309,17 @@ class MapView {
       array.push({ x: xVal, y: yVal });
     }
   }
-
+  /**
+   * deletes the coordinates of a WT from the array and stops the animation if there are
+   * no WTs on the map (both array for small and big Wts are empty)
+   * @param {*} xVal the x coordinate. measured in tiles.
+   * @param {*} yVal the y coordinate. measured in tiles.
+   * @param {*} array an array. containing coordinates for either small or big WTs
+   */
   deleteFromArray(xVal, yVal, array) {
     for (var i = 0; i < array.length; i++) {
       if (array[i].x === xVal && array[i].y === yVal) array.splice(i, 1); // 2nd parameter means remove one item only
     }
-    console.log(array);
     if (
       this.smallWindturbines.length <= 0 &&
       this.bigWindturbines.length <= 0
@@ -300,39 +327,47 @@ class MapView {
       this.animatedSprite.stop();
     }
   }
+
+  /**
+   * animates the spritesheet and changes frames of the WT Textures
+   * @param {*} x the x coordinate. measured in tiles.
+   * @param {*} y the y coordinate. measured in tiles.
+   */
   renderWindTurbineSmallTile(x, y) {
     this.animate(this.animatedSprite, x, y);
   }
+  /**
+   * animates the spritesheet and changes frames of the WT Textures
+   * @param {*} img spritesheet for the PIXI animated Sprite
+   * @param {*} x the x coordinate. measured in tiles.
+   * @param {*} y the y coordinate. measured in tiles.
+   */
   animate(img, x, y) {
+    // sets animation spees
     img.animationSpeed = 0.1;
+    // starts the animated sprite
     img.play();
-
-    img.onLoop = () => {
-      // console.log("loop");
-    };
+    // sets the animated spprite on loop
+    img.onLoop = () => {};
     img.onFrameChange = () => {
-      // console.log("currentFrame", img.currentFrame);
+      //every small WT texture on the map changes to the next frame when the animated sprite does
       for (var i = 0; i < this.smallWindturbines.length; i++) {
         var x = this.smallWindturbines[i].x;
         var y = this.smallWindturbines[i].y;
         this.getTextureTile(x, y).texture =
-          //  this.animatedTextures.animatedWT.animations.wt;
           this.animatedTextures.wt_small_texture.textures[
             `wt${img.currentFrame + 1}`
           ];
       }
+      //every big WT texture on the map changes to the next frame when the animated sprite does
       for (var i = 0; i < this.bigWindturbines.length; i++) {
         var x = this.bigWindturbines[i].x;
         var y = this.bigWindturbines[i].y;
         this.getTextureTile(x, y).texture =
-          //  this.animatedTextures.animatedWT.animations.wt;
           this.textures.wt_big_texture[`wt${img.currentFrame + 1}`];
-      } // s[`wt${img.currentFrame}.png`]
+      }
     };
     this.getTextureTile(x, y).visible = true;
-    img.onComplete = () => {
-      console.log("done");
-    };
   }
 
   renderRedBorderWindTurbineSmallTile(x, y) {
@@ -440,10 +475,7 @@ class MapView {
           this.renderRedBorderWindTurbineBigTile(x, y);
         } else {
           this.renderWindTurbineBigTile(x, y);
-          if (
-            this.bigWindturbines.length == 0 ||
-            this.filterCoordinates(x, y, this.bigWindturbines) == true
-          ) {
+          {
             this.storeCoordinate(x, y, this.bigWindturbines);
           }
         }
@@ -454,10 +486,7 @@ class MapView {
           this.renderRedBorderWindTurbineSmallTile(x, y);
         } else {
           this.renderWindTurbineSmallTile(x, y);
-          if (
-            this.smallWindturbines.length == 0 ||
-            this.filterCoordinates(x, y, this.smallWindturbines) == true
-          ) {
+          {
             this.storeCoordinate(x, y, this.smallWindturbines);
           }
         }
