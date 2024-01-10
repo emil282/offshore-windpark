@@ -5,7 +5,6 @@ class AnimatedTextureLoader {
     // const canvas = document.getElementById("mycanvas");
     this.img;
 
-    console.log(PIXI.utils.TextureCache);
     // this.loader = this.AnimationApp.loader;
     // this.app.loader.add("animatedWT", "./textures/${animatedWT}.json");
     this.AnimationApp.loader.onProgress.add(this.handleLoadProgress);
@@ -73,7 +72,6 @@ class AnimatedTextureLoader {
   // }
   async loadAnimatedTextures(name, frame) {
     const result = await this.addAnimatedTexture(name, frame);
-    console.log(result);
     return new Promise((resolve) => {
       this.AnimationApp.loader.load(() => {
         {
