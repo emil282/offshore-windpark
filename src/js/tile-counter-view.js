@@ -14,10 +14,13 @@ class TileCounterView {
         calculate: () => {
           const turbinesSmall = this.stats.get("zones-windTurbineSmall-count");
           const turbinesBig = this.stats.get("zones-windTurbineBig-count");
-
+          //Calculate the energy gain based on the wind speed and the number of turbines
+          let speed =
+            (($(`#${this.config.wind.windspeed.id}_knob`).val() ?? 0) % 1) * 2;
           return (
             (turbinesSmall + turbinesBig * 2) *
-            (($(`#${this.config.wind.windspeed.id}_knob`).val() ?? 0) % 1)
+            (speed / 1) *
+            (speed / 1) ** 3
           ).toFixed(2);
         },
       },
@@ -113,6 +116,8 @@ class TileCounterView {
     this.computedFieldDefs.forEach(({ id, calculate }) => {
       this.fields[id].text(`${calculate()} kWh`);
     });
+
+    this.stats.sources[3].calculateWind();
   }
 
   /**

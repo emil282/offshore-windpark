@@ -58,7 +58,7 @@ class WindTurbinesData extends DataSource {
     this.distancesIndex = 5;
 
     this.winddirection = this.config.wind.winddirection.default;
-    this.windspeed = this.config.wind.windspeed.default;
+    this.windspeed = parseFloat(this.config.wind.windspeed.default);
   }
 
   /**
@@ -213,7 +213,7 @@ class WindTurbinesData extends DataSource {
   calculate() {
     this.calculateProximities();
     this.calculateIndex();
-    //this.calculateWind();
+    this.calculateWind();
   }
 
   //
@@ -340,8 +340,7 @@ class WindTurbinesData extends DataSource {
   calculateWind() {
     this.winddirection =
       ($(`#${this.config.wind.winddirection.id}_knob`).val() % 1) *
-        $(`#${this.config.wind.winddirection.id}_knob`).attr("divisions") +
-      " km/h";
+      $(`#${this.config.wind.winddirection.id}_knob`).attr("divisions");
     this.windspeed =
       ($(`#${this.config.wind.windspeed.id}_knob`).val() % 1) * 100;
   }

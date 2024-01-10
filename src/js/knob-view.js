@@ -102,13 +102,8 @@ class KnobView {
       // Calculate the energy gain
       this.tileCounterView.handleUpdate();
     } else {
-      // Definieren Sie die Daten, die Sie senden möchten
       var data = this.getWind();
-
-      // Konvertieren Sie die Daten in einen String
       var jsonData = JSON.stringify(data);
-
-      // Senden Sie die Daten mit fetch
       fetch(`${process.env.SERVER_HTTP_URI}/wind`, {
         method: "POST", // oder 'PUT'
         headers: {
