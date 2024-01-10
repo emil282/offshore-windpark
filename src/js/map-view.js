@@ -3,6 +3,7 @@ const EventEmitter = require("events");
 const Array2D = require("./lib/array-2d");
 const { getTileTypeId } = require("./lib/config-helpers");
 const PencilCursor = require("../../static/fa/pencil-alt-solid.svg");
+const CoordsArray = require("./map-view-animation");
 
 class MapView {
   constructor(
@@ -49,16 +50,15 @@ class MapView {
       this.city.map.height,
       null
     );
-    // TODO:
-    // array for saving the coords of big windturbines
-    this.bigWindturbines = [];
-    // array for saving the coords of small windturbines
-    this.smallWindturbines = [];
+    // // array for saving the coords of big windturbines
+    // this.bigWindturbines = [];
+    // // array for saving the coords of small windturbines
+    // this.smallWindturbines = [];
     // animated sprite
     this.animatedSprite = new PIXI.AnimatedSprite(
       this.animatedTextures.wt_small_texture.animations.wt
     );
-
+    this.wtAnimation = new CoordsArray(this.animatedSprite);
     // creates backround tiles with PIXI Graphics for each cell in the map
     this.city.map.allCells().forEach(([x, y]) => {
       const bgTile = new PIXI.Graphics();
@@ -215,56 +215,96 @@ class MapView {
       case this.windTurbineSmallId:
         // if the type of the tily is small Windturbine and the WT has a location error
         if (1 == this.dataManager.sources[3].locationsGoalsError[y][x]) {
-          this.deleteFromArray(x, y, this.smallWindturbines);
+          this.wtAnimation.deleteFromArray(
+            x,
+            y,
+            this.wtAnimation.smallWindturbines
+          );
           // renders texture with attention symbol
           this.renderRedBorderWindTurbineSmallTile(x, y);
         } else {
           // else: renders animation for small WT and deletes the coordinates from the array, which saves the big WTs
           this.renderWindTurbineSmallTile(x, y);
-          this.deleteFromArray(x, y, this.bigWindturbines);
+          this.wtAnimation.deleteFromArray(
+            x,
+            y,
+            this.wtAnimation.bigWindturbines
+          );
           // if they array which saves the small WTs is empty or the the coords aren't in it
           // they will be added to the array
           {
-            this.storeCoordinate(x, y, this.smallWindturbines);
+            this.wtAnimation.storeCoordinate(
+              x,
+              y,
+              this.wtAnimation.smallWindturbines
+            );
           }
         }
         break;
-      case this.windTurbineBigId:
-        this.deleteFromArray(x, y, this.bigWindturbines);
+      case this.wtAnimation.windTurbineBigId:
+        this.wtAnimation.deleteFromArray(
+          x,
+          y,
+          this.wtAnimation.bigWindturbines
+        );
         // if the type of the tily is big Windturbine and the WT has a location error
         if (1 == this.dataManager.sources[3].locationsGoalsError[y][x]) {
-          this.deleteFromArray(x, y, this.bigWindturbines);
+          this.wtAnimation.deleteFromArray(
+            x,
+            y,
+            this.wtAnimation.bigWindturbines
+          );
           // renders texture with attention symbol
           this.renderRedBorderWindTurbineBigTile(x, y);
         } else {
           // else: renders animation for big WT and deletes the coordinates from the array, which saves the small WTs
           this.renderWindTurbineBigTile(x, y);
-          this.deleteFromArray(x, y, this.smallWindturbines);
+          this.wtAnimation.deleteFromArray(
+            x,
+            y,
+            this.wtAnimation.smallWindturbines
+          );
           // if they array which saves the big WTs is empty or the the coords aren't in it
           // they will be added to the array
           {
-            this.storeCoordinate(x, y, this.bigWindturbines);
+            this.wtAnimation.storeCoordinate(
+              x,
+              y,
+              this.wtAnimation.bigWindturbines
+            );
           }
         }
         break;
       case this.parkTileId:
-        this.deleteFromArray(x, y, this.smallWindturbines);
+        this.wtAnimation.deleteFromArray(
+          x,
+          y,
+          this.wtAnimation.smallWindturbines
+        );
         this.renderParkTile(x, y);
         break;
       case this.waterTileId:
-        this.deleteFromArray(x, y, this.smallWindturbines);
+        this.wtAnimation.deleteFromArray(
+          x,
+          y,
+          this.wtAnimation.smallWindturbines
+        );
         this.renderWaterTile(x, y);
         break;
       case this.roadTileId:
-        this.deleteFromArray(x, y, this.smallWindturbines);
+        this.wtAnimation.deleteFromArray(
+          x,
+          y,
+          this.wtAnimation.smallWindturbines
+        );
         this.renderRoadTile(x, y);
         break;
     }
   }
 
   renderParkTile(x, y) {
-    this.deleteFromArray(x, y, this.smallWindturbines);
-    this.deleteFromArray(x, y, this.bigWindturbines);
+    this.wtAnimation.deleteFromArray(x, y, this.wtAnimation.smallWindturbines);
+    this.wtAnimation.deleteFromArray(x, y, this.wtAnimation.bigWindturbines);
     const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 8);
     this.getTextureTile(x, y).texture =
       this.textures.parks[`park-0${textureNumber}`];
@@ -277,56 +317,55 @@ class MapView {
       this.textures.water[`water-0${textureNumber}`];
     this.getTextureTile(x, y).visible = true;
   }
-  // TODO:
-  /**
-   * searches if given coords are already in the array
-   * @param {*} xVal the x coordinate. measured in tiles.
-   * @param {*} yVal the y coordinate. measured in tiles.
-   * @param {*} array an array. containing coordinates for either small or big WTs
-   * @returns true: xVal and yVal are in the array. false: xVal and yVal are already in the array
-   */
-  filterCoordinates(xVal, yVal, array) {
-    let duplicates = array.filter(
-      (coords) => coords.x == xVal && coords.y == yVal
-    );
-    if (duplicates.length == 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  /**
-   * stores new coordinates as an pbject with x- and y-Value
-   * @param {*} xVal the x coordinate. measured in tiles.
-   * @param {*} yVal the y coordinate. measured in tiles.
-   * @param {*} array an array. containing coordinates for either small or big WTs
-   */
-  storeCoordinate(xVal, yVal, array) {
-    if (
-      array.length == 0 ||
-      this.filterCoordinates(xVal, yVal, array) == true
-    ) {
-      array.push({ x: xVal, y: yVal });
-    }
-  }
-  /**
-   * deletes the coordinates of a WT from the array and stops the animation if there are
-   * no WTs on the map (both array for small and big Wts are empty)
-   * @param {*} xVal the x coordinate. measured in tiles.
-   * @param {*} yVal the y coordinate. measured in tiles.
-   * @param {*} array an array. containing coordinates for either small or big WTs
-   */
-  deleteFromArray(xVal, yVal, array) {
-    for (var i = 0; i < array.length; i++) {
-      if (array[i].x === xVal && array[i].y === yVal) array.splice(i, 1); // 2nd parameter means remove one item only
-    }
-    if (
-      this.smallWindturbines.length <= 0 &&
-      this.bigWindturbines.length <= 0
-    ) {
-      this.animatedSprite.stop();
-    }
-  }
+  // /**
+  //  * searches if given coords are already in the array
+  //  * @param {*} xVal the x coordinate. measured in tiles.
+  //  * @param {*} yVal the y coordinate. measured in tiles.
+  //  * @param {*} array an array. containing coordinates for either small or big WTs
+  //  * @returns true: xVal and yVal are in the array. false: xVal and yVal are already in the array
+  //  */
+  // filterCoordinates(xVal, yVal, array) {
+  //   let duplicates = array.filter(
+  //     (coords) => coords.x == xVal && coords.y == yVal
+  //   );
+  //   if (duplicates.length == 0) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+  // /**
+  //  * stores new coordinates as an pbject with x- and y-Value
+  //  * @param {*} xVal the x coordinate. measured in tiles.
+  //  * @param {*} yVal the y coordinate. measured in tiles.
+  //  * @param {*} array an array. containing coordinates for either small or big WTs
+  //  */
+  // storeCoordinate(xVal, yVal, array) {
+  //   if (
+  //     array.length == 0 ||
+  //     this.filterCoordinates(xVal, yVal, array) == true
+  //   ) {
+  //     array.push({ x: xVal, y: yVal });
+  //   }
+  // }
+  // /**
+  //  * deletes the coordinates of a WT from the array and stops the animation if there are
+  //  * no WTs on the map (both array for small and big Wts are empty)
+  //  * @param {*} xVal the x coordinate. measured in tiles.
+  //  * @param {*} yVal the y coordinate. measured in tiles.
+  //  * @param {*} array an array. containing coordinates for either small or big WTs
+  //  */
+  // deleteFromArray(xVal, yVal, array) {
+  //   for (var i = 0; i < array.length; i++) {
+  //     if (array[i].x === xVal && array[i].y === yVal) array.splice(i, 1); // 2nd parameter means remove one item only
+  //   }
+  //   if (
+  //     this.smallWindturbines.length <= 0 &&
+  //     this.bigWindturbines.length <= 0
+  //   ) {
+  //     this.animatedSprite.stop();
+  //   }
+  // }
 
   /**
    * animates the spritesheet and changes frames of the WT Textures
@@ -351,18 +390,18 @@ class MapView {
     img.onLoop = () => {};
     img.onFrameChange = () => {
       //every small WT texture on the map changes to the next frame when the animated sprite does
-      for (var i = 0; i < this.smallWindturbines.length; i++) {
-        var x = this.smallWindturbines[i].x;
-        var y = this.smallWindturbines[i].y;
+      for (var i = 0; i < this.wtAnimation.smallWindturbines.length; i++) {
+        var x = this.wtAnimation.smallWindturbines[i].x;
+        var y = this.wtAnimation.smallWindturbines[i].y;
         this.getTextureTile(x, y).texture =
           this.animatedTextures.wt_small_texture.textures[
             `wt${img.currentFrame + 1}`
           ];
       }
       //every big WT texture on the map changes to the next frame when the animated sprite does
-      for (var i = 0; i < this.bigWindturbines.length; i++) {
-        var x = this.bigWindturbines[i].x;
-        var y = this.bigWindturbines[i].y;
+      for (var i = 0; i < this.wtAnimation.bigWindturbines.length; i++) {
+        var x = this.wtAnimation.bigWindturbines[i].x;
+        var y = this.wtAnimation.bigWindturbines[i].y;
         this.getTextureTile(x, y).texture =
           this.textures.wt_big_texture[`wt${img.currentFrame + 1}`];
       }
@@ -471,23 +510,39 @@ class MapView {
     this.city.map.allCells().forEach(([x, y]) => {
       if (this.city.map.cells[y][x] == 5) {
         if (1 == this.dataManager.sources[3].locationsGoalsError[y][x]) {
-          this.deleteFromArray(x, y, this.bigWindturbines);
+          this.wtAnimation.deleteFromArray(
+            x,
+            y,
+            this.wtAnimation.bigWindturbines
+          );
           this.renderRedBorderWindTurbineBigTile(x, y);
         } else {
           this.renderWindTurbineBigTile(x, y);
           {
-            this.storeCoordinate(x, y, this.bigWindturbines);
+            this.wtAnimation.storeCoordinate(
+              x,
+              y,
+              this.wtAnimation.bigWindturbines
+            );
           }
         }
       }
       if (this.city.map.cells[y][x] == 4) {
         if (1 == this.dataManager.sources[3].locationsGoalsError[y][x]) {
-          this.deleteFromArray(x, y, this.smallWindturbines);
+          this.wtAnimation.deleteFromArray(
+            x,
+            y,
+            this.wtAnimation.smallWindturbines
+          );
           this.renderRedBorderWindTurbineSmallTile(x, y);
         } else {
           this.renderWindTurbineSmallTile(x, y);
           {
-            this.storeCoordinate(x, y, this.smallWindturbines);
+            this.wtAnimation.storeCoordinate(
+              x,
+              y,
+              this.wtAnimation.smallWindturbines
+            );
           }
         }
       }

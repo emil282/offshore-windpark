@@ -1,3 +1,4 @@
+const MapView = require("./map-view-animation");
 class TextureLoader {
   constructor(app) {
     this.app = app;
