@@ -1,70 +1,86 @@
 class AnimatedTextureLoader {
   constructor(app) {
-    this.app = app;
-    this.textures = {};
+    this.AnimationApp = app;
+    this.animatedTextures = {};
     // const canvas = document.getElementById("mycanvas");
     this.img;
 
-    console.log(PIXI.utils.TextureCache);
-
+    // this.loader = this.AnimationApp.loader;
     // this.app.loader.add("animatedWT", "./textures/${animatedWT}.json");
-    this.app.loader.onProgress.add(this.handleLoadProgress);
-    this.app.loader.onLoad.add(this.handleLoadAsset);
-    this.app.loader.onError.add(this.handleLoadError);
-    this.app.loader.load(this.handleLoadComplete);
+    this.AnimationApp.loader.onProgress.add(this.handleLoadProgress);
+    this.AnimationApp.loader.onLoad.add(this.handleLoadAsset);
+    this.AnimationApp.loader.onError.add(this.handleLoadError);
   }
 
-  addAnimatedTexture(animatedSprite) {
-    this.app.loader.add(animatedSprite, `./textures/${animatedSprite}.json`);
-  }
+  //   addAnimatedTexture(animatedSprite) {
+  //     this.app.loader.add(animatedSprite, `./textures/${animatedSprite}.json`);
+  //   }
 
   handleLoadProgress(loader, resource) {
-    console.log(loader.progress + "% loaded");
+    // console.log(loader.progress + "% loaded");
   }
 
   handleLoadAsset(loader, resource) {
-    console.log("asset loaded " + resource.name);
+    // console.log("asset loaded " + resource.name);
   }
 
   handleLoadError() {
     console.error("load error");
   }
 
-  handleLoadComplete(name) {
-    this.textures[name] = this.app.loader.resources[name].spritesheet;
-    this.img = new PIXI.AnimatedSprite(this.texture.animations.wt);
-    this.img.anchor.x = 0.5;
-    this.img.anchor.y = 0.5;
-    this.app.stage.addChild(img);
+  loadtexture(name) {
+    return new Promise((resolve) => {
+      this.AnimationApp.loader.add(`./textures/${name}.json`, (resource) => {
+        resolve(resource);
+      });
+    });
+  }
+  async addAnimatedTexture(name, frame) {
+    const resource = await this.loadtexture(name);
+    console.log(resource);
+    this.animatedTextures[name] = resource.spritesheet;
+    return new Promise((resolve) => {
+      this.img = new PIXI.AnimatedSprite(
+        this.animatedTextures[name].animations[frame]
+      );
+      // this.img.anchor.x = 0.5;
+      // this.img.anchor.y = 0.5;
+      // this.AnimationApp.stage.addChild(this.img);
 
-    this.img.animationSpeed = 0.1;
-    this.img.play();
+      // this.img.animationSpeed = 0.1;
+      // this.img.play();
 
-    this.img.onLoop = () => {
-      console.log("loop");
-    };
-    this.img.onFrameChange = () => {
-      console.log("currentFrame", img.currentFrame);
-    };
-    this.img.onComplete = () => {
-      console.log("done");
-    };
+      // this.img.onLoop = () => {
+      //   console.log("loop");
+      // };
+      // this.img.onFrameChange = () => {
+      //   console.log("currentFrame", this.img.currentFrame);
+      // };
+      // this.img.onComplete = () => {
+      //   console.log("done");
+      // };
+      // this.img.stop();
+      // this.app.ticker.add(this.animateTexture(this.img, this.app));
 
-    this.app.ticker.add(animate);
+      resolve("resolved");
+    });
   }
 
-  animate() {
-    this.img.x = this.app.renderer.screen.width / 2;
-    this.img.y = this.app.renderer.screen.height / 2;
-  }
-  loadAnimatedTextures() {
-    return new Promise((resolve, reject) => {
-      this.app.loader.load(() => {
+  // animateTexture(img, app) {
+  //   img.x = app.renderer.screen.width / 2;
+  //   img.y = app.renderer.screen.height / 2;
+  // }
+  async loadAnimatedTextures(name, frame) {
+    const result = await this.addAnimatedTexture(name, frame);
+    return new Promise((resolve) => {
+      this.AnimationApp.loader.load(() => {
         {
-          resolve(this.textures);
+          let result = [this.animatedTextures, this.AnimationApp];
+          resolve(result);
         }
       });
     });
   }
 }
+
 module.exports = AnimatedTextureLoader;

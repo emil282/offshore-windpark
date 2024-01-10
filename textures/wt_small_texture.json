@@ -1,75 +1,72 @@
 {
   "frames": {
-    "turbine-01": {
+    "wt1": {
       "frame": { "x": 0, "y": 0, "w": 72, "h": 72 },
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
       "sourceSize": { "w": 72, "h": 72 }
     },
-    "turbine-02": {
+    "wt2": {
       "frame": { "x": 72, "y": 0, "w": 72, "h": 72 },
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
       "sourceSize": { "w": 72, "h": 72 }
     },
-    "turbine-03": {
-      "frame": { "x": 144, "y": 0, "w": 72, "h": 72 },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
-      "sourceSize": { "w": 72, "h": 72 }
-    },
-    "turbine-04": {
+    "wt3": {
       "frame": { "x": 0, "y": 72, "w": 72, "h": 72 },
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
       "sourceSize": { "w": 72, "h": 72 }
     },
-    "turbine-05": {
+    "wt4": {
       "frame": { "x": 72, "y": 72, "w": 72, "h": 72 },
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
       "sourceSize": { "w": 72, "h": 72 }
     },
-    "turbine-06": {
-      "frame": { "x": 144, "y": 72, "w": 72, "h": 72 },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
-      "sourceSize": { "w": 72, "h": 72 }
-    },
-    "turbine-07": {
+    "wt5": {
       "frame": { "x": 0, "y": 144, "w": 72, "h": 72 },
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
       "sourceSize": { "w": 72, "h": 72 }
     },
-    "turbine-08": {
+    "wt6": {
       "frame": { "x": 72, "y": 144, "w": 72, "h": 72 },
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
       "sourceSize": { "w": 72, "h": 72 }
     },
-    "turbine-09": {
-      "frame": { "x": 144, "y": 144, "w": 72, "h": 72 },
+    "wt7": {
+      "frame": { "x": 0, "y": 216, "w": 72, "h": 72 },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
+      "sourceSize": { "w": 72, "h": 72 }
+    },
+    "wt8": {
+      "frame": { "x": 72, "y": 216, "w": 72, "h": 72 },
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": { "x": 0, "y": 0, "w": 72, "h": 72 },
       "sourceSize": { "w": 72, "h": 72 }
     }
   },
+  "animations": {
+    "wt": ["wt1", "wt2", "wt3", "wt4", "wt5", "wt6", "wt7", "wt8"]
+  },
   "meta": {
     "app": "https://www.codeandweb.com/texturepacker",
-    "version": "1.0",
-    "image": "animated_windturbines.gif",
+    "version": "1.1",
+    "image": "wt_small_texture.png",
     "format": "RGBA8888",
-    "size": { "w": 216, "h": 216 },
-    "scale": "1"
+    "size": { "w": 144, "h": 288 },
+    "scale": "1",
+    "smartupdate": "$TexturePacker:SmartUpdate:ab57576d73bea6970d1faea1084ed3c9:437ad646f087c45479652e38fafc52a7:768186d4318b43a55a6ae69f41fbd4c0$"
   }
 }

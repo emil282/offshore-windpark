@@ -1,5 +1,5 @@
-const Vec2 = require('vec2');
-const { TILE_SIZE } = require('../map-view');
+const Vec2 = require("vec2");
+const { TILE_SIZE } = require("../map-view");
 
 const LANE_WIDTH = TILE_SIZE / 6;
 
@@ -15,13 +15,13 @@ const laneNames = {
 
 function entryPoint(lane, side) {
   switch (side) {
-    case 'W':
-      return Vec2(0, TILE_SIZE - (LANE_WIDTH * (lane + 0.5)));
-    case 'E':
+    case "W":
+      return Vec2(0, TILE_SIZE - LANE_WIDTH * (lane + 0.5));
+    case "E":
       return Vec2(TILE_SIZE, LANE_WIDTH * (lane + 0.5));
-    case 'S':
-      return Vec2(TILE_SIZE - (LANE_WIDTH * (lane + 0.5)), TILE_SIZE);
-    case 'N':
+    case "S":
+      return Vec2(TILE_SIZE - LANE_WIDTH * (lane + 0.5), TILE_SIZE);
+    case "N":
       return Vec2(LANE_WIDTH * (lane + 0.5), 0);
     default:
       throw new Error(`Invalid direction ${side}`);
@@ -30,14 +30,14 @@ function entryPoint(lane, side) {
 
 function exitPoint(lane, side) {
   switch (side) {
-    case 'W':
+    case "W":
       return Vec2(0, LANE_WIDTH * (lane + 0.5));
-    case 'E':
-      return Vec2(TILE_SIZE, TILE_SIZE - (LANE_WIDTH * (lane + 0.5)));
-    case 'S':
+    case "E":
+      return Vec2(TILE_SIZE, TILE_SIZE - LANE_WIDTH * (lane + 0.5));
+    case "S":
       return Vec2(LANE_WIDTH * (lane + 0.5), TILE_SIZE);
-    case 'N':
-      return Vec2(TILE_SIZE - (LANE_WIDTH * (lane + 0.5)), 0);
+    case "N":
+      return Vec2(TILE_SIZE - LANE_WIDTH * (lane + 0.5), 0);
     default:
       throw new Error(`Invalid direction ${side}`);
   }
@@ -56,10 +56,10 @@ curveRadius.ccw[BIKE_LANE] = LANE_WIDTH * 5.5;
 
 function curveRotDir(entryDir, exitDir) {
   const table = {
-    N: { W: 'cw', E: 'ccw' },
-    E: { N: 'cw', S: 'ccw' },
-    S: { E: 'cw', W: 'ccw' },
-    W: { S: 'cw', N: 'ccw' },
+    N: { W: "cw", E: "ccw" },
+    E: { N: "cw", S: "ccw" },
+    S: { E: "cw", W: "ccw" },
+    W: { S: "cw", N: "ccw" },
   };
 
   return table[entryDir][exitDir];
@@ -82,7 +82,6 @@ function curveCenter(entryDir, exitDir) {
 }
 
 function curveRotation(entryDir, exitDir) {
-
   const table = {
     N: { W: Math.PI * 1.5, E: Math.PI * 0.5 },
     E: { N: 0, S: Math.PI },

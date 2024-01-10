@@ -1,4 +1,6 @@
 /* globals PIXI */
+// import { AnimatedGIF } from "@pixi/gif";
+
 const yaml = require("js-yaml");
 const CfgReaderFetch = require("./cfg-reader-fetch");
 const CfgLoader = require("./cfg-loader");
@@ -26,6 +28,7 @@ const CitizenRequestView = require("./citizen-request-view");
 const CitizenRequestViewMgr = require("./citizen-request-view-mgr");
 const KnobView = require("./knob-view");
 const TextureLoader = require("./texture-loader");
+const AnimatedTextureLoader = require("./animated-textures");
 const CarSpawner = require("./cars/car-spawner");
 
 const qs = new URLSearchParams(window.location.search);
@@ -74,19 +77,41 @@ cfgLoader
       backgroundColor: 0xf2f2f2,
     });
 
+    // fetch("/src/js/image.gif")
+    //   .then((res) => res.arrayBuffer())
+    //   .then(AnimatedGIF.fromBuffer)
+    //   .then((image) => app.stage.addChild(image));
+    console.log(app.stage);
+    // const windturbineGIF = app.stage.children[0];
+    const animatedTextureLoader = new AnimatedTextureLoader(app);
     const textureLoader = new TextureLoader(app);
     textureLoader.addSpritesheet("roads");
     textureLoader.addSpritesheet("roads-walkable");
     textureLoader.addSpritesheet("parks");
     textureLoader.addSpritesheet("water");
-    textureLoader.addSpritesheet("windturbines_small");
-    textureLoader.addSpritesheet("windturbines_big");
-    textureLoader.addSpritesheet("redBorder_windturbines_big");
-    textureLoader.addSpritesheet("redBorder_windturbines_small");
+    // textureLoader.addSpritesheet("wt_small_texture");
+    textureLoader.addSpritesheet("wt_big_texture");
+    textureLoader.addSpritesheet("marked_big_wt");
+    textureLoader.addSpritesheet("marked_small_wt");
     textureLoader.addFolder("cars", CarSpawner.allTextureIds(config));
-    textureLoader
-      .load()
-      .then((textures) => {
+    // textureLoader.addGIF("animatedWT", app);
+
+    const promiseAnimatedtextures = animatedTextureLoader.loadAnimatedTextures(
+      "wt_small_texture",
+      "wt"
+    );
+    // .then((textures) => {
+    //   animatedTextures = textures;
+    // });
+    const promiseTextures = textureLoader.load();
+
+    let animatedTextures = {};
+    let textures = {};
+    Promise.all([promiseAnimatedtextures, promiseTextures])
+      .then((response) => {
+        animatedTextures = response[0][0];
+        AnimatedApp = response[0][1];
+        textures = response[1];
         $('[data-component="app-container"]').append(app.view);
 
         const mapEditor = new MapEditor(
@@ -94,7 +119,9 @@ cfgLoader
           city,
           config,
           textures,
-          stats
+          stats,
+          animatedTextures,
+          AnimatedApp
         );
         app.stage.addChild(mapEditor.displayObject);
         mapEditor.displayObject.width = 1920;
