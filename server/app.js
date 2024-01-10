@@ -18,7 +18,16 @@ const WindTurbinesData = require("../src/js/data-sources/wind-turbines-data_WT")
 //const PowerUpManager = require("../src/js/power-up-manager");
 //const PowerUpDataModifier = require("../src/js/power-up-data-modifier");
 
+var wind;
+const wss = new ws.Server({ noServer: true, clientTracking: true });
+const viewRepeater = new EventEmitter();
+
 function initApp(config) {
+  wind = {
+    winddirection: config.wind.winddirection.default,
+    windspeed: config.wind.windspeed.default,
+  };
+
   console.log(`Initializing ${config.cityWidth} x ${config.cityHeight} city.`);
   const city = new City(config.cityWidth, config.cityHeight);
   const stats = new DataManager({
@@ -36,6 +45,8 @@ function initApp(config) {
   city.map.events.on("update", () => {
     stats.throttledCalculateAll();
   });
+
+  //const counterView = new TileCounterView(stats, config);
   //const powerUpMgr = new PowerUpManager(config);
   //stats.registerModifier(new PowerUpDataModifier(config, powerUpMgr));
   /*powerUpMgr.events.on("update", () => {
@@ -67,6 +78,12 @@ function initApp(config) {
     }
     city.map.replace(req.body.cells);
     res.json({ status: "ok" });
+  });
+
+  app.post("/wind", (req, res) => {
+    wind = req.body;
+    res.json({ status: "ok" });
+    wss.clients.forEach((socket) => sendCountersMessage(socket));
   });
 
   app.use((err, req, res, next) => {
@@ -113,6 +130,34 @@ function initApp(config) {
     );
   }
 
+  /**
+   * Sends a counters update message to the specified socket.
+   * @param {Socket} socket - The socket to send the message to.
+   */
+  function sendCountersMessage(socket) {
+    let counts = {};
+    Object.keys(config.tileTypes).forEach((id) => {
+      if (id == "6" || id == "7") {
+        return;
+      }
+      const { type } = config.tileTypes[id];
+      const count = stats.get(`zones-${type}-count`);
+      // Generate an object with the counts and percentages for each zone type
+      counts[id] = {
+        count: count,
+        percentage: ((count / stats.get("zones-total")) * 100).toFixed(1),
+      };
+      //fields[id].text(`${count} (${((count / this.total) * 100).toFixed(1)}%)`);
+    });
+    socket.send(
+      JSON.stringify({
+        type: "counters_update",
+        stats: counts,
+        wind: wind,
+      })
+    );
+  }
+
   function sendViewShowMapVar(socket, variable) {
     socket.send(
       JSON.stringify({
@@ -140,9 +185,6 @@ function initApp(config) {
     );
   }
 
-  const wss = new ws.Server({ noServer: true, clientTracking: true });
-  const viewRepeater = new EventEmitter();
-
   wss.on("connection", (socket) => {
     console.log(`Connected (${wss.clients.size} clients)`);
 
@@ -162,9 +204,13 @@ function initApp(config) {
           case "get_goals":
             sendGoalsMessage(socket);
             break;
+          case "get_counters":
+            sendCountersMessage(socket);
+            break;
           case "view_show_map_var":
             viewRepeater.emit("view_show_map_var", message.variable);
             break;
+
           /*case "get_active_power_ups":
             sendPowerUpsUpdate(socket);
             break;
@@ -220,6 +266,7 @@ function initApp(config) {
   stats.events.on("update", () => {
     wss.clients.forEach((socket) => sendVariablesMessage(socket));
     wss.clients.forEach((socket) => sendGoalsMessage(socket));
+    wss.clients.forEach((socket) => sendCountersMessage(socket));
   });
 
   /*powerUpMgr.events.on("update", () => {

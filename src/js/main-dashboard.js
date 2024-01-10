@@ -8,6 +8,7 @@ const CitizenRequestViewMgr = require("./citizen-request-view-mgr");
 //const ActionsPane = require("./dashboard/actions-pane");
 const { createTitle } = require("./dashboard/titles");
 //const PowerUpSelector = require("./dashboard/power-up-selector");
+const TileCounterViewDashboard = require("./tile-counter-view-dashboard");
 
 fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
   .then((response) => {
@@ -49,6 +50,12 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
     });
 
     // $("#col-3").append(createTitle(config.dashboard.powerUps.title));
+
+    const counterView = new TileCounterViewDashboard(config);
+    //const zoneBalanceView = new ZoneBalanceView(stats, config);
+    $("#col-3")
+      .append(createTitle(config.dashboard.counters.title))
+      .append(counterView.$element);
 
     /*const actionsPane = new ActionsPane(config);
     $("#col-actions").append(actionsPane.$element);
@@ -94,8 +101,13 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
     connector.events.on("connect", () => {
       connector.getVars();
       connector.getGoals();
+      connector.getCounters();
       //connector.getActivePowerUps();
       //actionsPane.enableAll();
+    });
+
+    connector.events.on("counters_update", (data) => {
+      counterView.updateCounters(data.stats, data.wind);
     });
 
     const connStateView = new ConnectionStateView(connector);

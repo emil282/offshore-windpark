@@ -25,15 +25,13 @@ class KnobView {
         $(`#${event.currentTarget.id}_span`).html(
           this.config.winddirection.labels[value]
         );
-        // Calculate the energy gain
-        this.tileCounterView.handleUpdate();
+        this.updateCalculation();
       });
       $(`#${this.config.windspeed.id}`).on("input", (event) => {
         // Sets the current windspeed
         let value = Math.round((event.target.value % 1) * 100);
         $(`#${event.currentTarget.id}_span`).html(value + " km/h");
-        // Calculate the energy gain
-        this.tileCounterView.handleUpdate();
+        this.updateCalculation();
       });
     });
   }
@@ -93,6 +91,62 @@ class KnobView {
       element.append($("<li><span>" + item + "</span></li>"));
     });
     return element;
+  }
+
+  /**
+   * Updates the calculation of the energy gain. When a tileCountetView is given then the counters can be updated directly.
+   * Otherwise the wind must be send to the dashboard.
+   */
+  updateCalculation() {
+    if (this.tileCounterView != null && this.connector == null) {
+      // Calculate the energy gain
+      this.tileCounterView.handleUpdate();
+    } else {
+      // Definieren Sie die Daten, die Sie senden möchten
+      var data = this.getWind();
+
+      // Konvertieren Sie die Daten in einen String
+      var jsonData = JSON.stringify(data);
+
+      // Senden Sie die Daten mit fetch
+      fetch(`${process.env.SERVER_HTTP_URI}/wind`, {
+        method: "POST", // oder 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: jsonData,
+      })
+        .then((response) => response)
+        .then((data) => {
+          console.log("Success:", data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+      // Send the wind to the dashboard
+      /*this.connector.send({
+        winddirection:
+          ($(`#${this.config.winddirection.id}_knob`).val() % 1) *
+          $(`#${this.config.winddirection.id}_knob`).attr("divisions"),
+        windspeed: ($(`#${this.config.windspeed.id}_knob`).val() % 1) * 100,
+        type: "wind_update",
+      });*/
+    }
+  }
+
+  /**
+   * Returns the current wind.
+   * @returns
+   */
+  getWind() {
+    return {
+      winddirection:
+        this.config.winddirection.labels[
+          ($(`#${this.config.winddirection.id}_knob`).val() % 1) *
+            $(`#${this.config.winddirection.id}_knob`).attr("divisions")
+        ],
+      windspeed: ($(`#${this.config.windspeed.id}_knob`).val() % 1) * 100,
+    };
   }
 }
 

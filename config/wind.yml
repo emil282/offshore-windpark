@@ -1,4 +1,4 @@
-knobs:
+wind:
   winddirection:
     id: "wind_direction"
     name_de: "Windrichtung"

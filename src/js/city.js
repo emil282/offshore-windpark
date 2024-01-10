@@ -1,5 +1,5 @@
-const Grid = require('./grid');
-const Array2D = require('./lib/array-2d');
+const Grid = require("./grid");
+const Array2D = require("./lib/array-2d");
 
 class City {
   constructor(width, height, cells = null) {
@@ -17,14 +17,26 @@ class City {
     const { map } = jsonObject;
     if (Array.isArray(map)) {
       // Support old serialization format
-      return new City(16, 16, Array2D.fromFlat(16, 16, map.map(v => Number(v))));
+      return new City(
+        16,
+        16,
+        Array2D.fromFlat(
+          16,
+          16,
+          map.map((v) => Number(v))
+        )
+      );
     }
     const { width, height } = map;
 
     // Support old serialization format
     const cells = Array2D.isValid(map.cells)
       ? Array2D.clone(map.cells)
-      : Array2D.fromFlat(width, height, map.cells.map(v => Number(v)));
+      : Array2D.fromFlat(
+          width,
+          height,
+          map.cells.map((v) => Number(v))
+        );
     return new City(width, height, cells);
   }
 

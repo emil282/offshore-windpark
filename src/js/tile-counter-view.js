@@ -17,7 +17,7 @@ class TileCounterView {
 
           return (
             (turbinesSmall + turbinesBig * 2) *
-            (($(`#${this.config.knobs.windspeed.id}_knob`).val() ?? 0) % 1)
+            (($(`#${this.config.wind.windspeed.id}_knob`).val() ?? 0) % 1)
           ).toFixed(2);
         },
       },
@@ -107,6 +107,25 @@ class TileCounterView {
       const count = this.stats.get(`zones-${type}-count`);
       this.fields[id].text(
         `${count} (${((count / this.total) * 100).toFixed(1)}%)`
+      );
+    });
+
+    this.computedFieldDefs.forEach(({ id, calculate }) => {
+      this.fields[id].text(`${calculate()} kWh`);
+    });
+  }
+
+  /**
+   * Updates the counters in the dashboard.
+   * @param {*} counters
+   */
+  updateCounters(counters) {
+    Object.keys(counters).forEach((id) => {
+      this.fields[id].text(
+        `${counters[id].count} (${(
+          (counters[id].count / this.total) *
+          100
+        ).toFixed(1)}%)`
       );
     });
 

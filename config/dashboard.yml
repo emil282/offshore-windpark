@@ -7,3 +7,7 @@ dashboard:
     title:
       de: "Status"
       en: "Status"
+  counters:
+    title:
+      de: "Counters"
+      en: "Counters"

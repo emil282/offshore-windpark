@@ -47,7 +47,7 @@ paths:
               properties:
                 cells:
                   $ref: "#/components/schemas/Cells"
-              required: [ cells ]
+              required: [cells]
       responses:
         "200":
           description: The city map was updated
@@ -57,6 +57,36 @@ paths:
                 $ref: "#/components/schemas/Success"
         "500":
           description: The city map could not be updated due to an error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /wind:
+    post:
+      summary: Send the wind data
+      requestBody:
+        description: The updated windspeed and winddirection
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                windspeed:
+                  type: number
+                  description: The speed of the wind
+                winddirection:
+                  type: string
+                  description: The direction of the wind
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
+        "400":
+          description: Invalid input
           content:
             application/json:
               schema:
@@ -71,7 +101,7 @@ components:
           type: string
           title: Operation status.
           example: ok
-      required: [ status ]
+      required: [status]
     Error:
       type: object
       properties:
@@ -83,13 +113,13 @@ components:
           type: string
           title: Error description
           example: Error description message
-      required: [ status, error ]
+      required: [status, error]
     City:
       type: object
       properties:
         map:
           "$ref": "#/components/schemas/Map"
-      required: [ map ]
+      required: [map]
     Map:
       type: object
       title: The city map
@@ -106,7 +136,7 @@ components:
           example: 16
         cells:
           "$ref": "#/components/schemas/Cells"
-      required: [ width, height, cells ]
+      required: [width, height, cells]
     Cells:
       type: array
       title: Cells of the city map
@@ -119,7 +149,7 @@ components:
           type: integer
           minimum: 0
           description: Tile type id
-      example: [ [ 1, 2, 3 ], [ 4, 5, 6 ], [ 7, 8 , 9 ] ]
+      example: [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
     Config:
       type: object
       properties:
@@ -157,6 +187,5 @@ components:
                   - 0 means no emissons.
                   - 1 is maximum emissions.
                   - Negative means the tile absorbs emissions around it.
-            required: [ name, color ]
-      required: [ cityWidth, cityHeight, tileTypes ]
-
+            required: [name, color]
+      required: [cityWidth, cityHeight, tileTypes]
