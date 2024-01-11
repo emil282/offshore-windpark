@@ -13,3 +13,4 @@ wind:
     divisions: null
     labels: null
     default: "0 km/h"
+    starting_speed: "10 km/h"

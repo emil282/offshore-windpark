@@ -30,8 +30,17 @@ class KnobView {
       $(`#${this.config.windspeed.id}`).on("input", (event) => {
         // Sets the current windspeed
         let value = Math.round((event.target.value % 1) * 90);
-        $(`#${event.currentTarget.id}_span`).html(value + " km/h");
+        $(`#${event.currentTarget.id}_span`)
+          .html(value + " km/h")
+          .append("<br>");
         this.updateCalculation();
+
+        // hide starting speed info if the speeed is above 10 km/h
+        if (value >= 10) {
+          $(`#${event.currentTarget.id}_startingSpeed`).hide();
+        } else {
+          $(`#${event.currentTarget.id}_startingSpeed`).show();
+        }
       });
     });
   }
@@ -75,6 +84,17 @@ class KnobView {
             $("<span></span>")
               .attr("id", `${config.id}_span`)
               .html(config.default)
+              .append("<br>")
+          )
+          .append(
+            config.starting_speed
+              ? $("<span></span>")
+                  .attr("id", `${config.id}_startingSpeed`)
+                  .addClass("beschr-en")
+                  .html("Anlaufgeschwindigkeit: <br> 10 km/h")
+                  .css("color", "red")
+                  .append("<br>")
+              : ""
           )
       );
 
