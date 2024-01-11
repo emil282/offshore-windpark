@@ -42,16 +42,18 @@ class KnobView {
    * @returns
    */
   makeKnob(config) {
+    //Create the x-knob element
     let knob = `<x-knob id='${config.id}_knob'${
-      config.divisions != null ? " divisions='8' " : ""
+      config.divisions != null ? ` divisions='${config.divisions}' ` : ""
     } class = 'windKnob'></x-knob>`;
 
+    //Create the circular labeling
     let label;
-
     if (config.labels != null) {
       label = this.makeLabeling(config);
     }
 
+    //Append everything to the element
     let element = $("<div id='" + config.id + "'></div>")
       .addClass("windDiv")
       .append($("<div></div>").addClass("flex").append(knob).append(label))
