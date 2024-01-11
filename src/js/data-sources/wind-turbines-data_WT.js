@@ -342,7 +342,7 @@ class WindTurbinesData extends DataSource {
       ($(`#${this.config.wind.winddirection.id}_knob`).val() % 1) *
       $(`#${this.config.wind.winddirection.id}_knob`).attr("divisions");
     this.windspeed =
-      ($(`#${this.config.wind.windspeed.id}_knob`).val() % 1) * 100;
+      ($(`#${this.config.wind.windspeed.id}_knob`).val() % 1) * 90;
   }
 
   /**
