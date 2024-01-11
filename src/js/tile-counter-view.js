@@ -1,7 +1,8 @@
 class TileCounterView {
-  constructor(stats, config) {
+  constructor(stats, config, mapEditor) {
     this.stats = stats;
     this.config = config;
+    this.mapView = mapEditor.mapView;
 
     this.stats.events.on("update", this.handleUpdate.bind(this));
 
@@ -118,6 +119,9 @@ class TileCounterView {
     });
 
     this.stats.sources[3].calculateWind();
+
+    // update the speed of the animation
+    this.mapView.updateSpeed();
   }
 
   /**

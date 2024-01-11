@@ -140,7 +140,7 @@ cfgLoader
           app.ticker.add((time) => carSpawner.animate(time));
         }
 
-        const counterView = new TileCounterView(stats, config);
+        const counterView = new TileCounterView(stats, config, mapEditor);
         //const zoneBalanceView = new ZoneBalanceView(stats, config);
 
         $("[data-component=counters]").append([
