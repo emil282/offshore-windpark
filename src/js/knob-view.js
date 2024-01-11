@@ -29,7 +29,7 @@ class KnobView {
       });
       $(`#${this.config.windspeed.id}`).on("input", (event) => {
         // Sets the current windspeed
-        let value = Math.round((event.target.value % 1) * 100);
+        let value = Math.round((event.target.value % 1) * 90);
         $(`#${event.currentTarget.id}_span`).html(value + " km/h");
         this.updateCalculation();
       });
@@ -42,16 +42,18 @@ class KnobView {
    * @returns
    */
   makeKnob(config) {
+    //Create the x-knob element
     let knob = `<x-knob id='${config.id}_knob'${
-      config.divisions != null ? " divisions='8' " : ""
+      config.divisions != null ? ` divisions='${config.divisions}' ` : ""
     } class = 'windKnob'></x-knob>`;
 
+    //Create the circular labeling
     let label;
-
     if (config.labels != null) {
       label = this.makeLabeling(config);
     }
 
+    //Append everything to the element
     let element = $("<div id='" + config.id + "'></div>")
       .addClass("windDiv")
       .append($("<div></div>").addClass("flex").append(knob).append(label))
@@ -123,7 +125,7 @@ class KnobView {
         winddirection:
           ($(`#${this.config.winddirection.id}_knob`).val() % 1) *
           $(`#${this.config.winddirection.id}_knob`).attr("divisions"),
-        windspeed: ($(`#${this.config.windspeed.id}_knob`).val() % 1) * 100,
+        windspeed: ($(`#${this.config.windspeed.id}_knob`).val() % 1) * 90,
         type: "wind_update",
       });*/
     }
@@ -140,7 +142,7 @@ class KnobView {
           ($(`#${this.config.winddirection.id}_knob`).val() % 1) *
             $(`#${this.config.winddirection.id}_knob`).attr("divisions")
         ],
-      windspeed: ($(`#${this.config.windspeed.id}_knob`).val() % 1) * 100,
+      windspeed: ($(`#${this.config.windspeed.id}_knob`).val() % 1) * 90,
     };
   }
 }
