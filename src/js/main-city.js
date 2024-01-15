@@ -23,6 +23,7 @@ const GreenSpacesData = require("./data-sources/green-spaces-data");
 const WindTurbinesData = require("./data-sources/wind-turbines-data_WT");
 const ZoningData = require("./data-sources/zoning-data");
 const ZoneBalanceData = require("./data-sources/zone-balance-data");
+const AnimatedTextureLoader = require("./animated-textures");
 
 fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
   .then((response) => {
@@ -49,20 +50,32 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
       height: 1152,
       backgroundColor: 0xa6a6a6,
     });
+    const animatedTextureLoader = new AnimatedTextureLoader(app);
     const textureLoader = new TextureLoader(app);
     textureLoader.addSpritesheet("roads");
     textureLoader.addSpritesheet("roads-walkable");
     textureLoader.addSpritesheet("parks");
     textureLoader.addSpritesheet("water");
-    textureLoader.addSpritesheet("windturbines_small");
-    textureLoader.addSpritesheet("windturbines_big");
-    textureLoader.addSpritesheet("redBorder_windturbines_big");
-    textureLoader.addSpritesheet("redBorder_windturbines_small");
+    textureLoader.addSpritesheet("wt_big_texture");
+    textureLoader.addSpritesheet("marked_big_wt");
+    textureLoader.addSpritesheet("marked_small_wt");
     textureLoader.addFolder("cars", CarSpawner.allTextureIds(config));
-    textureLoader
-      .load()
-      .then((textures) => {
+
+    const promiseAnimatedtextures = animatedTextureLoader.loadAnimatedTextures(
+      "wt_small_texture",
+      "wt"
+    );
+    const promiseTextures = textureLoader.load();
+
+    let animatedTextures = {};
+    let textures = {};
+    Promise.all([promiseAnimatedtextures, promiseTextures])
+      .then((response) => {
+        animatedTextures = response[0][0];
+        AnimatedApp = response[0][1];
+        textures = response[1];
         $('[data-component="app-container"]').append(app.view);
+
         const stats = new DataManager();
         stats.registerSource(new ZoningData(city, config));
         stats.registerSource(new ZoneBalanceData(city, config));
@@ -73,7 +86,14 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
           stats.calculateAll();
         });
 
-        const mapView = new MapView(city, config, textures, stats);
+        const mapView = new MapView(
+          city,
+          config,
+          textures,
+          stats,
+          animatedTextures,
+          AnimatedApp
+        );
         app.stage.addChild(mapView.displayObject);
         mapView.displayObject.width = 1152;
         mapView.displayObject.height = 1152;
