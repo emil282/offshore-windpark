@@ -1,9 +1,9 @@
 class KnobView {
   constructor(config, tileCounterView, stats, mapEditor) {
     this.config = config;
-    this.tileCounterView = tileCounterView;
-    this.stats = stats;
-    this.mapView = mapEditor.mapView;
+    this.tileCounterView = tileCounterView; //is only defined, when called from the main.js
+    this.stats = stats; //is only defined, when called from the main-editor.js
+    this.mapView = mapEditor.mapView; //is only defined, when called from the main-editor.js
     /*this.$element = $("<div></div>")
       .addClass("index-list")
       .append($("<div></div>").addClass("flex"));*/
