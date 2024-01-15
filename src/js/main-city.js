@@ -146,6 +146,11 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
             variableMapOverlay.hide();
           }, config.variableMapOverlay.overlayDuration * 1000);
         });
+
+        connector.events.on("counters_update", (data) => {
+          //counterView.updateCounters(data.stats, data.wind);
+          mapView.updateSpeed(data.wind.windspeed);
+        });
         /*connector.events.on("power_ups_update", (activePowerUps) => {
           powerUpViewMgr.update(activePowerUps);
         });*/

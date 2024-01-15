@@ -84,6 +84,8 @@ function initApp(config) {
     wind = req.body;
     res.json({ status: "ok" });
     wss.clients.forEach((socket) => sendCountersMessage(socket));
+    // Update the wind
+    stats.sources[3].calculateWind(wind);
   });
 
   app.use((err, req, res, next) => {

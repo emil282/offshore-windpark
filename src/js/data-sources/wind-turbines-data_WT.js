@@ -337,12 +337,25 @@ class WindTurbinesData extends DataSource {
     this.distancesIndex = this.distancesIndex <= 0 ? 1 : this.distancesIndex;
   }
 
-  calculateWind() {
-    this.winddirection =
-      ($(`#${this.config.wind.winddirection.id}_knob`).val() % 1) *
-      $(`#${this.config.wind.winddirection.id}_knob`).attr("divisions");
-    this.windspeed =
-      ($(`#${this.config.wind.windspeed.id}_knob`).val() % 1) * 90;
+  /**
+   * Calculates the wind, after getting the values from the knobs.
+   * If the function is called from the server, jQuery is not definded, so it will be skipped.
+   * @returns
+   */
+  calculateWind(wind) {
+    if (!wind) {
+      if (typeof $ === "undefined") {
+        return;
+      }
+      this.winddirection =
+        ($(`#${this.config.wind.winddirection.id}_knob`).val() % 1) *
+        $(`#${this.config.wind.winddirection.id}_knob`).attr("divisions");
+      this.windspeed =
+        ($(`#${this.config.wind.windspeed.id}_knob`).val() % 1) * 90;
+    } else {
+      this.winddirection = wind.winddirection;
+      this.windspeed = wind.windspeed;
+    }
   }
 
   /**

@@ -338,8 +338,10 @@ class MapView {
    * updates the speed of the animation according to the windspeed knob
    * starts to turn by 9kmh
    */
-  updateSpeed() {
-    let windspeed = this.dataManager.get("wind-speed");
+  updateSpeed(windspeed) {
+    if (!windspeed) {
+      windspeed = this.dataManager.get("wind-speed");
+    }
     if (windspeed >= 9) {
       this.animatedSprite.animationSpeed = (0.1 * windspeed) / 40;
       // starts the animated sprite

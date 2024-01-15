@@ -1,7 +1,9 @@
 class KnobView {
-  constructor(config, tileCounterView) {
+  constructor(config, tileCounterView, stats, mapEditor) {
     this.config = config;
     this.tileCounterView = tileCounterView;
+    this.stats = stats;
+    this.mapView = mapEditor.mapView;
     /*this.$element = $("<div></div>")
       .addClass("index-list")
       .append($("<div></div>").addClass("flex"));*/
@@ -121,9 +123,11 @@ class KnobView {
    */
   updateCalculation() {
     if (this.tileCounterView != null && this.connector == null) {
+      // function is called from the index page
       // Calculate the energy gain
       this.tileCounterView.handleUpdate();
     } else {
+      //function is called from the editorpage
       var data = this.getWind();
       var jsonData = JSON.stringify(data);
       fetch(`${process.env.SERVER_HTTP_URI}/wind`, {
@@ -140,14 +144,10 @@ class KnobView {
         .catch((error) => {
           console.error("Error:", error);
         });
-      // Send the wind to the dashboard
-      /*this.connector.send({
-        winddirection:
-          ($(`#${this.config.winddirection.id}_knob`).val() % 1) *
-          $(`#${this.config.winddirection.id}_knob`).attr("divisions"),
-        windspeed: ($(`#${this.config.windspeed.id}_knob`).val() % 1) * 90,
-        type: "wind_update",
-      });*/
+
+      this.stats.sources[3].calculateWind(this.getWind());
+      // update the speed of the animation
+      this.mapView.updateSpeed();
     }
   }
 
