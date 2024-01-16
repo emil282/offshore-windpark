@@ -209,7 +209,12 @@ cfgLoader
           goalDebugView.$element
         );
 
-        const knobView = new KnobView(config.wind, counterView);
+        const knobView = new KnobView(
+          config.wind,
+          counterView,
+          undefined,
+          mapEditor.mapView
+        );
         $("[data-component=wind]").append(knobView.$element);
 
         let indexesDirty = true;

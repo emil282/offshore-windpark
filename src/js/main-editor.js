@@ -138,7 +138,12 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
         });
         const connStateView = new ConnectionStateView(connector);
         $("body").append(connStateView.$element);
-        const knobView = new KnobView(config.wind, undefined, stats, mapView);
+        const knobView = new KnobView(
+          config.wind,
+          undefined,
+          stats,
+          mapView.mapView
+        );
         $("[data-component=wind]").append(knobView.$element);
       })
       .catch((err) => {
