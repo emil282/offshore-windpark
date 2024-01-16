@@ -157,6 +157,38 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
 
         const connStateView = new ConnectionStateView(connector);
         $("body").append(connStateView.$element);
+
+        var speedCounter = 0;
+        var speedVal = parseFloat(config.wind.windspeed.default);
+        var directionCounter = 0;
+        var directionVal = config.wind.winddirection.default;
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "q") {
+            speedCounter++;
+          } else if (event.key === "Backspace") {
+            speedCounter--;
+          }
+          speedCounter = ((speedCounter % 18) + 18) % 18;
+          speedVal = ((Math.round(speedCounter * (90 / 17)) % 90) + 90) % 90;
+          var jsonData = JSON.stringify({
+            windspeed: speedVal,
+            winddirection: directionVal,
+          });
+          fetch(`${process.env.SERVER_HTTP_URI}/wind`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: jsonData,
+          })
+            .then((response) => response)
+            .then((data) => {
+              console.log("Success:", data);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        });
       })
       .catch((err) => {
         showFatalError("Error loading textures", err);

@@ -24,27 +24,53 @@ class KnobView {
       $(`#${this.config.winddirection.id}`).on("input", (event) => {
         // Sets the current winddirection
         let value = (event.target.value % 1) * event.target.divisions;
-        $(`#${event.currentTarget.id}_span`).html(
-          this.config.winddirection.labels[value]
-        );
+        this.updateKnob({ winddirection: value });
         this.updateCalculation();
       });
       $(`#${this.config.windspeed.id}`).on("input", (event) => {
         // Sets the current windspeed
         let value = Math.round((event.target.value % 1) * 90);
-        $(`#${event.currentTarget.id}_span`)
-          .html(value + " km/h")
-          .append("<br>");
+        this.updateKnob({ windspeed: value });
         this.updateCalculation();
-
-        // hide starting speed info if the speeed is above 10 km/h
-        if (value >= 10) {
-          $(`#${event.currentTarget.id}_startingSpeed`).hide();
-        } else {
-          $(`#${event.currentTarget.id}_startingSpeed`).show();
-        }
       });
     });
+
+    //Event Listener for the physical knobs
+    //When a "q" is detected the knob is turned to the right
+    //When a "Backspace" is detected the knob is turned to the left
+    //After 18 turns the knob is back at the starting position. Because of this I am working with modulo 18.
+    //Because we have 8 wind directions I am working with modulo 8 after that.
+    /*
+    let directionCounter = 0;
+    document.addEventListener(
+      "keydown",
+      function (event) {
+        if (event.key === "q") {
+          directionCounter++;
+        } else if (event.key === "Backspace") {
+          directionCounter--;
+        }
+        directionCounter = ((directionCounter % 18) + 18) % 18;
+        let val = ((Math.round(directionCounter * (7 / 17) + 0.5) % 8) + 8) % 8; //+0.5, because it was better.
+        this.updateKnob({ winddirection: val });
+        this.updateCalculation();
+      }.bind(this)
+    );*/
+    let speedCounter = 0;
+    document.addEventListener(
+      "keydown",
+      function (event) {
+        if (event.key === "q") {
+          speedCounter++;
+        } else if (event.key === "Backspace") {
+          speedCounter--;
+        }
+        speedCounter = ((speedCounter % 18) + 18) % 18;
+        let val = ((Math.round(speedCounter * (90 / 17)) % 90) + 90) % 90;
+        this.updateKnob({ windspeed: val });
+        this.updateCalculation();
+      }.bind(this)
+    );
   }
 
   /**
@@ -86,8 +112,8 @@ class KnobView {
             $("<span></span>")
               .attr("id", `${config.id}_span`)
               .html(config.default)
-              .append("<br>")
           )
+          .append("<br>")
           .append(
             config.starting_speed
               ? $("<span></span>")
@@ -149,6 +175,33 @@ class KnobView {
       // update the speed of the animation
       this.mapView.updateSpeed();
     }
+  }
+
+  /**
+   * Updates the knob values and the labels.
+   * @param {*} wind
+   */
+  updateKnob(wind) {
+    if (wind.winddirection) {
+      $(`#${this.config.winddirection.id}_knob`).val(wind.winddirection / 8);
+      $(`#${this.config.winddirection.id}_span`).html(
+        this.config.winddirection.labels[wind.winddirection]
+      );
+    }
+
+    if (wind.windspeed) {
+      $(`#${this.config.windspeed.id}_knob`).val(wind.windspeed / 90);
+      $(`#${this.config.windspeed.id}_span`).html(wind.windspeed + " km/h");
+
+      // hide starting speed info if the speeed is above 10 km/h
+      if (wind.windspeed >= 10) {
+        $(`#${this.config.windspeed.id}_startingSpeed`).hide();
+      } else {
+        $(`#${this.config.windspeed.id}_startingSpeed`).show();
+      }
+    }
+    this.stats.sources[3].calculateWind(this.getWind());
+    this.mapView.updateSpeed();
   }
 
   /**
