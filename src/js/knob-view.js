@@ -200,7 +200,10 @@ class KnobView {
         $(`#${this.config.windspeed.id}_startingSpeed`).show();
       }
     }
-    this.stats.sources[3].calculateWind(this.getWind());
+    // is only needed when we render the editor.html and dashboard html (not for index.html)
+    if (this.stats) {
+      this.stats.sources[3].calculateWind(this.getWind());
+    }
     this.mapView.updateSpeed();
   }
 
