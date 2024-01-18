@@ -44,6 +44,7 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
   })
   .then((config) => {
     const city = new City(config.cityWidth, config.cityHeight);
+    var wind;
 
     const app = new PIXI.Application({
       width: 1152,
@@ -132,6 +133,7 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
         );
         connector.events.on("map_update", (cells) => {
           city.map.replace(cells);
+          mapView.updateSpeed(wind.windspeed);
         });
         connector.events.on("connect", () => {
           connector.getMap();
@@ -150,6 +152,7 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
         connector.events.on("counters_update", (data) => {
           //counterView.updateCounters(data.stats, data.wind);
           mapView.updateSpeed(data.wind.windspeed);
+          wind = data.wind;
         });
         /*connector.events.on("power_ups_update", (activePowerUps) => {
           powerUpViewMgr.update(activePowerUps);
