@@ -93,6 +93,7 @@ cfgLoader
     textureLoader.addSpritesheet("wt_big_texture");
     textureLoader.addSpritesheet("marked_big_wt");
     textureLoader.addSpritesheet("marked_small_wt");
+    textureLoader.addSpritesheet("city");
     textureLoader.addFolder("cars", CarSpawner.allTextureIds(config));
     // textureLoader.addGIF("animatedWT", app);
 

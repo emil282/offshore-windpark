@@ -65,7 +65,9 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
     textureLoader.addSpritesheet("water");
     textureLoader.addSpritesheet("wt_big_texture");
     textureLoader.addSpritesheet("marked_big_wt");
-    textureLoader.addSpritesheet("marked_small_wt"); // MAYBE START OUTCOMMENTING UP FROM HERE
+    textureLoader.addSpritesheet("marked_small_wt");
+    textureLoader.addSpritesheet("city");
+    // MAYBE START OUTCOMMENTING UP FROM HERE
     const promiseAnimatedtextures = animatedTextureLoader.loadAnimatedTextures(
       "wt_small_texture",
       "wt"

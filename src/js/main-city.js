@@ -59,6 +59,7 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
     textureLoader.addSpritesheet("wt_big_texture");
     textureLoader.addSpritesheet("marked_big_wt");
     textureLoader.addSpritesheet("marked_small_wt");
+    textureLoader.addSpritesheet("city");
     textureLoader.addFolder("cars", CarSpawner.allTextureIds(config));
 
     const promiseAnimatedtextures = animatedTextureLoader.loadAnimatedTextures(
