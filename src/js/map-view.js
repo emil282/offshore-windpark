@@ -21,6 +21,7 @@ class MapView {
 
     this.animatedApp = animatedApp;
     this.events = new EventEmitter();
+    this.cityTileId = getTileTypeId(config, "residential");
     this.roadTileId = getTileTypeId(config, "road");
     this.parkTileId = getTileTypeId(config, "park");
     this.waterTileId = getTileTypeId(config, "water");
@@ -270,6 +271,14 @@ class MapView {
           }
         }
         break;
+      case this.cityTileId:
+        this.wtAnimation.deleteFromArray(
+          x,
+          y,
+          this.wtAnimation.smallWindturbines
+        );
+        this.renderCityTile(x, y);
+        break;
       case this.parkTileId:
         this.wtAnimation.deleteFromArray(
           x,
@@ -303,6 +312,15 @@ class MapView {
     const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 8);
     this.getTextureTile(x, y).texture =
       this.textures.parks[`park-0${textureNumber}`];
+    this.getTextureTile(x, y).visible = true;
+  }
+
+  renderCityTile(x, y) {
+    this.wtAnimation.deleteFromArray(x, y, this.wtAnimation.smallWindturbines);
+    this.wtAnimation.deleteFromArray(x, y, this.wtAnimation.bigWindturbines);
+    const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 8);
+    this.getTextureTile(x, y).texture =
+      this.textures.city[`b0${textureNumber}`];
     this.getTextureTile(x, y).visible = true;
   }
 

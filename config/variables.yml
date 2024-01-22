@@ -11,3 +11,7 @@ variables:
     name:
       de: Abstände
       en: Distances
+  life-span:
+    name:
+      de: Lebensdauer
+      en: Life span
