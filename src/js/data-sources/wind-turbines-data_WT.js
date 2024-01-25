@@ -347,11 +347,16 @@ class WindTurbinesData extends DataSource {
       if (typeof $ === "undefined") {
         return;
       }
+      // Modulo 1 is used to only get positive values
       this.winddirection =
-        ($(`#${this.config.wind.winddirection.id}_knob`).val() % 1) *
-        $(`#${this.config.wind.winddirection.id}_knob`).attr("divisions");
+        this.config.wind.winddirection.labels[
+          ((($(`#${this.config.wind.winddirection.id}_knob`).val() % 1) + 1) %
+            1) *
+            $(`#${this.config.wind.winddirection.id}_knob`).attr("divisions")
+        ];
       this.windspeed =
-        ($(`#${this.config.wind.windspeed.id}_knob`).val() % 1) * 90;
+        ((($(`#${this.config.wind.windspeed.id}_knob`).val() % 1) + 1) % 1) *
+        90;
     } else {
       this.winddirection = wind.winddirection;
       this.windspeed = wind.windspeed;

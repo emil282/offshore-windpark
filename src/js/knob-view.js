@@ -23,13 +23,16 @@ class KnobView {
     $(document).ready(() => {
       $(`#${this.config.winddirection.id}`).on("input", (event) => {
         // Sets the current winddirection
-        let value = (event.target.value % 1) * event.target.divisions;
+        // Modulo 1 is used to only get positive values
+        let value =
+          (((event.target.value % 1) + 1) % 1) * event.target.divisions;
         this.updateKnob({ winddirection: value });
         this.updateCalculation();
       });
       $(`#${this.config.windspeed.id}`).on("input", (event) => {
         // Sets the current windspeed
-        let value = Math.round((event.target.value % 1) * 90);
+        // Modulo 1 is used to only get positive values
+        let value = Math.round((((event.target.value % 1) + 1) % 1) * 90);
         this.updateKnob({ windspeed: value });
         this.updateCalculation();
       });
@@ -215,10 +218,11 @@ class KnobView {
     return {
       winddirection:
         this.config.winddirection.labels[
-          ($(`#${this.config.winddirection.id}_knob`).val() % 1) *
+          ((($(`#${this.config.winddirection.id}_knob`).val() % 1) + 1) % 1) *
             $(`#${this.config.winddirection.id}_knob`).attr("divisions")
         ],
-      windspeed: ($(`#${this.config.windspeed.id}_knob`).val() % 1) * 90,
+      windspeed:
+        ((($(`#${this.config.windspeed.id}_knob`).val() % 1) + 1) % 1) * 90,
     };
   }
 }

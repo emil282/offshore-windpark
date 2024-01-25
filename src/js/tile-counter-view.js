@@ -15,7 +15,9 @@ class TileCounterView {
         calculate: () => {
           const turbinesSmall = this.stats.get("zones-windTurbineSmall-count");
           const turbinesBig = this.stats.get("zones-windTurbineBig-count");
+
           //Calculate the energy gain based on the wind speed and the number of turbines
+          /*
           let speed =
             (($(`#${this.config.wind.windspeed.id}_knob`).val() ?? 0) % 1) * 2;
           return (
@@ -23,6 +25,22 @@ class TileCounterView {
             (speed / 1) *
             (speed / 1) ** 3
           ).toFixed(2);
+          */
+          let speed_km_h =
+            (((($(`#${this.config.wind.windspeed.id}_knob`).val() ?? 0) % 1) +
+              1) %
+              1) *
+            90;
+          let speed_m_s = speed_km_h / 3.6;
+          let energy;
+          if (speed_m_s > 13) {
+            energy = this.big_turbine_function(13);
+          } else if (speed_m_s < 3) {
+            energy = 0;
+          } else {
+            energy = this.big_turbine_function(speed_m_s);
+          }
+          return Math.round(energy * (turbinesSmall + turbinesBig * 2));
         },
       },
       /*{
@@ -158,6 +176,29 @@ class TileCounterView {
       },
     ];
   }*/
+
+  /**
+   * Describes the energy gain of the wind turbine "Enercon E-141 EP4"
+   * Source: https://www.wind-turbine-models.com/turbines/1297-enercon-e-141-ep4
+   * @param {*} x
+   * @returns
+   */
+  big_turbine_function(x) {
+    let function_koeff = [
+      -2.03924163e-5, 1.88820128e-3, -7.7057351e-2, 1.81572488, -2.72127936e1,
+      2.69858211e2, -1.7890036e3, 7.82779325e3, -2.15978494e4, 3.39834211e4,
+      -2.31445422e4,
+    ];
+
+    let y = 0;
+
+    //Calculate the y value of the function
+    for (let i = 0; i < function_koeff.length; i++) {
+      y += function_koeff[i] * Math.pow(x, function_koeff.length - i - 1);
+    }
+
+    return y;
+  }
 }
 
 module.exports = TileCounterView;

@@ -26,31 +26,6 @@
           <div data-component="app-container"></div>
         </div>
         <div class="col-xl-3 col-md-4 mb-4">
-          <!--<div class="wind">
-            <div class="flex" style="height: 200px">
-              <div class="flex" style="height: 200px">
-                <div id="wind_direction">
-                  <x-knob id="wind_direction_knob" divisions="8"></x-knob>
-                </div>
-                <ul id="circle-container">
-                  <li><span></span></li>
-                  <li><span></span></li>
-                  <li><span></span></li>
-                  <li><span></span></li>
-                  <li><span></span></li>
-                  <li><span></span></li>
-                  <li><span></span></li>
-                  <li><span></span></li>
-                </ul>
-              </div>
-              <div id="wind_speed">
-                <x-knob id="wind_speed_knob"></x-knob>
-              </div>
-            </div>
-            Windrichtung: <span id="wind_direction_span">N</span>
-            <br />Windgeschwindigkeit:
-            <span id="wind_speed_span">0</span>
-          </div>-->
           <div class="status" data-component="status"></div>
           <div data-component="citizen-request-container"></div>
         </div>
@@ -77,48 +52,6 @@
                 <div class="counters" data-component="counters"></div>
               </div>
             </div>
-            <!--<div class="card">
-              <div class="card-header">
-                <h2 class="mb-0">
-                  <button
-                    class="btn btn-link btn-block text-left"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#collapseInspector"
-                  >
-                    Data Inspector
-                  </button>
-                </h2>
-              </div>
-              <div
-                id="collapseInspector"
-                class="collapse"
-                data-parent="#accordionData"
-              >
-                <div class="p-2" data-component="dataInspector"></div>
-              </div>
-            </div>-->
-            <!--<div class="card">
-              <div class="card-header">
-                <h2 class="mb-0">
-                  <button
-                    class="btn btn-link btn-block text-left"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#collapseGoalInspector"
-                  >
-                    Goal Inspector
-                  </button>
-                </h2>
-              </div>
-              <div
-                id="collapseGoalInspector"
-                class="collapse"
-                data-parent="#accordionData"
-              >
-                <div data-component="goal-debug-container" class="p-2"></div>
-              </div>
-            </div>-->
           </div>
           <div data-component="wind"></div>
         </div>
@@ -126,29 +59,3 @@
     </div>
   </div>
 </body>
-<!--<script>
-  let windDirection = document.getElementById("wind_direction");
-  let windDirectionKnob = document.getElementById("wind_direction_knob");
-  const windDirections = ["N", "NO", "O", "SO", "S", "SW", "W", "NW"];
-
-  let windSpeed = document.getElementById("wind_speed");
-  let windSpeedKnob = document.getElementById("wind_speed_knob");
-
-  windDirection.addEventListener("input", (event) => {
-    let value = (windDirectionKnob.value % 1) * windDirectionKnob.divisions;
-    document.getElementById("wind_direction_span").innerHTML =
-      windDirections[value];
-  });
-
-  let circleContainer = document.querySelectorAll(
-    "#circle-container > li > span"
-  );
-  for (let i = 0; i < circleContainer.length; i++) {
-    circleContainer[i].innerHTML = windDirections[i];
-  }
-
-  windSpeed.addEventListener("input", (event) => {
-    let value = Math.round((windSpeedKnob.value % 1) * 12);
-    document.getElementById("wind_speed_span").innerHTML = value;
-  });
-</script>-->

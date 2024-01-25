@@ -176,7 +176,7 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
           speedVal = ((Math.round(speedCounter * (90 / 17)) % 90) + 90) % 90;
           var jsonData = JSON.stringify({
             windspeed: speedVal,
-            winddirection: directionVal,
+            winddirection: config.wind.winddirection.labels[directionVal],
           });
           fetch(`${process.env.SERVER_HTTP_URI}/wind`, {
             method: "POST",
