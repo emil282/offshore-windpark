@@ -171,9 +171,16 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
             speedCounter++;
           } else if (event.key === "Backspace") {
             speedCounter--;
+          } else if (event.key === "n") {
+            directionCounter++;
+          } else if (event.key === "s") {
+            directionCounter--;
           }
-          speedCounter = ((speedCounter % 18) + 18) % 18;
+          speedCounter = ((speedCounter % 17) + 17) % 17;
           speedVal = ((Math.round(speedCounter * (90 / 17)) % 90) + 90) % 90;
+          directionCounter = ((directionCounter % 17) + 17) % 17;
+          directionVal =
+            (Math.round((directionCounter * (7 / 17)) % 8) + 8) % 8;
           var jsonData = JSON.stringify({
             windspeed: speedVal,
             winddirection: config.wind.winddirection.labels[directionVal],
