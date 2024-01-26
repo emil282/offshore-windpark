@@ -83,7 +83,6 @@ cfgLoader
     //   .then((res) => res.arrayBuffer())
     //   .then(AnimatedGIF.fromBuffer)
     //   .then((image) => app.stage.addChild(image));
-    console.log(app.stage);
     // const windturbineGIF = app.stage.children[0];
     const animatedTextureLoader = new AnimatedTextureLoader(app);
     const textureLoader = new TextureLoader(app);
