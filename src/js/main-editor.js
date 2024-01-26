@@ -140,7 +140,6 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
         });
         connector.events.on("counters_update", (data) => {
           knobView.updateKnob(data.wind);
-          console.log("HALLO");
         });
         const connStateView = new ConnectionStateView(connector);
         $("body").append(connStateView.$element);

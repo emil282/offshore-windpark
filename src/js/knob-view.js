@@ -70,7 +70,6 @@ class KnobView {
         // Modulo is used to only get positive values
         let val =
           (Math.round((directionCounter * ((div - 1) / 17)) % div) + div) % div;
-        console.log("DirectionCounter: " + directionCounter + " Val: " + val);
         this.updateKnob({ winddirection: val });
         this.updateCalculation();
       }.bind(this)
@@ -211,7 +210,6 @@ class KnobView {
       $(`#${this.config.winddirection.id}_knob`).val(
         wind.winddirection / this.config.winddirection.divisions
       );
-      console.log($(`#${this.config.winddirection.id}_knob`).val());
       $(`#${this.config.winddirection.id}_span`).html(
         this.config.winddirection.labels[wind.winddirection]
       );
