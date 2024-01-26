@@ -3,8 +3,8 @@ wind:
     id: "wind_direction"
     name_de: "Windrichtung"
     name_en: "Winddirection"
-    divisions: 8
-    labels: ["N", "NO", "O", "SO", "S", "SW", "W", "NW"]
+    divisions: 4
+    labels: ["N", "O", "S", "W"]
     default: "N"
   windspeed:
     id: "wind_speed"
@@ -13,4 +13,5 @@ wind:
     divisions: null
     labels: null
     default: "0 km/h"
-    starting_speed: "10 km/h"
+    starting_speed: 10
+    max_speed: 90

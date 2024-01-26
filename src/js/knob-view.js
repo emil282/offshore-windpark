@@ -35,11 +35,13 @@ class KnobView {
       $(`#${this.config.windspeed.id}`).on("input", (event) => {
         // Sets the current windspeed
         // Modulo 1 is used to only get positive values
-        let value = Math.round((((event.target.value % 1) + 1) % 1) * 90);
+        let value = Math.round(
+          (((event.target.value % 1) + 1) % 1) * this.config.windspeed.max_speed
+        );
         //this.updateKnob({ windspeed: value });
         $(`#${this.config.windspeed.id}_span`).html(value + " km/h");
         // hide starting speed info if the speeed is above 10 km/h
-        if (value >= 10) {
+        if (value >= this.config.windspeed.starting_speed) {
           $(`#${this.config.windspeed.id}_startingSpeed`).hide();
         } else {
           $(`#${this.config.windspeed.id}_startingSpeed`).show();
@@ -58,13 +60,16 @@ class KnobView {
     document.addEventListener(
       "keydown",
       function (event) {
-        if (event.key === "n") {
+        if (event.key === "s") {
           directionCounter++;
-        } else if (event.key === "s") {
+        } else if (event.key === "n") {
           directionCounter--;
         }
         directionCounter = ((directionCounter % 17) + 17) % 17;
-        let val = (Math.round((directionCounter * (7 / 17)) % 8) + 8) % 8;
+        let div = this.config.winddirection.divisions;
+        // Modulo is used to only get positive values
+        let val =
+          (Math.round((directionCounter * ((div - 1) / 17)) % div) + div) % div;
         console.log("DirectionCounter: " + directionCounter + " Val: " + val);
         this.updateKnob({ winddirection: val });
         this.updateCalculation();
@@ -80,7 +85,11 @@ class KnobView {
           speedCounter--;
         }
         speedCounter = ((speedCounter % 17) + 17) % 17;
-        let val = ((Math.round(speedCounter * (90 / 17)) % 90) + 90) % 90;
+        let maxSpeed = this.config.windspeed.max_speed;
+        // Modulo is used to only get positive values
+        let val =
+          ((Math.round(speedCounter * (maxSpeed / 17)) % maxSpeed) + maxSpeed) %
+          maxSpeed;
         this.updateKnob({ windspeed: val });
         this.updateCalculation();
       }.bind(this)
@@ -133,7 +142,9 @@ class KnobView {
               ? $("<span></span>")
                   .attr("id", `${config.id}_startingSpeed`)
                   .addClass("beschr-en")
-                  .html("Anlaufgeschwindigkeit: <br> 10 km/h")
+                  .html(
+                    `Anlaufgeschwindigkeit: <br> ${config.starting_speed} km/h`
+                  )
                   .css("color", "red")
                   .append("<br>")
               : ""
@@ -197,7 +208,9 @@ class KnobView {
    */
   updateKnob(wind) {
     if (wind.winddirection || wind.winddirection == 0) {
-      $(`#${this.config.winddirection.id}_knob`).val(wind.winddirection / 8);
+      $(`#${this.config.winddirection.id}_knob`).val(
+        wind.winddirection / this.config.winddirection.divisions
+      );
       console.log($(`#${this.config.winddirection.id}_knob`).val());
       $(`#${this.config.winddirection.id}_span`).html(
         this.config.winddirection.labels[wind.winddirection]
@@ -205,7 +218,9 @@ class KnobView {
     }
 
     if (wind.windspeed || wind.windspeed == 0) {
-      $(`#${this.config.windspeed.id}_knob`).val(wind.windspeed / 90);
+      $(`#${this.config.windspeed.id}_knob`).val(
+        wind.windspeed / this.config.windspeed.max_speed
+      );
       $(`#${this.config.windspeed.id}_span`).html(wind.windspeed + " km/h");
 
       // hide starting speed info if the speeed is above 10 km/h
@@ -234,7 +249,8 @@ class KnobView {
             $(`#${this.config.winddirection.id}_knob`).attr("divisions")
         ],
       windspeed:
-        ((($(`#${this.config.windspeed.id}_knob`).val() % 1) + 1) % 1) * 90,
+        ((($(`#${this.config.windspeed.id}_knob`).val() % 1) + 1) % 1) *
+        this.config.windspeed.max_speed,
     };
   }
 }

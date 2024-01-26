@@ -171,16 +171,23 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
             speedCounter++;
           } else if (event.key === "Backspace") {
             speedCounter--;
-          } else if (event.key === "n") {
-            directionCounter++;
           } else if (event.key === "s") {
+            directionCounter++;
+          } else if (event.key === "n") {
             directionCounter--;
           }
           speedCounter = ((speedCounter % 17) + 17) % 17;
-          speedVal = ((Math.round(speedCounter * (90 / 17)) % 90) + 90) % 90;
+          let maxSpeed = this.config.windspeed.max_speed;
+          // Modulo is used to only get positive values
+          let speedVal =
+            ((Math.round(speedCounter * (maxSpeed / 17)) % maxSpeed) +
+              maxSpeed) %
+            maxSpeed;
           directionCounter = ((directionCounter % 17) + 17) % 17;
+          let div = this.config.winddirection.divisions;
           directionVal =
-            (Math.round((directionCounter * (7 / 17)) % 8) + 8) % 8;
+            (Math.round((directionCounter * ((div - 1) / 17)) % div) + div) %
+            div;
           var jsonData = JSON.stringify({
             windspeed: speedVal,
             winddirection: config.wind.winddirection.labels[directionVal],

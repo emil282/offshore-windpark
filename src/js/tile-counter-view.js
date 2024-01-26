@@ -30,7 +30,7 @@ class TileCounterView {
             (((($(`#${this.config.wind.windspeed.id}_knob`).val() ?? 0) % 1) +
               1) %
               1) *
-            90;
+            this.config.wind.windspeed.max_speed;
           let speed_m_s = speed_km_h / 3.6;
           let energy;
           if (speed_m_s > 13) {
