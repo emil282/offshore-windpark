@@ -39,24 +39,23 @@ class SlipstreamData extends DataSource {
     );
     switch (windDirection) {
       // NORTH
-      case 0:
+      case "N":
         this.calculateSlipstreamN();
         break;
       // EAST
-      case 2:
+      case "O":
         this.calculateSlipstreamE();
         break;
       // SOUTH
-      case 4:
+      case "S":
         this.calculateSlipstreamS();
         break;
       //WEST
-      case 6:
+      case "W":
         this.calculateSlipstreamW();
         break;
     }
   }
-
   /**
    * calculates the energy loss caused by slipstreams from other windturbines when the main wind direction is
    * NORTH
