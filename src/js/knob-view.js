@@ -196,6 +196,8 @@ class KnobView {
         });
 
       this.stats.sources[3].calculateWind(this.getWind());
+      // updates the energy loss by slipstream
+      this.stats.sources[4].calculate(this.stats.get("wind-direction"));
       // update the speed of the animation
       this.mapView.updateSpeed();
     }
@@ -231,6 +233,7 @@ class KnobView {
     // is only needed when we render the editor.html and dashboard html (not for index.html)
     if (this.stats) {
       this.stats.sources[3].calculateWind(this.getWind());
+      this.stats.sources[4].calculate(this.stats.get("wind-direction"));
     }
     this.mapView.updateSpeed();
   }

@@ -37,7 +37,6 @@ class AnimatedTextureLoader {
   }
   async addAnimatedTexture(name, frame) {
     const resource = await this.loadtexture(name);
-    console.log(resource);
     this.animatedTextures[name] = resource.spritesheet;
     return new Promise((resolve) => {
       this.img = new PIXI.AnimatedSprite(

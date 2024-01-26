@@ -21,6 +21,7 @@ const VariableMapOverlay = require("./variable-map-overlay");
 const DataManager = require("./data-manager");
 const GreenSpacesData = require("./data-sources/green-spaces-data");
 const WindTurbinesData = require("./data-sources/wind-turbines-data_WT");
+const SlipstreamData = require("./data-sources/slipstream-data");
 const ZoningData = require("./data-sources/zoning-data");
 const ZoneBalanceData = require("./data-sources/zone-balance-data");
 const AnimatedTextureLoader = require("./animated-textures");
@@ -83,6 +84,8 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
         stats.registerSource(new ZoneBalanceData(city, config));
         stats.registerSource(new GreenSpacesData(city, config));
         stats.registerSource(new WindTurbinesData(city, config));
+        stats.registerSource(new SlipstreamData(city, config));
+
         stats.calculateAll(); // Calculation gets done here once, because the cities default state is no longer only empty cells, but park cells. Therefore the tile count must be calculated here too, default 0 is no longer correct
         city.map.events.on("update", () => {
           stats.calculateAll();
