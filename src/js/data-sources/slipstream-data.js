@@ -10,6 +10,7 @@ class SlipstreamData extends DataSource {
     this.cells = city.map.cells;
     this.energyLoss = Array2D.create(city.map.width, this.city.map.height, 1);
     this.config = config;
+    this.lifeSpan = 0;
 
     // These counters save the number of windturbines standing in the slipstream
     // Group A: no wt standing in slipstream |  |  |  |  |x|
@@ -30,7 +31,10 @@ class SlipstreamData extends DataSource {
     this.windTurbineSmallId = getTileTypeId(this.config, "windTurbineSmall");
     this.windTurbineBigId = getTileTypeId(this.config, "windTurbineBig");
   }
-
+  /**
+   * calculates the energy loss caused by placement and slipstreams for every wind trubine
+   * @param {*} windDirection | The by the User selected wind direction as a String
+   */
   calculate(windDirection) {
     this.energyLoss = Array2D.create(
       this.city.map.width,
@@ -55,6 +59,33 @@ class SlipstreamData extends DataSource {
         this.calculateSlipstreamW();
         break;
     }
+    this.calculateLifeSpan();
+  }
+  /**
+   * calculates the average life span of a windturbine
+   *    the life span is reduced by turbulences caused by placement and slipstreams
+   */
+  calculateLifeSpan() {
+    let wtCounter = 0;
+    let reducedLifeSpan = 0;
+    for (let col = 0; col < 16; col++) {
+      for (let row = 0; row < 16; row++) {
+        // counts the number of wts
+        if (
+          this.cells[row][col] == this.windTurbineSmallId ||
+          this.cells[row][col] == this.windTurbineBigId
+        ) {
+          wtCounter++;
+        }
+        // sums up the total energy loss caused by slipstreams
+        if (this.energyLoss[row][col] != 1) {
+          reducedLifeSpan += this.energyLoss[row][col];
+        }
+      }
+    }
+    // the average life span:
+    this.lifeSpan = 1 - reducedLifeSpan / wtCounter;
+    console.log(this.lifeSpan);
   }
   /**
    * calculates the energy loss caused by slipstreams from other windturbines when the main wind direction is
