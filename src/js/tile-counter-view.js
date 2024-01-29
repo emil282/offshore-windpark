@@ -32,15 +32,32 @@ class TileCounterView {
               1) *
             this.config.wind.windspeed.max_speed;
           let speed_m_s = speed_km_h / 3.6;
-          let energy;
-          if (speed_m_s > 13) {
-            energy = this.big_turbine_function(13);
+          // Calculate the energy gain based on the wind speed and the number of turbines
+          let energy_small;
+          let energy_big;
+          if (speed_m_s < 2.5) {
+            energy_small = 0;
+            energy_big = 0;
           } else if (speed_m_s < 3) {
-            energy = 0;
+            //Starting speed for small turbines
+            energy_small = this.small_turbine_function(speed_m_s);
+            energy_big = 0;
+          } else if (speed_m_s < 13) {
+            //Starting speed for big turbines
+            energy_small = this.small_turbine_function(speed_m_s);
+            energy_big = this.big_turbine_function(speed_m_s);
+          } else if (speed_m_s < 14) {
+            //"Nennleistung" for big turbines
+            energy_small = this.small_turbine_function(speed_m_s);
+            energy_big = 4200;
           } else {
-            energy = this.big_turbine_function(speed_m_s);
+            //"Nennleistung" for small turbines
+            energy_small = 2300;
+            energy_big = 4200;
           }
-          return Math.round(energy * (turbinesSmall + turbinesBig * 2));
+          return Math.round(
+            energy_small * turbinesSmall + energy_big * turbinesBig
+          );
         },
       },
       /*{
@@ -177,6 +194,29 @@ class TileCounterView {
     ];
   }*/
 
+  /**
+   * Describes the energy gain of the wind turbine "Enercon E-70 E4 2.300"
+   * Source: https://www.wind-turbine-models.com/turbines/69-enercon-e-70-e4-2.300
+   * @param {*} x
+   * @returns
+   */
+
+  small_turbine_function(x) {
+    let function_koeff = [
+      -2.2570403e-5, 1.72850455e-3, -5.69300328e-2, 1.05680842, -1.21766486e1,
+      9.03787641e1, -4.340438e2, 1.32003111e3, -2.39686287e3, 2.30853417e3,
+      -8.76933333e2,
+    ];
+
+    let y = 0;
+
+    //Calculate the y value of the function
+    for (let i = 0; i < function_koeff.length; i++) {
+      y += function_koeff[i] * Math.pow(x, function_koeff.length - i - 1);
+    }
+
+    return y;
+  }
   /**
    * Describes the energy gain of the wind turbine "Enercon E-141 EP4"
    * Source: https://www.wind-turbine-models.com/turbines/1297-enercon-e-141-ep4
