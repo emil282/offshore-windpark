@@ -237,7 +237,7 @@ class MapView {
           }
         }
         break;
-      case this.wtAnimation.windTurbineBigId:
+      case this.windTurbineBigId:
         this.wtAnimation.deleteFromArray(
           x,
           y,
@@ -318,7 +318,7 @@ class MapView {
   renderCityTile(x, y) {
     this.wtAnimation.deleteFromArray(x, y, this.wtAnimation.smallWindturbines);
     this.wtAnimation.deleteFromArray(x, y, this.wtAnimation.bigWindturbines);
-    const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 8);
+    const textureNumber = 1 + Math.round(this.randomizedTerrain[y][x] * 15);
     this.getTextureTile(x, y).texture =
       this.textures.city[`b0${textureNumber}`];
     this.getTextureTile(x, y).visible = true;

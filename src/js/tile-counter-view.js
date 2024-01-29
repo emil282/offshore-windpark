@@ -154,7 +154,8 @@ class TileCounterView {
     });
 
     this.stats.sources[3].calculateWind();
-
+    // updates the energy loss by slipstream
+    this.stats.sources[4].calculate(this.stats.get("wind-direction"));
     // update the speed of the animation
     this.mapView.updateSpeed();
   }

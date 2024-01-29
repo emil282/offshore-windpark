@@ -10,6 +10,7 @@ const showFatalError = require("./lib/show-fatal-error");
 //const NoiseData = require("./data-sources/noise-data");
 const GreenSpacesData = require("./data-sources/green-spaces-data");
 const WindTurbinesData = require("./data-sources/wind-turbines-data_WT");
+const SlipstreamData = require("./data-sources/slipstream-data");
 //const TravelTimesData = require("./data-sources/travel-times-data");
 const ZoningData = require("./data-sources/zoning-data");
 const ZoneBalanceData = require("./data-sources/zone-balance-data");
@@ -48,6 +49,7 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
     stats.registerSource(new ZoneBalanceData(city, config));
     stats.registerSource(new GreenSpacesData(city, config));
     stats.registerSource(new WindTurbinesData(city, config));
+    stats.registerSource(new SlipstreamData(city, config));
     city.map.events.on("update", () => {
       stats.calculateAll();
     });
