@@ -230,6 +230,7 @@ cfgLoader
               "green-spaces": stats.get("green-spaces-index"),
               "wind-turbines": stats.get("wind-turbines-index"),
               distances: stats.get("distances-index"),
+              "life-span": 5,
             });
             goalDebugView.setValues(stats.getGoals());
             indexesDirty = false;
