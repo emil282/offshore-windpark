@@ -1,9 +1,12 @@
+const EventEmitter = require("events");
+
 class KnobView {
   constructor(config, tileCounterView, stats, mapView) {
     this.config = config;
     this.tileCounterView = tileCounterView; //is only defined, when called from the main.js
     this.stats = stats; //is only defined, when called from the main-editor.js
     this.mapView = mapView; //is only defined, when called from the main-editor.js
+    this.events = new EventEmitter();
     /*this.$element = $("<div></div>")
       .addClass("index-list")
       .append($("<div></div>").addClass("flex"));*/
@@ -22,6 +25,7 @@ class KnobView {
     // Event Listeners for when the knobs change
     $(document).ready(() => {
       $(`#${this.config.winddirection.id}`).on("input", (event) => {
+        this.events.emit("winddirection-change");
         // Sets the current winddirection
         // Modulo 1 is used to only get positive values
         let value =
@@ -218,6 +222,11 @@ class KnobView {
     }
 
     if (wind.windspeed || wind.windspeed == 0) {
+      console.log(
+        Math.abs(wind.windspeed - this.config.windspeed.max_speed) < 0.01
+      );
+      console.log(wind.windspeed / this.config.windspeed.max_speed);
+      console.log($(`#${this.config.windspeed.id}_knob`).val());
       $(`#${this.config.windspeed.id}_knob`).val(
         wind.windspeed / this.config.windspeed.max_speed
       );
