@@ -21,48 +21,16 @@ class TileCounterView {
           const turbinesSmall = this.stats.get("zones-windTurbineSmall-count");
           const turbinesBig = this.stats.get("zones-windTurbineBig-count");
 
-          //Calculate the energy gain based on the wind speed and the number of turbines
-          /*
-          let speed =
-            (($(`#${this.config.wind.windspeed.id}_knob`).val() ?? 0) % 1) * 2;
-          return (
-            (turbinesSmall + turbinesBig * 2) *
-            (speed / 1) *
-            (speed / 1) ** 3
-          ).toFixed(2);
-          */
           let speed_km_h =
             (((($(`#${this.config.wind.windspeed.id}_knob`).val() ?? 0) % 1) +
               1) %
               1) *
             this.config.wind.windspeed.max_speed;
           let speed_m_s = speed_km_h / 3.6;
-          console.log(speed_m_s);
           // Calculate the energy gain based on the wind speed and the number of turbines
           let energy_small = small_turbine_function(speed_m_s);
           let energy_big = big_turbine_function(speed_m_s);
-          /*
-          if (speed_m_s < 2.5) {
-            energy_small = 0;
-            energy_big = 0;
-          } else if (speed_m_s < 3) {
-            //Starting speed for small turbines
-            energy_small = this.small_turbine_function(speed_m_s);
-            energy_big = 0;
-          } else if (speed_m_s < 13) {
-            //Starting speed for big turbines
-            energy_small = this.small_turbine_function(speed_m_s);
-            energy_big = this.big_turbine_function(speed_m_s);
-          } else if (speed_m_s < 14) {
-            //"Nennleistung" for big turbines
-            energy_small = this.small_turbine_function(speed_m_s);
-            energy_big = 4200;
-          } else {
-            //"Nennleistung" for small turbines
-            energy_small = 2300;
-            energy_big = 4200;
-          }
-          */
+
           return Math.round(
             energy_small * turbinesSmall + energy_big * turbinesBig
           );

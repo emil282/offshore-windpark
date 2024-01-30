@@ -219,6 +219,10 @@ cfgLoader
         );
         $("[data-component=wind]").append(knobView.$element);
 
+        knobView.events.on("winddirection-change", () => {
+          recalculateIndexes();
+        });
+
         let indexesDirty = true;
         let indexesCooldownTimer = null;
         const indexesCooldownTime = 1000;

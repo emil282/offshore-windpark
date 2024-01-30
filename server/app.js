@@ -26,7 +26,7 @@ const viewRepeater = new EventEmitter();
 function initApp(config) {
   wind = {
     winddirection: config.wind.winddirection.default,
-    windspeed: config.wind.windspeed.default,
+    windspeed: parseFloat(config.wind.windspeed.default),
   };
 
   console.log(`Initializing ${config.cityWidth} x ${config.cityHeight} city.`);
