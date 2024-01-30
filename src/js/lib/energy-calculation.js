@@ -42,6 +42,7 @@ function small_turbine_function(x) {
  * @returns
  */
 function big_turbine_function(x) {
+  console.log("x: " + x);
   if (x < 3) {
     return 0;
   } else if (x >= 14) {
@@ -63,7 +64,6 @@ function big_turbine_function(x) {
     if (y > 4200) {
       y = 4200;
     }
-
     return y;
   }
 }
