@@ -173,7 +173,7 @@ class SlipstreamData extends DataSource {
    */
   calculateSlipstreamE() {
     for (let row = 0; row < 16; row++) {
-      for (let j = 14; j > 0; j--) {
+      for (let j = 14; j >= 0; j--) {
         let type = this.cells[row][j];
         if (
           j > 11 &&
@@ -238,7 +238,7 @@ class SlipstreamData extends DataSource {
    */
   calculateSlipstreamS() {
     for (let col = 0; col < 16; col++) {
-      for (let j = 14; j > 0; j--) {
+      for (let j = 14; j >= 0; j--) {
         let type = this.cells[j][col];
         if (
           j > 11 &&
