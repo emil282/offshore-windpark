@@ -230,6 +230,8 @@ cfgLoader
         function recalculateIndexes() {
           indexesDirty = true;
           if (indexesCooldownTimer === null) {
+            stats.sources[3].calculateWind();
+            stats.sources[4].calculate(stats.get("wind-direction"));
             variableRankListView.setValues({
               "green-spaces": stats.get("green-spaces-index"),
               "wind-turbines": stats.get("wind-turbines-index"),
@@ -246,7 +248,6 @@ cfgLoader
             }, indexesCooldownTime);
           }
         }
-
         stats.events.on("update", () => {
           recalculateIndexes();
         });
