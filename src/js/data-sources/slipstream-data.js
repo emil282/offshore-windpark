@@ -10,33 +10,48 @@ class SlipstreamData extends DataSource {
     this.cells = city.map.cells;
     this.energyLoss = Array2D.create(city.map.width, this.city.map.height, 1);
     this.config = config;
+    this.lifeSpan = 0;
+    this.lifeSpanIndex = 5;
 
     // These counters save the number of windturbines standing in the slipstream
     // Group A: no wt standing in slipstream |  |  |  |  |x|
     // maximal energy gain x 1.0
-
+    this.groupA = 0;
     // Group B: 0 tile distance inbetween |  |  |  |x|x|
     // Energy Gain: x 0.5
-
+    this.groupB = 0;
     // Group C: 1 tile distance inbetween |  |  |x|  |x|
     // Energy Gain: x 0.3
-
+    this.groupC = 0;
     // Group D: 2 tile distance inbetween |  |x|  |  |x|
     // Energy Gain: x 0.2
-
+    this.groupD = 0;
     // Group E: 3 tile distance inbetween |x|  |  |  |x|
     // Energy Gain: x 0.1
+    this.groupE = 0;
 
     this.windTurbineSmallId = getTileTypeId(this.config, "windTurbineSmall");
     this.windTurbineBigId = getTileTypeId(this.config, "windTurbineBig");
   }
-
+  getVariables() {
+    return {
+      "life-span-index": () => this.lifeSpanIndex,
+    };
+  }
+  /**
+   * calculates the energy loss caused by placement and slipstreams for every wind trubine
+   * @param {*} windDirection | The by the User selected wind direction as a String
+   */
   calculate(windDirection) {
     this.energyLoss = Array2D.create(
       this.city.map.width,
       this.city.map.height,
       1
     );
+    this.groupA = 0;
+    this.groupB = 0;
+    this.groupC = 0;
+    this.groupD = 0;
     switch (windDirection) {
       // NORTH
       case "N":
@@ -55,7 +70,36 @@ class SlipstreamData extends DataSource {
         this.calculateSlipstreamW();
         break;
     }
+    this.calculateLifeSpan();
   }
+  /**
+   * calculates the average life span of a windturbine
+   *    the life span is reduced by turbulences caused by placement and slipstreams
+   */
+  calculateLifeSpan() {
+    if (this.groupA + this.groupB + this.groupC + this.groupD > 0) {
+      this.lifeSpan =
+        (0.5 * this.groupA +
+          0.3 * this.groupB +
+          0.2 * this.groupC +
+          0.1 * this.groupD) /
+        (this.groupA + this.groupB + this.groupC + this.groupD);
+
+      if (this.lifeSpan <= 0.2) {
+        this.lifeSpanIndex = 4;
+      } else if (this.lifeSpan <= 0.3) {
+        this.lifeSpanIndex = 3;
+      } else if (this.lifeSpan <= 0.4) {
+        this.lifeSpanIndex = 2;
+      } else if (this.lifeSpan <= 0.5) {
+        this.lifeSpanIndex = 1;
+      }
+    } else {
+      this.lifeSpan = 0;
+      this.lifeSpanIndex = 5;
+    }
+  }
+
   /**
    * calculates the energy loss caused by slipstreams from other windturbines when the main wind direction is
    * NORTH
@@ -79,6 +123,7 @@ class SlipstreamData extends DataSource {
           ) {
             switch (type) {
               case this.cells[j - 1][col]:
+                this.groupA++;
                 this.calculateEnergyLoss(
                   col,
                   j,
@@ -87,6 +132,7 @@ class SlipstreamData extends DataSource {
                 );
                 break;
               case this.cells[j - 2][col]:
+                this.groupB++;
                 this.calculateEnergyLoss(
                   col,
                   j,
@@ -95,6 +141,7 @@ class SlipstreamData extends DataSource {
                 );
                 break;
               case this.cells[j - 3][col]:
+                this.groupC++;
                 this.calculateEnergyLoss(
                   col,
                   j,
@@ -103,6 +150,7 @@ class SlipstreamData extends DataSource {
                 );
                 break;
               case this.cells[j - 4][col]:
+                this.groupD++;
                 this.calculateEnergyLoss(
                   col,
                   j,
@@ -139,6 +187,7 @@ class SlipstreamData extends DataSource {
           ) {
             switch (type) {
               case this.cells[row][j + 1]:
+                this.groupA++;
                 this.calculateEnergyLoss(
                   j,
                   row,
@@ -147,6 +196,7 @@ class SlipstreamData extends DataSource {
                 );
                 break;
               case this.cells[row][j + 2]:
+                this.groupB++;
                 this.calculateEnergyLoss(
                   j,
                   row,
@@ -155,6 +205,7 @@ class SlipstreamData extends DataSource {
                 );
                 break;
               case this.cells[row][j + 3]:
+                this.groupC++;
                 this.calculateEnergyLoss(
                   j,
                   row,
@@ -163,6 +214,7 @@ class SlipstreamData extends DataSource {
                 );
                 break;
               case this.cells[row][j + 4]:
+                this.groupD++;
                 this.calculateEnergyLoss(
                   j,
                   row,
@@ -200,6 +252,7 @@ class SlipstreamData extends DataSource {
           ) {
             switch (type) {
               case this.cells[j + 1][col]:
+                this.groupA++;
                 this.calculateEnergyLoss(
                   col,
                   j,
@@ -208,6 +261,7 @@ class SlipstreamData extends DataSource {
                 );
                 break;
               case this.cells[j + 2][col]:
+                this.groupB++;
                 this.calculateEnergyLoss(
                   col,
                   j,
@@ -216,6 +270,7 @@ class SlipstreamData extends DataSource {
                 );
                 break;
               case this.cells[j + 3][col]:
+                this.groupC++;
                 this.calculateEnergyLoss(
                   col,
                   j,
@@ -224,6 +279,7 @@ class SlipstreamData extends DataSource {
                 );
                 break;
               case this.cells[j + 4][col]:
+                this.groupD++;
                 this.calculateEnergyLoss(
                   col,
                   j,
@@ -261,6 +317,7 @@ class SlipstreamData extends DataSource {
           ) {
             switch (type) {
               case this.cells[row][j - 1]:
+                this.groupA++;
                 this.calculateEnergyLoss(
                   j,
                   row,
@@ -269,6 +326,7 @@ class SlipstreamData extends DataSource {
                 );
                 break;
               case this.cells[row][j - 2]:
+                this.groupB++;
                 this.calculateEnergyLoss(
                   j,
                   row,
@@ -277,6 +335,7 @@ class SlipstreamData extends DataSource {
                 );
                 break;
               case this.cells[row][j - 3]:
+                this.groupC++;
                 this.calculateEnergyLoss(
                   j,
                   row,
@@ -285,6 +344,7 @@ class SlipstreamData extends DataSource {
                 );
                 break;
               case this.cells[row][j - 4]:
+                this.groupD++;
                 this.calculateEnergyLoss(
                   j,
                   row,
@@ -323,7 +383,7 @@ class SlipstreamData extends DataSource {
       case 1:
         switch (type) {
           case this.cells[firstNeighbour][col]:
-            this.slipstreamsA++;
+            this.groupA++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -336,7 +396,7 @@ class SlipstreamData extends DataSource {
       case 2:
         switch (type) {
           case this.cells[firstNeighbour][col]:
-            this.slipstreamsA++;
+            this.groupA++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -345,7 +405,7 @@ class SlipstreamData extends DataSource {
             );
             break;
           case this.cells[secondNeighbour][col]:
-            this.slipstreamsB++;
+            this.groupB++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -358,7 +418,7 @@ class SlipstreamData extends DataSource {
       case 3:
         switch (type) {
           case this.cells[firstNeighbour][col]:
-            this.slipstreamsA++;
+            this.groupA++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -367,7 +427,7 @@ class SlipstreamData extends DataSource {
             );
             break;
           case this.cells[secondNeighbour][col]:
-            this.slipstreamsB++;
+            this.groupB++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -376,7 +436,7 @@ class SlipstreamData extends DataSource {
             );
             break;
           case this.cells[thirdNeighbour][col]:
-            this.slipstreamsc++;
+            this.groupC++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -414,7 +474,7 @@ class SlipstreamData extends DataSource {
       case 14:
         switch (type) {
           case this.cells[row][firstNeighbour]:
-            this.slipstreamsA++;
+            this.groupA++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -427,7 +487,7 @@ class SlipstreamData extends DataSource {
       case 13:
         switch (type) {
           case this.cells[row][firstNeighbour]:
-            this.slipstreamsA++;
+            this.groupA++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -436,7 +496,7 @@ class SlipstreamData extends DataSource {
             );
             break;
           case this.cells[row][secondNeighbour]:
-            this.slipstreamsB++;
+            this.groupB++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -449,7 +509,7 @@ class SlipstreamData extends DataSource {
       case 12:
         switch (type) {
           case this.cells[row][firstNeighbour]:
-            this.slipstreamsA++;
+            this.groupA++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -458,7 +518,7 @@ class SlipstreamData extends DataSource {
             );
             break;
           case this.cells[row][secondNeighbour]:
-            this.slipstreamsB++;
+            this.groupB++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -467,7 +527,7 @@ class SlipstreamData extends DataSource {
             );
             break;
           case this.cells[row][thirdNeighbour]:
-            this.slipstreamsc++;
+            this.groupC++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -505,7 +565,7 @@ class SlipstreamData extends DataSource {
       case 14:
         switch (type) {
           case this.cells[firstNeighbour][col]:
-            this.slipstreamsA++;
+            this.groupA++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -518,7 +578,7 @@ class SlipstreamData extends DataSource {
       case 13:
         switch (type) {
           case this.cells[firstNeighbour][col]:
-            this.slipstreamsA++;
+            this.groupA++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -527,7 +587,7 @@ class SlipstreamData extends DataSource {
             );
             break;
           case this.cells[secondNeighbour][col]:
-            this.slipstreamsB++;
+            this.groupB++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -540,7 +600,7 @@ class SlipstreamData extends DataSource {
       case 12:
         switch (type) {
           case this.cells[firstNeighbour][col]:
-            this.slipstreamsA++;
+            this.groupA++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -549,7 +609,7 @@ class SlipstreamData extends DataSource {
             );
             break;
           case this.cells[secondNeighbour][col]:
-            this.slipstreamsB++;
+            this.groupB++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -558,7 +618,7 @@ class SlipstreamData extends DataSource {
             );
             break;
           case this.cells[thirdNeighbour][col]:
-            this.slipstreamsc++;
+            this.groupC++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -596,7 +656,7 @@ class SlipstreamData extends DataSource {
       case 1:
         switch (type) {
           case this.cells[row][firstNeighbour]:
-            this.slipstreamsA++;
+            this.groupA++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -609,7 +669,7 @@ class SlipstreamData extends DataSource {
       case 2:
         switch (type) {
           case this.cells[row][firstNeighbour]:
-            this.slipstreamsA++;
+            this.groupA++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -618,7 +678,7 @@ class SlipstreamData extends DataSource {
             );
             break;
           case this.cells[row][secondNeighbour]:
-            this.slipstreamsB++;
+            this.groupB++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -631,7 +691,7 @@ class SlipstreamData extends DataSource {
       case 3:
         switch (type) {
           case this.cells[row][firstNeighbour]:
-            this.slipstreamsA++;
+            this.groupA++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -640,7 +700,7 @@ class SlipstreamData extends DataSource {
             );
             break;
           case this.cells[row][secondNeighbour]:
-            this.slipstreamsB++;
+            this.groupB++;
             this.calculateEnergyLoss(
               col,
               row,
@@ -649,7 +709,7 @@ class SlipstreamData extends DataSource {
             );
             break;
           case this.cells[row][thirdNeighbour]:
-            this.slipstreamsc++;
+            this.groupC++;
             this.calculateEnergyLoss(
               col,
               row,
