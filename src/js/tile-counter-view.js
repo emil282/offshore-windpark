@@ -126,7 +126,7 @@ class TileCounterView {
     });
 
     this.computedFieldDefs.forEach(({ id, calculate }) => {
-      this.fields[id].text(`${calculate()} kWh`);
+      this.fields[id].text(`${calculate()} kW`);
     });
 
     this.stats.sources[3].calculateWind();
@@ -151,7 +151,7 @@ class TileCounterView {
     });
 
     this.computedFieldDefs.forEach(({ id, calculate }) => {
-      this.fields[id].text(`${calculate()} kWh`);
+      this.fields[id].text(`${calculate()} kW`);
     });
   }
 

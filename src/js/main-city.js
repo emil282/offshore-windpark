@@ -45,7 +45,10 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
   })
   .then((config) => {
     const city = new City(config.cityWidth, config.cityHeight);
-    var wind;
+    var wind = {
+      winddirection: config.wind.winddirection.default,
+      windspeed: parseFloat(config.wind.windspeed.default),
+    };
 
     const app = new PIXI.Application({
       width: 1152,
@@ -169,6 +172,7 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
         var speedVal = parseFloat(config.wind.windspeed.default);
         var directionCounter = 0;
         var directionVal = config.wind.winddirection.default;
+        // Event Listener for changing of the physical knobs
         document.addEventListener("keydown", function (event) {
           if (event.key === "q") {
             speedCounter++;
@@ -180,20 +184,21 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
             directionCounter--;
           }
           speedCounter = ((speedCounter % 17) + 17) % 17;
-          let maxSpeed = this.config.windspeed.max_speed;
+          let maxSpeed = config.wind.windspeed.max_speed;
           // Modulo is used to only get positive values
           let speedVal =
             ((Math.round(speedCounter * (maxSpeed / 17)) % maxSpeed) +
               maxSpeed) %
             maxSpeed;
           directionCounter = ((directionCounter % 17) + 17) % 17;
-          let div = this.config.winddirection.divisions;
+          let div = config.wind.winddirection.divisions;
           directionVal =
             (Math.round((directionCounter * ((div - 1) / 17)) % div) + div) %
             div;
           var jsonData = JSON.stringify({
             windspeed: speedVal,
             winddirection: config.wind.winddirection.labels[directionVal],
+            physical: true,
           });
           fetch(`${process.env.SERVER_HTTP_URI}/wind`, {
             method: "POST",

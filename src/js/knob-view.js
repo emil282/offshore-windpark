@@ -64,6 +64,7 @@ class KnobView {
     document.addEventListener(
       "keydown",
       function (event) {
+        this.events.emit("winddirection-change");
         if (event.key === "s") {
           directionCounter++;
         } else if (event.key === "n") {
@@ -74,7 +75,7 @@ class KnobView {
         // Modulo is used to only get positive values
         let val =
           (Math.round((directionCounter * ((div - 1) / 17)) % div) + div) % div;
-        this.updateKnob({ winddirection: val });
+        this.updateKnob({ winddirection: val, physical: true });
         this.updateCalculation();
       }.bind(this)
     );
@@ -93,7 +94,7 @@ class KnobView {
         let val =
           ((Math.round(speedCounter * (maxSpeed / 17)) % maxSpeed) + maxSpeed) %
           maxSpeed;
-        this.updateKnob({ windspeed: val });
+        this.updateKnob({ windspeed: val, physical: true });
         this.updateCalculation();
       }.bind(this)
     );
@@ -183,6 +184,7 @@ class KnobView {
     } else {
       //function is called from the editorpage
       var data = this.getWind();
+      //data["physical"] = physical;
       var jsonData = JSON.stringify(data);
       fetch(`${process.env.SERVER_HTTP_URI}/wind`, {
         method: "POST", // oder 'PUT'
@@ -213,24 +215,28 @@ class KnobView {
    */
   updateKnob(wind) {
     if (wind.winddirection || wind.winddirection == 0) {
-      $(`#${this.config.winddirection.id}_knob`).val(
-        wind.winddirection / this.config.winddirection.divisions
-      );
-      $(`#${this.config.winddirection.id}_span`).html(
-        this.config.winddirection.labels[wind.winddirection]
-      );
+      if (wind.physical) {
+        //true if the function is called from the physical knobs
+        //The position of the x-knobs needs to be updated when the physical knobs are turned
+        $(`#${this.config.winddirection.id}_knob`).val(
+          wind.winddirection / this.config.winddirection.divisions
+        );
+        $(`#${this.config.winddirection.id}_span`).html(
+          this.config.winddirection.labels[wind.winddirection]
+        );
+      }
     }
-
     if (wind.windspeed || wind.windspeed == 0) {
-      console.log(
-        Math.abs(wind.windspeed - this.config.windspeed.max_speed) < 0.01
+      //true if the function is called from the physical knobs
+      //The position of the x-knobs needs to be updated when the physical knobs are turned
+      if (wind.physical) {
+        $(`#${this.config.windspeed.id}_knob`).val(
+          wind.windspeed / this.config.windspeed.max_speed
+        );
+      }
+      $(`#${this.config.windspeed.id}_span`).html(
+        Math.round(wind.windspeed) + " km/h"
       );
-      console.log(wind.windspeed / this.config.windspeed.max_speed);
-      console.log($(`#${this.config.windspeed.id}_knob`).val());
-      $(`#${this.config.windspeed.id}_knob`).val(
-        wind.windspeed / this.config.windspeed.max_speed
-      );
-      $(`#${this.config.windspeed.id}_span`).html(wind.windspeed + " km/h");
 
       // hide starting speed info if the speeed is above 10 km/h
       if (wind.windspeed >= 10) {

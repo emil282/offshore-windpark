@@ -18,16 +18,16 @@ class TileCounterViewDashboard {
           const turbinesSmall = this.counters[4].count;
           const turbinesBig = this.counters[5].count;
 
-          let speed_km_h =
-            ((((wind.windspeed ?? 0) % 1) + 1) % 1) *
-            this.config.wind.windspeed.max_speed;
+          let speed_km_h = wind.windspeed ?? 0;
           let speed_m_s = speed_km_h / 3.6;
           // Calculate the energy gain based on the wind speed and the number of turbines
           let energy_small = small_turbine_function(speed_m_s);
           let energy_big = big_turbine_function(speed_m_s);
 
-          return Math.round(
-            energy_small * turbinesSmall + energy_big * turbinesBig
+          return (
+            Math.round(
+              energy_small * turbinesSmall + energy_big * turbinesBig
+            ) + " kW"
           );
         },
       },
@@ -110,7 +110,7 @@ class TileCounterViewDashboard {
     });
 
     this.computedFieldDefs.forEach(({ id, calculate }) => {
-      this.fields[id].text(`${calculate(wind)} kWh`);
+      this.fields[id].text(`${calculate(wind)}`);
     });
   }
 }
