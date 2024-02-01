@@ -27,7 +27,7 @@ class TileCounterViewDashboard {
           return (
             Math.round(
               energy_small * turbinesSmall + energy_big * turbinesBig
-            ) + " kWh"
+            ) + " kW"
           );
         },
       },
