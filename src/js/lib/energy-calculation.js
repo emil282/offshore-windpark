@@ -3,7 +3,7 @@
  * Source: https://www.wind-turbine-models.com/turbines/69-enercon-e-70-e4-2.300
  * Starting speed: 2.5 m/s
  * Nennleistung: 2300 kW at 15 m/s
- * @param {*} x
+ * @param {*} x Windspeed in m/s
  * @returns
  */
 
@@ -38,11 +38,10 @@ function small_turbine_function(x) {
  * Source: https://www.wind-turbine-models.com/turbines/1297-enercon-e-141-ep4
  * Starting speed: 3 m/s
  * Nennleistung: 4200 kW at 14 m/s
- * @param {*} x
+ * @param {*} x Windspeed in m/s
  * @returns
  */
 function big_turbine_function(x) {
-  console.log("x: " + x);
   if (x < 3) {
     return 0;
   } else if (x >= 14) {
