@@ -12,6 +12,7 @@ class SlipstreamData extends DataSource {
     this.config = config;
     this.lifeSpan = 0;
     this.lifeSpanIndex = 5;
+    this.arrayOfLoss = [];
 
     // These counters save the number of windturbines standing in the slipstream
     // Group A: no wt standing in slipstream |  |  |  |  |x|
@@ -36,6 +37,7 @@ class SlipstreamData extends DataSource {
   getVariables() {
     return {
       "life-span-index": () => this.lifeSpanIndex,
+      "energy-losses": () => this.arrayOfLoss,
     };
   }
   /**
@@ -71,6 +73,30 @@ class SlipstreamData extends DataSource {
         break;
     }
     this.calculateLifeSpan();
+    this.saveEngeryLosses();
+  }
+  /**
+   * saves all energy losses and the according wt type in an array for calculating the final energy gain
+   */
+  saveEngeryLosses() {
+    this.arrayOfLoss = [];
+    for (let col = 0; col < 16; col++) {
+      for (let row = 0; row < 16; row++) {
+        if (this.cells[row][col] == this.windTurbineSmallId) {
+          let energyLossSmall = [];
+          energyLossSmall.push(
+            this.energyLoss[row][col],
+            this.windTurbineSmallId
+          );
+          this.arrayOfLoss.push(energyLossSmall);
+        }
+        if (this.cells[row][col] == this.windTurbineBigId) {
+          let energyLossBig = [];
+          energyLossBig.push(this.energyLoss[row][col], this.windTurbineBigId);
+          this.arrayOfLoss.push(energyLossBig);
+        }
+      }
+    }
   }
   /**
    * calculates the average life span of a windturbine
