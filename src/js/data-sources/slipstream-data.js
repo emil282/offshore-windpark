@@ -97,6 +97,7 @@ class SlipstreamData extends DataSource {
         }
       }
     }
+    console.log(this.arrayOfLoss);
   }
   /**
    * calculates the average life span of a windturbine
@@ -147,49 +148,57 @@ class SlipstreamData extends DataSource {
             type == this.windTurbineSmallId ||
             type == this.windTurbineBigId
           ) {
-            switch (type) {
-              case this.cells[j - 1][col]:
-                this.groupA++;
-                this.calculateEnergyLoss(
-                  col,
-                  j,
-                  0.5,
-                  this.energyLoss[j - 1][col]
-                );
-                break;
-              case this.cells[j - 2][col]:
-                this.groupB++;
-                this.calculateEnergyLoss(
-                  col,
-                  j,
-                  0.3,
-                  this.energyLoss[j - 2][col]
-                );
-                break;
-              case this.cells[j - 3][col]:
-                this.groupC++;
-                this.calculateEnergyLoss(
-                  col,
-                  j,
-                  0.2,
-                  this.energyLoss[j - 3][col]
-                );
-                break;
-              case this.cells[j - 4][col]:
-                this.groupD++;
-                this.calculateEnergyLoss(
-                  col,
-                  j,
-                  0.1,
-                  this.energyLoss[j - 4][col]
-                );
-                break;
+            if (
+              this.cells[j - 1][col] == this.windTurbineSmallId ||
+              this.cells[j - 1][col] == this.windTurbineBigId
+            ) {
+              this.groupA++;
+              this.calculateEnergyLoss(
+                col,
+                j,
+                0.5,
+                this.energyLoss[j - 1][col]
+              );
+            } else if (
+              this.cells[j - 2][col] == this.windTurbineSmallId ||
+              this.cells[j - 2][col] == this.windTurbineBigId
+            ) {
+              this.groupB++;
+              this.calculateEnergyLoss(
+                col,
+                j,
+                0.3,
+                this.energyLoss[j - 2][col]
+              );
+            } else if (
+              this.cells[j - 3][col] == this.windTurbineSmallId ||
+              this.cells[j - 3][col] == this.windTurbineBigId
+            ) {
+              this.groupC++;
+              this.calculateEnergyLoss(
+                col,
+                j,
+                0.2,
+                this.energyLoss[j - 3][col]
+              );
+            } else if (
+              this.cells[j - 4][col] == this.windTurbineSmallId ||
+              this.cells[j - 4][col] == this.windTurbineBigId
+            ) {
+              this.groupD++;
+              this.calculateEnergyLoss(
+                col,
+                j,
+                0.1,
+                this.energyLoss[j - 4][col]
+              );
             }
           }
         }
       }
     }
   }
+
   /**
    * calculates the energy loss matrix (this.energyloss) caused by slipstreams from other windturbines when the main wind direction is
    * EAST
@@ -211,43 +220,50 @@ class SlipstreamData extends DataSource {
             type == this.windTurbineSmallId ||
             type == this.windTurbineBigId
           ) {
-            switch (type) {
-              case this.cells[row][j + 1]:
-                this.groupA++;
-                this.calculateEnergyLoss(
-                  j,
-                  row,
-                  0.5,
-                  this.energyLoss[row][j + 1]
-                );
-                break;
-              case this.cells[row][j + 2]:
-                this.groupB++;
-                this.calculateEnergyLoss(
-                  j,
-                  row,
-                  0.3,
-                  this.energyLoss[row][j + 2]
-                );
-                break;
-              case this.cells[row][j + 3]:
-                this.groupC++;
-                this.calculateEnergyLoss(
-                  j,
-                  row,
-                  0.2,
-                  this.energyLoss[row][j + 3]
-                );
-                break;
-              case this.cells[row][j + 4]:
-                this.groupD++;
-                this.calculateEnergyLoss(
-                  j,
-                  row,
-                  0.1,
-                  this.energyLoss[row][j + 4]
-                );
-                break;
+            if (
+              this.windTurbineBigId == this.cells[row][j + 1] ||
+              this.windTurbineSmallId == this.cells[row][j + 1]
+            ) {
+              this.groupA++;
+              this.calculateEnergyLoss(
+                j,
+                row,
+                0.5,
+                this.energyLoss[row][j + 1]
+              );
+            } else if (
+              this.windTurbineBigId == this.cells[row][j + 2] ||
+              this.windTurbineSmallId == this.cells[row][j + 2]
+            ) {
+              this.groupB++;
+              this.calculateEnergyLoss(
+                j,
+                row,
+                0.3,
+                this.energyLoss[row][j + 2]
+              );
+            } else if (
+              this.windTurbineBigId == this.cells[row][j + 3] ||
+              this.windTurbineSmallId == this.cells[row][j + 3]
+            ) {
+              this.groupC++;
+              this.calculateEnergyLoss(
+                j,
+                row,
+                0.2,
+                this.energyLoss[row][j + 3]
+              );
+            } else if (
+              this.windTurbineBigId == this.cells[row][j + 4] ||
+              this.windTurbineSmallId == this.cells[row][j + 4]
+            ) {
+              this.groupD++;
+              this.calculateEnergyLoss(
+                j,
+                row,
+                0.1,
+                this.energyLoss[row][j + 4]
+              );
             }
           }
         }
@@ -276,43 +292,50 @@ class SlipstreamData extends DataSource {
             type == this.windTurbineSmallId ||
             type == this.windTurbineBigId
           ) {
-            switch (type) {
-              case this.cells[j + 1][col]:
-                this.groupA++;
-                this.calculateEnergyLoss(
-                  col,
-                  j,
-                  0.5,
-                  this.energyLoss[j + 1][col]
-                );
-                break;
-              case this.cells[j + 2][col]:
-                this.groupB++;
-                this.calculateEnergyLoss(
-                  col,
-                  j,
-                  0.3,
-                  this.energyLoss[j + 2][col]
-                );
-                break;
-              case this.cells[j + 3][col]:
-                this.groupC++;
-                this.calculateEnergyLoss(
-                  col,
-                  j,
-                  0.2,
-                  this.energyLoss[j + 3][col]
-                );
-                break;
-              case this.cells[j + 4][col]:
-                this.groupD++;
-                this.calculateEnergyLoss(
-                  col,
-                  j,
-                  0.1,
-                  this.energyLoss[j + 4][col]
-                );
-                break;
+            if (
+              this.windTurbineBigId == this.cells[j + 1][col] ||
+              this.windTurbineSmallId == this.cells[j + 1][col]
+            ) {
+              this.groupA++;
+              this.calculateEnergyLoss(
+                col,
+                j,
+                0.5,
+                this.energyLoss[j + 1][col]
+              );
+            } else if (
+              this.windTurbineBigId == this.cells[j + 2][col] ||
+              this.windTurbineSmallId == this.cells[j + 2][col]
+            ) {
+              this.groupB++;
+              this.calculateEnergyLoss(
+                col,
+                j,
+                0.3,
+                this.energyLoss[j + 2][col]
+              );
+            } else if (
+              this.windTurbineBigId == this.cells[j + 3][col] ||
+              this.windTurbineSmallId == this.cells[j + 3][col]
+            ) {
+              this.groupC++;
+              this.calculateEnergyLoss(
+                col,
+                j,
+                0.2,
+                this.energyLoss[j + 3][col]
+              );
+            } else if (
+              this.windTurbineBigId == this.cells[j + 4][col] ||
+              this.windTurbineSmallId == this.cells[j + 4][col]
+            ) {
+              this.groupD++;
+              this.calculateEnergyLoss(
+                col,
+                j,
+                0.1,
+                this.energyLoss[j + 4][col]
+              );
             }
           }
         }
@@ -341,43 +364,50 @@ class SlipstreamData extends DataSource {
             type == this.windTurbineSmallId ||
             type == this.windTurbineBigId
           ) {
-            switch (type) {
-              case this.cells[row][j - 1]:
-                this.groupA++;
-                this.calculateEnergyLoss(
-                  j,
-                  row,
-                  0.5,
-                  this.energyLoss[row][j - 1]
-                );
-                break;
-              case this.cells[row][j - 2]:
-                this.groupB++;
-                this.calculateEnergyLoss(
-                  j,
-                  row,
-                  0.3,
-                  this.energyLoss[row][j - 2]
-                );
-                break;
-              case this.cells[row][j - 3]:
-                this.groupC++;
-                this.calculateEnergyLoss(
-                  j,
-                  row,
-                  0.2,
-                  this.energyLoss[row][j - 3]
-                );
-                break;
-              case this.cells[row][j - 4]:
-                this.groupD++;
-                this.calculateEnergyLoss(
-                  j,
-                  row,
-                  0.1,
-                  this.energyLoss[row][j - 4]
-                );
-                break;
+            if (
+              this.windTurbineSmallId == this.cells[row][j - 1] ||
+              this.windTurbineBigId == this.cells[row][j - 1]
+            ) {
+              this.groupA++;
+              this.calculateEnergyLoss(
+                j,
+                row,
+                0.5,
+                this.energyLoss[row][j - 1]
+              );
+            } else if (
+              this.windTurbineSmallId == this.cells[row][j - 2] ||
+              this.windTurbineBigId == this.cells[row][j - 2]
+            ) {
+              this.groupB++;
+              this.calculateEnergyLoss(
+                j,
+                row,
+                0.3,
+                this.energyLoss[row][j - 2]
+              );
+            } else if (
+              this.windTurbineSmallId == this.cells[row][j - 3] ||
+              this.windTurbineBigId == this.cells[row][j - 3]
+            ) {
+              this.groupC++;
+              this.calculateEnergyLoss(
+                j,
+                row,
+                0.2,
+                this.energyLoss[row][j - 3]
+              );
+            } else if (
+              this.windTurbineSmallId == this.cells[row][j - 4] ||
+              this.windTurbineBigId == this.cells[row][j - 4]
+            ) {
+              this.groupD++;
+              this.calculateEnergyLoss(
+                j,
+                row,
+                0.1,
+                this.energyLoss[row][j - 4]
+              );
             }
           }
         }
@@ -407,69 +437,78 @@ class SlipstreamData extends DataSource {
   ) {
     switch (j) {
       case 1:
-        switch (type) {
-          case this.cells[firstNeighbour][col]:
-            this.groupA++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.5,
-              this.energyLoss[firstNeighbour][col]
-            );
-            break;
+        if (
+          this.windTurbineSmallId == this.cells[firstNeighbour][col] ||
+          this.windTurbineBigId == this.cells[firstNeighbour][col]
+        ) {
+          this.groupA++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.5,
+            this.energyLoss[firstNeighbour][col]
+          );
         }
         break;
       case 2:
-        switch (type) {
-          case this.cells[firstNeighbour][col]:
-            this.groupA++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.5,
-              this.energyLoss[firstNeighbour][col]
-            );
-            break;
-          case this.cells[secondNeighbour][col]:
-            this.groupB++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.3,
-              this.energyLoss[secondNeighbour][col]
-            );
-            break;
+        if (
+          this.windTurbineSmallId == this.cells[firstNeighbour][col] ||
+          this.windTurbineBigId == this.cells[firstNeighbour][col]
+        ) {
+          this.groupA++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.5,
+            this.energyLoss[firstNeighbour][col]
+          );
+        } else if (
+          this.windTurbineSmallId == this.cells[secondNeighbour][col] ||
+          this.windTurbineBigId == this.cells[secondNeighbour][col]
+        ) {
+          this.groupB++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.3,
+            this.energyLoss[secondNeighbour][col]
+          );
         }
         break;
       case 3:
-        switch (type) {
-          case this.cells[firstNeighbour][col]:
-            this.groupA++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.5,
-              this.energyLoss[firstNeighbour][col]
-            );
-            break;
-          case this.cells[secondNeighbour][col]:
-            this.groupB++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.3,
-              this.energyLoss[secondNeighbour][col]
-            );
-            break;
-          case this.cells[thirdNeighbour][col]:
-            this.groupC++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.2,
-              this.energyLoss[thirdNeighbour][col]
-            );
-            break;
+        if (
+          this.windTurbineSmallId == this.cells[firstNeighbour][col] ||
+          this.windTurbineBigId == this.cells[firstNeighbour][col]
+        ) {
+          this.groupA++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.5,
+            this.energyLoss[firstNeighbour][col]
+          );
+        } else if (
+          this.windTurbineSmallId == this.cells[secondNeighbour][col] ||
+          this.windTurbineBigId == this.cells[secondNeighbour][col]
+        ) {
+          this.groupB++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.3,
+            this.energyLoss[secondNeighbour][col]
+          );
+        } else if (
+          this.windTurbineSmallId == this.cells[thirdNeighbour][col] ||
+          this.windTurbineBigId == this.cells[thirdNeighbour][col]
+        ) {
+          this.groupC++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.2,
+            this.energyLoss[thirdNeighbour][col]
+          );
         }
         break;
     }
@@ -498,69 +537,78 @@ class SlipstreamData extends DataSource {
   ) {
     switch (j) {
       case 14:
-        switch (type) {
-          case this.cells[row][firstNeighbour]:
-            this.groupA++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.5,
-              this.energyLoss[row][firstNeighbour]
-            );
-            break;
+        if (
+          this.windTurbineBigId == this.cells[row][firstNeighbour] ||
+          this.windTurbineSmallId == this.cells[row][firstNeighbour]
+        ) {
+          this.groupA++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.5,
+            this.energyLoss[row][firstNeighbour]
+          );
         }
         break;
       case 13:
-        switch (type) {
-          case this.cells[row][firstNeighbour]:
-            this.groupA++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.5,
-              this.energyLoss[row][firstNeighbour]
-            );
-            break;
-          case this.cells[row][secondNeighbour]:
-            this.groupB++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.3,
-              this.energyLoss[row][secondNeighbour]
-            );
-            break;
+        if (
+          this.windTurbineBigId == this.cells[row][firstNeighbour] ||
+          this.windTurbineSmallId == this.cells[row][firstNeighbour]
+        ) {
+          this.groupA++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.5,
+            this.energyLoss[row][firstNeighbour]
+          );
+        } else if (
+          this.windTurbineBigId == this.cells[row][secondNeighbour] ||
+          this.windTurbineSmallId == this.cells[row][secondNeighbour]
+        ) {
+          this.groupB++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.3,
+            this.energyLoss[row][secondNeighbour]
+          );
         }
         break;
       case 12:
-        switch (type) {
-          case this.cells[row][firstNeighbour]:
-            this.groupA++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.5,
-              this.energyLoss[row][firstNeighbour]
-            );
-            break;
-          case this.cells[row][secondNeighbour]:
-            this.groupB++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.3,
-              this.energyLoss[row][secondNeighbour]
-            );
-            break;
-          case this.cells[row][thirdNeighbour]:
-            this.groupC++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.2,
-              this.energyLoss[row][thirdNeighbour]
-            );
-            break;
+        if (
+          this.windTurbineBigId == this.cells[row][firstNeighbour] ||
+          this.windTurbineSmallId == this.cells[row][firstNeighbour]
+        ) {
+          this.groupA++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.5,
+            this.energyLoss[row][firstNeighbour]
+          );
+        } else if (
+          this.windTurbineBigId == this.cells[row][secondNeighbour] ||
+          this.windTurbineSmallId == this.cells[row][secondNeighbour]
+        ) {
+          this.groupB++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.3,
+            this.energyLoss[row][secondNeighbour]
+          );
+        } else if (
+          this.windTurbineBigId == this.cells[row][thirdNeighbour] ||
+          this.windTurbineSmallId == this.cells[row][thirdNeighbour]
+        ) {
+          this.groupC++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.2,
+            this.energyLoss[row][thirdNeighbour]
+          );
         }
         break;
     }
@@ -589,73 +637,83 @@ class SlipstreamData extends DataSource {
   ) {
     switch (j) {
       case 14:
-        switch (type) {
-          case this.cells[firstNeighbour][col]:
-            this.groupA++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.5,
-              this.energyLoss[firstNeighbour][col]
-            );
-            break;
+        if (
+          this.windTurbineBigId == this.cells[firstNeighbour][col] ||
+          this.windTurbineSmallId == this.cells[firstNeighbour][col]
+        ) {
+          this.groupA++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.5,
+            this.energyLoss[firstNeighbour][col]
+          );
         }
         break;
       case 13:
-        switch (type) {
-          case this.cells[firstNeighbour][col]:
-            this.groupA++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.5,
-              this.energyLoss[firstNeighbour][col]
-            );
-            break;
-          case this.cells[secondNeighbour][col]:
-            this.groupB++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.3,
-              this.energyLoss[secondNeighbour][col]
-            );
-            break;
+        if (
+          this.windTurbineBigId == this.cells[firstNeighbour][col] ||
+          this.windTurbineSmallId == this.cells[firstNeighbour][col]
+        ) {
+          this.groupA++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.5,
+            this.energyLoss[firstNeighbour][col]
+          );
+        } else if (
+          this.windTurbineBigId == this.cells[secondNeighbour][col] ||
+          this.windTurbineSmallId == this.cells[secondNeighbour][col]
+        ) {
+          this.groupB++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.3,
+            this.energyLoss[secondNeighbour][col]
+          );
         }
         break;
       case 12:
-        switch (type) {
-          case this.cells[firstNeighbour][col]:
-            this.groupA++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.5,
-              this.energyLoss[firstNeighbour][col]
-            );
-            break;
-          case this.cells[secondNeighbour][col]:
-            this.groupB++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.3,
-              this.energyLoss[secondNeighbour][col]
-            );
-            break;
-          case this.cells[thirdNeighbour][col]:
-            this.groupC++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.2,
-              this.energyLoss[thirdNeighbour][col]
-            );
-            break;
+        if (
+          this.windTurbineBigId == this.cells[firstNeighbour][col] ||
+          this.windTurbineSmallId == this.cells[firstNeighbour][col]
+        ) {
+          this.groupA++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.5,
+            this.energyLoss[firstNeighbour][col]
+          );
+        } else if (
+          this.windTurbineBigId == this.cells[secondNeighbour][col] ||
+          this.windTurbineSmallId == this.cells[secondNeighbour][col]
+        ) {
+          this.groupB++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.3,
+            this.energyLoss[secondNeighbour][col]
+          );
+        } else if (
+          this.windTurbineBigId == this.cells[thirdNeighbour][col] ||
+          this.windTurbineSmallId == this.cells[thirdNeighbour][col]
+        ) {
+          this.groupC++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.2,
+            this.energyLoss[thirdNeighbour][col]
+          );
         }
         break;
     }
   }
+
   /**
    * calculates the energy loss of the first four cells in wind direction
    * WEST
@@ -680,69 +738,78 @@ class SlipstreamData extends DataSource {
   ) {
     switch (j) {
       case 1:
-        switch (type) {
-          case this.cells[row][firstNeighbour]:
-            this.groupA++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.5,
-              this.energyLoss[row][firstNeighbour]
-            );
-            break;
+        if (
+          this.windTurbineSmallId == this.cells[row][firstNeighbour] ||
+          this.windTurbineBigId == this.cells[row][firstNeighbour]
+        ) {
+          this.groupA++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.5,
+            this.energyLoss[row][firstNeighbour]
+          );
         }
         break;
       case 2:
-        switch (type) {
-          case this.cells[row][firstNeighbour]:
-            this.groupA++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.5,
-              this.energyLoss[row][firstNeighbour]
-            );
-            break;
-          case this.cells[row][secondNeighbour]:
-            this.groupB++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.3,
-              this.energyLoss[row][secondNeighbour]
-            );
-            break;
+        if (
+          this.windTurbineSmallId == this.cells[row][firstNeighbour] ||
+          this.windTurbineBigId == this.cells[row][firstNeighbour]
+        ) {
+          this.groupA++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.5,
+            this.energyLoss[row][firstNeighbour]
+          );
+        } else if (
+          this.windTurbineSmallId == this.cells[row][secondNeighbour] ||
+          this.windTurbineBigId == this.cells[row][secondNeighbour]
+        ) {
+          this.groupB++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.3,
+            this.energyLoss[row][secondNeighbour]
+          );
         }
         break;
       case 3:
-        switch (type) {
-          case this.cells[row][firstNeighbour]:
-            this.groupA++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.5,
-              this.energyLoss[row][firstNeighbour]
-            );
-            break;
-          case this.cells[row][secondNeighbour]:
-            this.groupB++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.3,
-              this.energyLoss[row][secondNeighbour]
-            );
-            break;
-          case this.cells[row][thirdNeighbour]:
-            this.groupC++;
-            this.calculateEnergyLoss(
-              col,
-              row,
-              0.2,
-              this.energyLoss[row][thirdNeighbour]
-            );
-            break;
+        if (
+          this.windTurbineSmallId == this.cells[row][firstNeighbour] ||
+          this.windTurbineBigId == this.cells[row][firstNeighbour]
+        ) {
+          this.groupA++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.5,
+            this.energyLoss[row][firstNeighbour]
+          );
+        } else if (
+          this.windTurbineSmallId == this.cells[row][secondNeighbour] ||
+          this.windTurbineBigId == this.cells[row][secondNeighbour]
+        ) {
+          this.groupB++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.3,
+            this.energyLoss[row][secondNeighbour]
+          );
+        } else if (
+          this.windTurbineSmallId == this.cells[row][thirdNeighbour] ||
+          this.windTurbineBigId == this.cells[row][thirdNeighbour]
+        ) {
+          this.groupC++;
+          this.calculateEnergyLoss(
+            col,
+            row,
+            0.2,
+            this.energyLoss[row][thirdNeighbour]
+          );
         }
         break;
     }
