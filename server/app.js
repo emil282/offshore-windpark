@@ -117,6 +117,7 @@ function initApp(config) {
           "wind-turbines": stats.get("wind-turbines-index"),
           distances: stats.get("distances-index"),
           "energy-losses": stats.get("energy-losses"),
+          "life-span": stats.get("life-span-index"),
           //pollution: stats.get('pollution-index'),
           //noise: stats.get('noise-index'),
           //"travel-times": stats.get("travel-times-index"),
