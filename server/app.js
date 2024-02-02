@@ -108,6 +108,7 @@ function initApp(config) {
   }
 
   function sendVariablesMessage(socket) {
+    stats.sources[4].calculate(wind.winddirection);
     socket.send(
       JSON.stringify({
         type: "vars_update",
@@ -115,6 +116,7 @@ function initApp(config) {
           "green-spaces": stats.get("green-spaces-index"),
           "wind-turbines": stats.get("wind-turbines-index"),
           distances: stats.get("distances-index"),
+          "energy-losses": stats.get("energy-losses"),
           //pollution: stats.get('pollution-index'),
           //noise: stats.get('noise-index'),
           //"travel-times": stats.get("travel-times-index"),

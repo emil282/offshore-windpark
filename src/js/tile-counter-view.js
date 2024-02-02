@@ -2,6 +2,7 @@ const {
   small_turbine_function,
   big_turbine_function,
 } = require("./lib/energy-calculation");
+const { getTileTypeId } = require("./lib/config-helpers");
 
 class TileCounterView {
   constructor(stats, config, mapEditor) {
@@ -18,8 +19,13 @@ class TileCounterView {
         id: "energy-gain",
         label: "Energy gain",
         calculate: () => {
-          const turbinesSmall = this.stats.get("zones-windTurbineSmall-count");
-          const turbinesBig = this.stats.get("zones-windTurbineBig-count");
+          //const turbinesSmall = this.stats.get("zones-windTurbineSmall-count");
+          //const turbinesBig = this.stats.get("zones-windTurbineBig-count");
+          const windTurbineSmallId = getTileTypeId(
+            this.config,
+            "windTurbineSmall"
+          );
+          const windTurbineBigId = getTileTypeId(this.config, "windTurbineBig");
 
           let speed_km_h =
             (((($(`#${this.config.wind.windspeed.id}_knob`).val() ?? 0) % 1) +
@@ -31,9 +37,22 @@ class TileCounterView {
           let energy_small = small_turbine_function(speed_m_s);
           let energy_big = big_turbine_function(speed_m_s);
 
+          let energy = 0;
+
+          this.stats.get("energy-losses").forEach((item) => {
+            if (item[1] == windTurbineSmallId) {
+              energy += energy_small * item[0];
+            } else if (item[1] == windTurbineBigId) {
+              energy += energy_big * item[0];
+            }
+          });
+
+          return Math.round(energy);
+          /*
           return Math.round(
             energy_small * turbinesSmall + energy_big * turbinesBig
           );
+          */
         },
       },
       /*{

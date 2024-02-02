@@ -2,11 +2,13 @@ const {
   small_turbine_function,
   big_turbine_function,
 } = require("./lib/energy-calculation");
+const { getTileTypeId } = require("./lib/config-helpers");
 
 class TileCounterViewDashboard {
   constructor(config) {
     this.counters = {};
     this.config = config;
+    this.energyLosses = [];
 
     this.$element = $("<div></div>").addClass("tile-counter");
 
@@ -15,8 +17,13 @@ class TileCounterViewDashboard {
         id: "energy-gain",
         label: "Energy gain",
         calculate: (wind) => {
-          const turbinesSmall = this.counters[4].count;
-          const turbinesBig = this.counters[5].count;
+          const windTurbineSmallId = getTileTypeId(
+            this.config,
+            "windTurbineSmall"
+          );
+          const windTurbineBigId = getTileTypeId(this.config, "windTurbineBig");
+          //const turbinesSmall = this.counters[windTurbineSmallId].count;
+          //const turbinesBig = this.counters[windTurbineBigId].count;
 
           let speed_km_h = wind.windspeed ?? 0;
           let speed_m_s = speed_km_h / 3.6;
@@ -24,11 +31,17 @@ class TileCounterViewDashboard {
           let energy_small = small_turbine_function(speed_m_s);
           let energy_big = big_turbine_function(speed_m_s);
 
-          return (
-            Math.round(
-              energy_small * turbinesSmall + energy_big * turbinesBig
-            ) + " kW"
-          );
+          let energy = 0;
+
+          this.energyLosses.forEach((item) => {
+            if (item[1] == windTurbineSmallId) {
+              energy += energy_small * item[0];
+            } else if (item[1] == windTurbineBigId) {
+              energy += energy_big * item[0];
+            }
+          });
+
+          return Math.round(energy) + " kW";
         },
       },
       {
@@ -112,6 +125,14 @@ class TileCounterViewDashboard {
     this.computedFieldDefs.forEach(({ id, calculate }) => {
       this.fields[id].text(`${calculate(wind)}`);
     });
+  }
+
+  /**
+   * Updates the energy losses
+   * @param {*} energyLosses
+   */
+  setEnergyLosses(energyLosses) {
+    this.energyLosses = energyLosses;
   }
 }
 

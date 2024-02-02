@@ -88,8 +88,18 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
       connector.disablePowerUp(powerUpId);
     });*/
 
+    // Are set in "counters_update" event
+    var stats = {};
+    var wind = {
+      windspeed: parseFloat(config.wind.windspeed.default),
+      winddirection: config.wind.winddirection.default,
+    };
+
     connector.events.on("vars_update", (variables) => {
       variableRankListView.setValues(variables);
+      //Save energy losses for the tile counter view
+      counterView.setEnergyLosses(variables["energy-losses"]);
+      counterView.updateCounters(stats, wind);
     });
 
     connector.events.on("goals_update", (goals) => {
@@ -107,6 +117,9 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
     });
 
     connector.events.on("counters_update", (data) => {
+      stats = data.stats;
+      wind = data.wind;
+      connector.getVars(); //Update the energy losses first
       counterView.updateCounters(data.stats, data.wind);
     });
 
