@@ -29,10 +29,12 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#running">Running</a></li>
+        <li><a href="#configuaration">Configuration</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#serverapis">Server APIs</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -40,87 +42,50 @@
   </ol>
 </details>
 
-
-## Website
-
-The website allows users to arrange a 16x16 grid with certain areas. These areas include green spaces as water areas and parks, infrastructure as roads and residentials and windturbines of two different sizes. The initial layout is all parks as you can see in the following image:
-<img width="1145" alt="Bildschirmfoto 2023-08-12 um 19 41 54" src="https://github.com/ifgiscope/wind-turbines/assets/61976072/7bf2aa67-74f1-4ab0-b20c-b83af037b83d">
-
-With the buttons on the right the user can select an area type and then change tiles by clicking on them. Right to the grid are smileys that display how satisfied certain conditions are, the amount of green spaces, the amount of wind turbines and the distances towards one another.
-![image](https://github.com/ifgiscope/wind-turbines/assets/46593824/a94634a1-71ac-4406-a474-74ff8e88c408)
-
-Below the smileys are acteurs displayed, that tell, when some conditions are true. They tell the user what is missing in the current layout. On example for this are citizens that say there is not enoug elecrticity. Therefore, there needs to be build more wind turbines.
-![image](https://github.com/ifgiscope/wind-turbines/assets/46593824/6039f364-5388-416a-9d72-7594a5a0a240)
-
-Together with all these options, the user has the goal, to build the best possible layout to fulfill all goals and leave averyone involved satisfied.
-
-## Compilation
-
-To install the required dependencies run `npm install` in **both** the root directory and the
-`server` directory.
-
-You can use `npm run build` or `npm run watch` in the root directory to build the client apps. The
-server does not require compilation.
-
-The `.env` file in the root directory contains settings that are applied at compilation time.
-
-## Running
-
-Start the server by running `npm run start` in the `server` directory.
-
-Start the frontend by running `http-server -c-1` in the root directory.
-The clients, in the root directory, are:
-
-- `city.html`: Presents the city map, to be projected over the exhibition table.
-- `dashboard.html`: Shows the auxiliary touchscreen dashboard that displays variables and goals,
-  and allows selecting Power-Ups.
-- `editor.html`: An editor that pushes changes to the server. Note that it doesn't read updates from
-  the server, so it's not possible to use multiple editors simulatenously. It's only meant for
-  use during development.
-
-- `index.html`: This is a standalone browser version of the software.
-
-## Configuration
-
-The main configuration file is `config.yml`. The server has to be reloaded after any changes.
-Clients get the configuration from the server through the http API and have to be reloaded after
-the server to take any changes.
-
-The .env file has other configuration keys that affect the environment.
-
-## Server APIs
-
-The server has both an HTTP and a WebSocket API. Their specifications are:
-
-- http: `specs/openapi.yaml`
-- ws: `specs/asyncapi.yaml`
-
-You can use [Swagger Editor](https://editor.swagger.io/) and the
-[AsyncAPI Playground](https://playground.asyncapi.io/) to format the respective specifications in
-a friendly format.
-
-## References
-
-Some icons are used from [Flaticon](<[url](https://www.flaticon.com/)>).
-
-## License
-
-Copyright (c) 2021 IMAGINARY gGmbH
-Licensed under the MIT license (see LICENSE)
-Supported by Futurium gGmbH
-
-
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 A collaborative and interactive wind farm simulator. This project was done during the summer semester 2023 at ifgi.
 
 This project is based on the existing [future mobility project from Imaginary ](<[url](https://github.com/IMAGINARY/future-mobility)>) and adapted it towards the aim of this project.
 It consists of multiple components, which will be explained in the following.
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `Lorano and Laxeros07`, `windpark-simulator`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
-
+<br />
+<div class="container">
+      <div class="image">
+        <img align=left width="50%" alt="Bildschirmfoto 2023-08-12 um 19 41 54" src="https://github.com/ifgiscope/wind-turbines/assets/61976072/7bf2aa67-74f1-4ab0-b20c-b83af037b83d">
+      </div>
+      <div class="text">
+        <p align=justify><a>The website allows users to arrange a 16x16 grid with certain areas. These areas include green spaces as water areas and parks, infrastructure as roads and residentials and windturbines of two different sizes. The initial layout is all parks as you can see in the image.</a>
+          <p>
+      </div>
+    </div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<div class="container">
+  <div class="image">
+    <img align=left width="30%" src="https://github.com/ifgiscope/wind-turbines/assets/46593824/a94634a1-71ac-4406-a474-74ff8e88c408">
+  </div>
+  <div class="text">
+    <p align=justify><a>With the buttons on the right the user can select an area type and then change tiles by clicking on them. Right to the grid are smileys that display how satisfied certain conditions are, the amount of green spaces, the amount of wind turbines and the distances towards one another.</a>
+      <p>
+  </div>
+</div> 
+<div class="container">
+  <div class="image">
+    <img align=left width="30%" src="https://github.com/ifgiscope/wind-turbines/assets/46593824/6039f364-5388-416a-9d72-7594a5a0a240">
+  </div>
+  <div class="text">
+    <p align=justify><a>Below the smileys are acteurs displayed, that tell, when some conditions are true. They tell the user what is missing in the current layout. On example for this are citizens that say there is not enoug elecrticity. Therefore, there needs to be build more wind turbines.</a>
+      <p>
+  </div>
+</div> 
+<br />
+<br />
+<br />
+<br />
+Together with all these options, the user has the goal, to build the best possible layout to fulfill all goals and leave averyone involved satisfied.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -141,14 +106,10 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 
 
 <!-- GETTING STARTED -->
-## Getting Started
-
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+## Getting Started ✇ミ
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
 * npm
   ```sh
   npm install npm@latest -g
@@ -156,23 +117,57 @@ This is an example of how to list things you need to use the software and how to
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
    git clone https://github.com/Lorano and Laxeros07/windpark-simulator.git
    ```
-3. Install NPM packages
+2. Install NPM packages in **both** the root directory and the
+`server` directory.
    ```sh
    npm install
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+3. You can use the following commands in the root directory to build the client apps. The
+server does not require compilation.
+   ```sh
+   npm run build
+   ```
+   or
+   ```sh
+   npm run watch
    ```
 
+### Running 🏃‍♀️𒈱
+1. Start the server by running 
+   ```sh
+   npm run start
+   ```
+   in the `server` directory.
+
+2. Start the frontend by running
+   ```sh
+   http-server -c-1
+   ```
+   in the root directory.
+
+The clients, in the root directory, are:
+
+- `city.html`: Presents the city map, to be projected over the exhibition table.
+- `dashboard.html`: Shows the auxiliary touchscreen dashboard that displays variables and goals,
+  and allows selecting Power-Ups.
+- `editor.html`: An editor that pushes changes to the server. Note that it doesn't read updates from
+  the server, so it's not possible to use multiple editors simulatenously. It's only meant for
+  use during development.
+
+- `index.html`: This is a standalone browser version of the software.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### Configuration
 
+The main configuration file is `config.yml`. The server has to be reloaded after any changes.
+Clients get the configuration from the server through the http API and have to be reloaded after
+the server to take any changes.
+
+The .env file has other configuration keys that affect the environment.
 
 <!-- USAGE EXAMPLES -->
 ## Usage
@@ -183,20 +178,12 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Server APIs
 
+The server has both an HTTP and a WebSocket API. Their specifications are:
 
-<!-- ROADMAP -->
-## Roadmap
-
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-See the [open issues](https://github.com/Lorano and Laxeros07/windpark-simulator/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
+- http: `specs/openapi.yaml`
+- ws: `specs/asyncapi.yaml`
 
 
 <!-- CONTRIBUTING -->
@@ -219,6 +206,9 @@ Don't forget to give the project a star! Thanks again!
 
 <!-- LICENSE -->
 ## License
+Copyright (c) 2021 IMAGINARY gGmbH
+Licensed under the MIT license (see LICENSE)
+Supported by Futurium gGmbH
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
@@ -278,5 +268,3 @@ Project Link: [https://github.com/Lorano and Laxeros07/windpark-simulator](https
 [Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
 [Bootstrap-url]: https://getbootstrap.com
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com
-
