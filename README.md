@@ -217,9 +217,10 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Eva Langstein - elangste@uni-muenster.de
+Anne Staskiewicz - anne.staskiewicz@uni-muenster.de
 
-Project Link: [https://github.com/Lorano and Laxeros07/windpark-simulator](https://github.com/Lorano and Laxeros07/windpark-simulator)
+Project Link: [https://github.com/Bachelor-thesis-windpark-simulator/windpark-simulator](https://github.com/Bachelor-thesis-windpark-simulator/windpark-simulator)
 
 <p align="right">(<a href="https://github.com/Bachelor-thesis-windpark-simulator/windpark-simulator/blob/main/README.md#windscope">back to top</a>)</p>
 
