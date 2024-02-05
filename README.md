@@ -51,7 +51,7 @@ It consists of multiple components, which will be explained in the following.
 <br />
 <div class="container">
       <div class="image">
-        <img align=left width="50%" alt="Bildschirmfoto 2023-08-12 um 19 41 54" src="https://github.com/ifgiscope/wind-turbines/assets/61976072/7bf2aa67-74f1-4ab0-b20c-b83af037b83d">
+        <img align=left width="50%" alt="Bildschirmfoto 2023-08-12 um 19 41 54" src="https://github.com/Bachelor-thesis-windpark-simulator/windpark-simulator/assets/90246149/6c4e63f2-ba9b-41d5-b408-676322ac077f">
       </div>
       <div class="text">
         <p align=justify><a>The website allows users to arrange a 16x16 grid with certain areas. These areas include green spaces as water areas and parks, infrastructure as roads and residentials and windturbines of two different sizes. The initial layout is all parks as you can see in the image.</a>
@@ -92,14 +92,12 @@ Together with all these options, the user has the goal, to build the best possib
 
 ### Built With
 
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
+* [![JavaScript][JavaScript.com]][JavaScript-url]
+* [![nodeJS][nodeJS.com]][nodeJS-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![JQuery][JQuery.com]][JQuery-url]
+* [![pixi][pixi.com]][pixi-url]
+* [![StackOverflow][StackOverflow.com]][StackOverflow-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -113,6 +111,10 @@ Together with all these options, the user has the goal, to build the best possib
 * npm
   ```sh
   npm install npm@latest -g
+  ```
+* http-server
+  ```sh
+  npm install --global http-server
   ```
 
 ### Installation
@@ -236,20 +238,29 @@ Project Link: [https://github.com/Lorano and Laxeros07/windpark-simulator](https
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
+<a name="readme-top"></a>
+
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/Lorano and Laxeros07/windpark-simulator.svg?style=for-the-badge
-[contributors-url]: https://github.com/Lorano and Laxeros07/windpark-simulator/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/Lorano and Laxeros07/windpark-simulator.svg?style=for-the-badge
-[forks-url]: https://github.com/Lorano and Laxeros07/windpark-simulator/network/members
-[stars-shield]: https://img.shields.io/github/stars/Lorano and Laxeros07/windpark-simulator.svg?style=for-the-badge
-[stars-url]: https://github.com/Lorano and Laxeros07/windpark-simulator/stargazers
-[issues-shield]: https://img.shields.io/github/issues/Lorano and Laxeros07/windpark-simulator.svg?style=for-the-badge
-[issues-url]: https://github.com/Lorano and Laxeros07/windpark-simulator/issues
-[license-shield]: https://img.shields.io/github/license/Lorano and Laxeros07/windpark-simulator.svg?style=for-the-badge
-[license-url]: https://github.com/Lorano and Laxeros07/windpark-simulator/blob/master/LICENSE.txt
+[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
+[contributors-url]: https://github.com/github_username/repo_name/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
+[forks-url]: https://github.com/github_username/repo_name/network/members
+[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
+[stars-url]: https://github.com/github_username/repo_name/stargazers
+[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
+[issues-url]: https://github.com/github_username/repo_name/issues
+[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
+[license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: images/screenshot.png
@@ -268,3 +279,12 @@ Project Link: [https://github.com/Lorano and Laxeros07/windpark-simulator](https
 [Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
 [Bootstrap-url]: https://getbootstrap.com
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
+[JQuery-url]: https://jquery.com
+[JavaScript.com]: https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E
+[JavaScript-url]: https://www.javascript.com/
+[StackOverflow-url]: https://stackoverflow.com/
+[StackOverflow.com]: https://img.shields.io/badge/-Stackoverflow-FE7A16?style=for-the-badge&logo=stack-overflow&logoColor=white
+[pixi-url]: https://pixijs.com/
+[pixi.com]: https://img.shields.io/badge/PIXI-FF10F0?style=for-the-badge&logo=pixi&logoColor=white
+[nodeJS-url]: [https://pixijs.com/](https://nodejs.org/en)
+[nodeJS.com]: https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white
