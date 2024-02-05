@@ -34,7 +34,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#serverapis">Server APIs</a></li>
+    <li><a href="https://github.com/Bachelor-thesis-windpark-simulator/windpark-simulator/blob/main/README.md#server-apis">Server APIs</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
