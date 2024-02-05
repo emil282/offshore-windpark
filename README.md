@@ -29,7 +29,7 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
-        <li><a href="#running">Running</a></li>
+        <li><a href="https://github.com/Bachelor-thesis-windpark-simulator/windpark-simulator/blob/main/README.md#running-%EF%B8%8F%F0%92%88%B1">Running</a></li>
         <li><a href="#configuaration">Configuration</a></li>
       </ul>
     </li>
