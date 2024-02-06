@@ -16,6 +16,7 @@ class TileCounterViewDashboard {
       {
         id: "energy-gain",
         label: "Energy gain",
+        labelDE: "Energiegewinn",
         calculate: (wind) => {
           const windTurbineSmallId = getTileTypeId(
             this.config,
@@ -46,14 +47,16 @@ class TileCounterViewDashboard {
       },
       {
         id: "winddirection",
-        label: "Winddirection",
+        label: this.config.wind.winddirection.name_en,
+        labelDE: this.config.wind.winddirection.name_de,
         calculate: (wind) => {
           return wind.winddirection;
         },
       },
       {
         id: "windspeed",
-        label: "Windspeed",
+        label: this.config.wind.windspeed.name_en,
+        labelDE: this.config.wind.windspeed.name_de,
         calculate: (wind) => {
           return wind.windspeed.toFixed(2) + " km/h";
         },
@@ -88,11 +91,12 @@ class TileCounterViewDashboard {
                   $("<span></span>")
                     .addClass("label")
                     .html(
-                      `${
+                      `${config.tileTypes[id].nameDE} 
+                      (${
                         config.tileTypes[id].name ||
                         config.tileTypes[id].type ||
                         id
-                      }: `
+                      }): `
                     )
                 )
                 .append(this.fields[id])
@@ -102,7 +106,9 @@ class TileCounterViewDashboard {
           this.computedFieldDefs.map((field) =>
             $("<li></li>")
               .append(
-                $("<span></span>").addClass("label").html(`${field.label}: `)
+                $("<span></span>")
+                  .addClass("label")
+                  .html(`${field.labelDE} (${field.label}): `)
               )
               .append(this.fields[field.id])
           )

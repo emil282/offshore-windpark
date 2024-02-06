@@ -2,11 +2,13 @@ tileTypes:
   0:
     type: park
     name: Park
+    nameDE: Park
     color: "#2ee517"
     editorIcon: "static/fa/tree-solid.svg"
   1:
     type: road
     name: Road
+    nameDE: Straße
     color: "#8f8f8f"
     editorIcon: "static/fa/road-solid.svg"
     emissions: 0.1
@@ -14,22 +16,26 @@ tileTypes:
   2:
     type: residential
     name: Residential
+    nameDE: Siedlung
     color: "#fd6451"
     editorIcon: "static/fa/home-solid.svg"
     noise: 0.05
   3:
     type: water
     name: Water
+    nameDE: Wasser
     color: "#19fff7"
     editorIcon: "static/fa/water-solid.svg"
   4:
     type: windTurbineSmall
     name: Wind Turbine Small
+    nameDE: Kleine Windkraftanlage
     color: "#cfd1c1"
     editorIcon: "static/fa/wind-power-small.svg"
   5:
     type: windTurbineBig
     name: Wind Turbine Big
+    nameDE: Große Windkraftanlage
     color: "#cfd1c2"
     editorIcon: "static/fa/wind-power-big.svg"
   6:

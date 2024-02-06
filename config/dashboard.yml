@@ -9,5 +9,5 @@ dashboard:
       en: "Status"
   counters:
     title:
-      de: "Counters"
-      en: "Counters"
+      de: "Eigenschaften"
+      en: "Properties"

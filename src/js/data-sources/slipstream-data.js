@@ -97,7 +97,6 @@ class SlipstreamData extends DataSource {
         }
       }
     }
-    console.log(this.arrayOfLoss);
   }
   /**
    * calculates the average life span of a windturbine

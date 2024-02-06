@@ -18,6 +18,7 @@ class TileCounterView {
       {
         id: "energy-gain",
         label: "Energy gain",
+        labelDE: "Energiegewinn",
         calculate: () => {
           //const turbinesSmall = this.stats.get("zones-windTurbineSmall-count");
           //const turbinesBig = this.stats.get("zones-windTurbineBig-count");
@@ -109,11 +110,12 @@ class TileCounterView {
                   $("<span></span>")
                     .addClass("label")
                     .html(
-                      `${
+                      `${config.tileTypes[id].nameDE} 
+                      (${
                         config.tileTypes[id].name ||
                         config.tileTypes[id].type ||
                         id
-                      }: `
+                      }): `
                     )
                 )
                 .append(this.fields[id])
@@ -123,7 +125,9 @@ class TileCounterView {
           this.computedFieldDefs.map((field) =>
             $("<li></li>")
               .append(
-                $("<span></span>").addClass("label").html(`${field.label}: `)
+                $("<span></span>")
+                  .addClass("label")
+                  .html(`${field.labelDE} (${field.label}): `)
               )
               .append(this.fields[field.id])
           )
