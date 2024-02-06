@@ -7,10 +7,10 @@ variables:
     name:
       de: Windenergieanlagen
       en: Wind turbines
-  distances:
-    name:
-      de: Abstände
-      en: Distances
+  # distances:
+  #   name:
+  #     de: Abstände
+  #     en: Distances
   life-span:
     name:
       de: Lebensdauer

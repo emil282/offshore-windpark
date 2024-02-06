@@ -106,18 +106,17 @@ class GreenSpacesData extends DataSource {
     this.proximityThreshold = Math.floor(
       this.proximities.length * this.proximityGoalPercentage
     );
-    this.index =
-      1 +
-      (this.largeAreasSum > this.largeAreaSumGoal ? 1 : 0) +
-      (this.numGreenSpaces > this.numGreenSpacesGoal ? 1 : 0) +
-      (this.numGreenSpaces > this.numGreenSpacesGoal &&
-      this.numMedProximity >= this.proximityThreshold
-        ? 1
-        : 0) +
-      (this.numGreenSpaces > this.numGreenSpacesGoal &&
-      this.numNearProximity >= this.proximityThreshold
-        ? 1
-        : 0);
+    if (this.numGreenSpaces >= this.numGreenSpacesGoal) {
+      this.index = 5;
+    } else if (this.numGreenSpaces >= this.numGreenSpacesGoal - 5) {
+      this.index = 4;
+    } else if (this.numGreenSpaces >= this.numGreenSpacesGoal - 10) {
+      this.index = 3;
+    } else if (this.numGreenSpaces >= this.numGreenSpacesGoal - 15) {
+      this.index = 2;
+    } else if (this.numGreenSpaces < this.numGreenSpacesGoal - 15) {
+      this.index = 1;
+    }
   }
 
   getGoals() {
