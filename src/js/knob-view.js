@@ -184,7 +184,6 @@ class KnobView {
     } else {
       //function is called from the editorpage
       var data = this.getWind();
-      //data["physical"] = physical;
       var jsonData = JSON.stringify(data);
       fetch(`${process.env.SERVER_HTTP_URI}/wind`, {
         method: "POST", // oder 'PUT'
