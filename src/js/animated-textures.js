@@ -2,19 +2,11 @@ class AnimatedTextureLoader {
   constructor(app) {
     this.AnimationApp = app;
     this.animatedTextures = {};
-    // const canvas = document.getElementById("mycanvas");
     this.img;
-
-    // this.loader = this.AnimationApp.loader;
-    // this.app.loader.add("animatedWT", "./textures/${animatedWT}.json");
     this.AnimationApp.loader.onProgress.add(this.handleLoadProgress);
     this.AnimationApp.loader.onLoad.add(this.handleLoadAsset);
     this.AnimationApp.loader.onError.add(this.handleLoadError);
   }
-
-  //   addAnimatedTexture(animatedSprite) {
-  //     this.app.loader.add(animatedSprite, `./textures/${animatedSprite}.json`);
-  //   }
 
   handleLoadProgress(loader, resource) {
     // console.log(loader.progress + "% loaded");
@@ -28,6 +20,11 @@ class AnimatedTextureLoader {
     console.error("load error");
   }
 
+  /**
+   * loads the texture which will be animated
+   * @param {*} name name of the JSON File
+   * @returns returns the JSOn file
+   */
   loadtexture(name) {
     return new Promise((resolve) => {
       this.AnimationApp.loader.add(`./textures/${name}.json`, (resource) => {
@@ -35,6 +32,12 @@ class AnimatedTextureLoader {
       });
     });
   }
+  /**
+   * loads the textures and turns them into animated sprites
+   * @param {*} name name of the JSON File
+   * @param {*} frame name of the frames in the spritesheet (e.g. wt01, wt02,..)
+   * @returns animated sprite with the animation frames
+   */
   async addAnimatedTexture(name, frame) {
     const resource = await this.loadtexture(name);
     this.animatedTextures[name] = resource.spritesheet;
@@ -42,33 +45,15 @@ class AnimatedTextureLoader {
       this.img = new PIXI.AnimatedSprite(
         this.animatedTextures[name].animations[frame]
       );
-      // this.img.anchor.x = 0.5;
-      // this.img.anchor.y = 0.5;
-      // this.AnimationApp.stage.addChild(this.img);
-
-      // this.img.animationSpeed = 0.1;
-      // this.img.play();
-
-      // this.img.onLoop = () => {
-      //   console.log("loop");
-      // };
-      // this.img.onFrameChange = () => {
-      //   console.log("currentFrame", this.img.currentFrame);
-      // };
-      // this.img.onComplete = () => {
-      //   console.log("done");
-      // };
-      // this.img.stop();
-      // this.app.ticker.add(this.animateTexture(this.img, this.app));
-
       resolve("resolved");
     });
   }
-
-  // animateTexture(img, app) {
-  //   img.x = app.renderer.screen.width / 2;
-  //   img.y = app.renderer.screen.height / 2;
-  // }
+  /**
+   * adds the animated textures to the app object
+   * @param {*} name name of the JSON File
+   * @param {*} frame name of the frames in the spritesheet (e.g. wt01, wt02,..)
+   * @returns the animated sprite as a texture array with the animation frames
+   */
   async loadAnimatedTextures(name, frame) {
     const result = await this.addAnimatedTexture(name, frame);
     return new Promise((resolve) => {
