@@ -1,8 +1,8 @@
 $tile-width: 72px;
 
 [data-component="app-container"] {
-  max-width: $tile-width * 16; // Stop resizing at the native map resolution
-  max-height: $tile-width * 16; // Stop resizing at the native map resolution
+  max-width: $tile-width * 10.208333333; // Stop resizing at the native map resolution
+  max-height: $tile-width * 10.208333333; // Stop resizing at the native map resolution
   width: 100%;
   height: 100%;
   text-align: center;
