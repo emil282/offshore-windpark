@@ -16,32 +16,32 @@
     <script src="vendor/pixijs-6.0.2/pixi.min.js"></script>
     <title>Dashboard - Use The Wind</title>
   </head>
+  <script>
+    var up = false;
+    var lastPosition;
+
+    var interval = setInterval(function () {
+      var $container = $("#col-1");
+      var position = $container.scrollTop();
+      var height = $container[0].scrollHeight;
+
+      // If we haven't moved, switch direction
+      if (position === lastPosition) up = !up;
+      lastPosition = position;
+
+      if (up) {
+        // Going up
+        $container.scrollTop(position - 10);
+      } else {
+        // Going down
+        $container.scrollTop(position + 10);
+      }
+    }, 100);
+  </script>
   <body class="dashboard" data-show-slide="1">
     <div class="container-fluid h-100">
       <div class="row h-100">
         <div id="col-1" class="col h-100 justify-content-center"></div>
-        <script>
-          var up = false;
-          var lastPosition;
-
-          var interval = setInterval(function () {
-            var $container = $("#col-1");
-            var position = $container.scrollTop();
-            var height = $container[0].scrollHeight;
-
-            // If we haven't moved, switch direction
-            if (position === lastPosition) up = !up;
-            lastPosition = position;
-
-            if (up) {
-              // Going up
-              $container.scrollTop(position - 10);
-            } else {
-              // Going down
-              $container.scrollTop(position + 10);
-            }
-          }, 100);
-        </script>
         <div id="col-2" class="col h-100 justify-content-center"></div>
         <div id="col-3" class="col h-100 justify-content-center"></div>
       </div>
