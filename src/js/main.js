@@ -235,7 +235,7 @@ cfgLoader
             variableRankListView.setValues({
               "green-spaces": stats.get("green-spaces-index"),
               "wind-turbines": stats.get("wind-turbines-index"),
-              distances: stats.get("distances-index"),
+              //distances: stats.get("distances-index"),
               "life-span": stats.get("life-span-index"),
             });
             goalDebugView.setValues(stats.getGoals());
