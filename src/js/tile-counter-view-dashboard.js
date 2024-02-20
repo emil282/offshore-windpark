@@ -70,6 +70,7 @@ class TileCounterViewDashboard {
           $("<span></span>").addClass("field"),
         ])
       ),
+
       Object.fromEntries(
         this.computedFieldDefs.map((field) => [
           field.id,
@@ -80,9 +81,9 @@ class TileCounterViewDashboard {
 
     //Here gets the Counters View created
     this.$element.append(
-      $("<ul></ul>")
+      $("<div></div>")
         .addClass("tile-counter-counts")
-        .append(
+        /*.append(
           Object.keys(config.tileTypes)
             .filter((id) => id < 6)
             .map((id) =>
@@ -101,16 +102,30 @@ class TileCounterViewDashboard {
                 )
                 .append(this.fields[id])
             )
-        )
+        )*/
         .append(
           this.computedFieldDefs.map((field) =>
-            $("<li></li>")
-              .append(
-                $("<span></span>")
-                  .addClass("label")
-                  .html(`${field.labelDE} (${field.label}): `)
+            $("<div></div>")
+              .addClass(
+                "d-flex justify-content-between align-items-center pr-4"
               )
-              .append(this.fields[field.id])
+              .append(
+                $("<div></div>")
+                  .append(
+                    $("<span></span>").addClass("name").html(`${field.labelDE}`)
+                  )
+                  .append("<br>")
+                  .append(
+                    $("<span></span>")
+                      .addClass("name-tr")
+                      .html(`${field.label}`)
+                  )
+              )
+              .append(
+                $("<div style='font-size: 30px'></div>").append(
+                  this.fields[field.id]
+                )
+              )
           )
         )
     );
@@ -122,6 +137,7 @@ class TileCounterViewDashboard {
    */
   updateCounters(counters, wind) {
     this.counters = counters;
+
     Object.keys(this.counters).forEach((id) => {
       this.fields[id].text(
         `${this.counters[id].count} (${this.counters[id].percentage}%)`
