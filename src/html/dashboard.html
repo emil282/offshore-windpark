@@ -23,6 +23,28 @@
           id="col-1"
           class="col h-100 justify-content-center overflow-auto"
         ></div>
+        <script>
+          var up = false;
+          var lastPosition;
+
+          var interval = setInterval(function () {
+            var $container = $("#col-1");
+            var position = $container.scrollTop();
+            var height = $container[0].scrollHeight;
+
+            // If we haven't moved, switch direction
+            if (position === lastPosition) up = !up;
+            lastPosition = position;
+
+            if (up) {
+              // Going up
+              $container.scrollTop(position - 10);
+            } else {
+              // Going down
+              $container.scrollTop(position + 10);
+            }
+          }, 100);
+        </script>
         <div id="col-2" class="col h-100 justify-content-center"></div>
         <div id="col-3" class="col h-100 justify-content-center"></div>
       </div>
