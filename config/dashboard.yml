@@ -9,5 +9,5 @@ dashboard:
       en: "Status"
   counters:
     title:
-      de: "Eigenschaften"
-      en: "Properties"
+      de: "Energie & Wind"
+      en: "Energy & Wind"

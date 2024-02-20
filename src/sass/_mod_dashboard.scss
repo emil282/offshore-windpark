@@ -96,3 +96,17 @@ body.dashboard {
   color: black;
   height: calc(100% - 1em);
 }
+
+.tile-counter{
+  .tile-counter-counts{
+    div{
+      .name{
+        font-weight: bold;
+        font-size: 30px;
+      }
+      .name-tr{
+        font-size: 24px;
+      }
+    }
+  }
+}
