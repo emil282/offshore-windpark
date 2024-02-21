@@ -115,7 +115,7 @@ function initApp(config) {
         variables: {
           "green-spaces": stats.get("green-spaces-index"),
           "wind-turbines": stats.get("wind-turbines-index"),
-          // distances: stats.get("distances-index"),
+          distances: stats.get("distances-index"),
           "energy-losses": stats.get("energy-losses"),
           "life-span": stats.get("life-span-index"),
           //pollution: stats.get('pollution-index'),
