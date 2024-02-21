@@ -5,8 +5,8 @@ variables:
       en: Green spaces
   wind-turbines:
     name:
-      de: Windenergieanlagen
-      en: Wind turbines
+      de: Energieversorgung
+      en: Energy supply
   distances:
     name:
       de: Abstände

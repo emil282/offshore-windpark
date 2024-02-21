@@ -43,6 +43,13 @@ body.dashboard {
   }
 }
 
+#col-3{
+  .dashboard-title{
+    background-color: $c-gray
+  }
+}
+
+
 .btn-dashboard-action {
   font-size: 1.8em;
   line-height: 1.1;

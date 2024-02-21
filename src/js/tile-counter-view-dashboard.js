@@ -15,8 +15,10 @@ class TileCounterViewDashboard {
     this.computedFieldDefs = [
       {
         id: "energy-gain",
-        label: "Energy gain",
-        labelDE: "Energiegewinn",
+        label: "Power",
+        labelDE: "Leistung",
+        subtitle: "gained based on the current wind speed",
+        subtitleDE: "produziert bei der aktuellen Windgeschwindigkeit",
         calculate: (wind) => {
           const windTurbineSmallId = getTileTypeId(
             this.config,
@@ -114,11 +116,20 @@ class TileCounterViewDashboard {
                   .append(
                     $("<span></span>").addClass("name").html(`${field.labelDE}`)
                   )
-                  .append("<br>")
+                  .append(
+                    field.subtitleDE
+                      ? $("<br><div></div>").html(field.subtitleDE)
+                      : "<br>"
+                  )
                   .append(
                     $("<span></span>")
                       .addClass("name-tr")
                       .html(`${field.label}`)
+                  )
+                  .append(
+                    field.subtitle
+                      ? $("<br><div></div>").html(field.subtitle)
+                      : ""
                   )
               )
               .append(

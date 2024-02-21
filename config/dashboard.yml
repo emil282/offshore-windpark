@@ -1,13 +1,13 @@
 dashboard:
   goals:
     title:
-      de: "Ziele"
-      en: "Goals"
+      de: "Anforderungen"
+      en: "Requests"
   status:
     title:
       de: "Status"
       en: "Status"
   counters:
     title:
-      de: "Energie & Wind"
-      en: "Energy & Wind"
+      de: "Simulation"
+      en: "Simulation"
