@@ -33,7 +33,12 @@ fetch(`${process.env.SERVER_HTTP_URI}/config`, { cache: "no-store" })
     const citizenRequestView = new CitizenRequestView(config);
     $("#col-1")
       .append(createTitle(config.dashboard.goals.title))
-      .append(citizenRequestView.$element.addClass("overflow-auto h-100"));
+      .append(
+        citizenRequestView.$element
+          .addClass("overflow-auto")
+          .attr("style", "height: 80%")
+          .attr("id", "autoScroll")
+      );
     const citizenRequestViewMgr = new CitizenRequestViewMgr(citizenRequestView);
 
     const variableRankListView = new VariableRankListView(config.variables);
