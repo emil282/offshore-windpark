@@ -30,17 +30,15 @@ class TileCounterViewDashboard {
 
           let speed_km_h = wind.windspeed ?? 0;
           let speed_m_s = speed_km_h / 3.6;
-          // Calculate the energy gain based on the wind speed and the number of turbines
-          let energy_small = small_turbine_function(speed_m_s);
-          let energy_big = big_turbine_function(speed_m_s);
 
+          // Calculate the energy gain based on the wind speed and the number of turbines.
+          // The energy loss of the wind is also considered. The windspeed decreases when multiple turbines stand in a row.
           let energy = 0;
-
           this.energyLosses.forEach((item) => {
             if (item[1] == windTurbineSmallId) {
-              energy += energy_small * item[0];
+              energy += small_turbine_function(speed_m_s * item[0]);
             } else if (item[1] == windTurbineBigId) {
-              energy += energy_big * item[0];
+              energy += big_turbine_function(speed_m_s * item[0]);
             }
           });
 
