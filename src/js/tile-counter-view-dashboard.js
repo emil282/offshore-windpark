@@ -9,7 +9,8 @@ class TileCounterViewDashboard {
     this.counters = {};
     this.config = config;
     this.energyLosses = [];
-
+    this.speed_km_h = 0;
+    this.speed_m_s = 0;
     this.$element = $("<div></div>").addClass("tile-counter");
 
     this.computedFieldDefs = [
@@ -27,18 +28,17 @@ class TileCounterViewDashboard {
           const windTurbineBigId = getTileTypeId(this.config, "windTurbineBig");
           //const turbinesSmall = this.counters[windTurbineSmallId].count;
           //const turbinesBig = this.counters[windTurbineBigId].count;
-
-          let speed_km_h = wind.windspeed ?? 0;
-          let speed_m_s = speed_km_h / 3.6;
+          this.speed_km_h = wind.windspeed ?? 0;
+          this.speed_m_s = this.speed_km_h / 3.6;
 
           // Calculate the energy gain based on the wind speed and the number of turbines.
           // The energy loss of the wind is also considered. The windspeed decreases when multiple turbines stand in a row.
           let energy = 0;
           this.energyLosses.forEach((item) => {
             if (item[1] == windTurbineSmallId) {
-              energy += small_turbine_function(speed_m_s * item[0]);
+              energy += small_turbine_function(this.speed_m_s * item[0]);
             } else if (item[1] == windTurbineBigId) {
-              energy += big_turbine_function(speed_m_s * item[0]);
+              energy += big_turbine_function(this.speed_m_s * item[0]);
             }
           });
 
@@ -137,6 +137,21 @@ class TileCounterViewDashboard {
               )
           )
         )
+        .append(
+          config.wind.windspeed.starting_speed
+            ? $("<span></span>")
+                .attr("id", `${config.wind.windspeed.id}_startingSpeed`)
+                .addClass("beschr-en")
+                .html(
+                  `Starting speed: ${config.wind.windspeed.starting_speed} km/h`
+                )
+                .css("color", "red")
+                .css({
+                  fontSize: 24,
+                })
+                .append("<br>")
+            : ""
+        )
     );
   }
 
@@ -156,6 +171,12 @@ class TileCounterViewDashboard {
     this.computedFieldDefs.forEach(({ id, calculate }) => {
       this.fields[id].text(`${calculate(wind)}`);
     });
+    // hide starting speed info if the speeed is above 10 km/h
+    if (this.speed_km_h >= 10) {
+      $(`#${this.config.wind.windspeed.id}_startingSpeed`).hide();
+    } else {
+      $(`#${this.config.wind.windspeed.id}_startingSpeed`).show();
+    }
   }
 
   /**
