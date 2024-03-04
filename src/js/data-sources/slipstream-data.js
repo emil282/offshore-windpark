@@ -671,71 +671,72 @@ class SlipstreamData extends DataSource {
         } else {
           if (type == this.windTurbineSmallId) {
             // big WT behind small WT  |  |  |  |x|x|
-            if (this.cells[j - 1][col] == this.windTurbineSmallId) {
-              this.groupSmallB++;
+            if (this.windTurbineSmallId == this.cells[j + 1][col]) {
+              this.groupSmallA++;
               this.calculateEnergyLoss(
                 col,
                 j,
                 this.elSmallBigZero,
-                this.energyLoss[j - 1][col]
-              );
-              // big WT behind big WT  |  |  |  |x|x|
-            } else if (this.cells[j - 1][col] == this.windTurbineBigId) {
-              this.groupBigA++;
-              this.calculateEnergyLoss(
-                col,
-                j,
-                this.elBigBigZero,
-                this.energyLoss[j - 1][col]
+                this.energyLoss[j + 1][col]
               );
             }
-            // big WT behind small WT  |  |  |x|  |x|
-            else if (this.cells[j - 2][col] == this.windTurbineSmallId) {
-              this.groupSmallC++;
-              this.calculateEnergyLoss(
-                col,
-                j,
-                this.elSmallBigOne,
-                this.energyLoss[j - 2][col]
-              );
-            }
-            // big WT behind big WT  |  |  |x|  |x|
-            else if (this.cells[j - 2][col] == this.windTurbineBigId) {
+            // big WT behind big WT  |  |  |  |x|x|
+            else if (this.cells[j + 1][col] == this.windTurbineBigId) {
               this.groupBigB++;
               this.calculateEnergyLoss(
                 col,
                 j,
-                (this.elBigBigOne = 0.39),
-                this.energyLoss[j - 1][col]
+                this.elBigBigZero,
+                this.energyLoss[j + 1][col]
               );
             }
-            // big WT behind small WT  |  |x|  |  |x|
-            else if (this.cells[j - 3][col] == this.windTurbineSmallId) {
+            // big WT behind small WT  |  |  |x|  |x|
+            else if (this.cells[j + 2][col] == this.windTurbineSmallId) {
+              this.groupSmallB++;
               this.calculateEnergyLoss(
                 col,
                 j,
-                this.elSmallBigTwo,
-                this.energyLoss[j - 3][col]
+                this.elSmallBigOne,
+                this.energyLoss[j + 2][col]
               );
             }
-            // big WT behind big WT  |  |x|  |  |x|
-            else if (this.cells[j - 3][col] == this.windTurbineBigId) {
+            // big WT behind big WT  |  |  |x|  |x|
+            else if (this.cells[j + 2][col] == this.windTurbineBigId) {
               this.groupBigC++;
               this.calculateEnergyLoss(
                 col,
                 j,
-                this.elBigBigTwo,
-                this.energyLoss[j - 3][col]
+                this.elBigBigOne,
+                this.energyLoss[j + 2][col]
               );
             }
-            // big WT behind big WT  |x|  |  |  |x|
-            else if (this.cells[j - 4][col] == this.windTurbineBigId) {
+            // big WT behind small WT  |  |x|  |  |x|
+            else if (this.cells[j + 3][col] == this.windTurbineSmallId) {
+              this.groupSmallC++;
+              this.calculateEnergyLoss(
+                col,
+                j,
+                this.elSmallBigTwo,
+                this.energyLoss[j + 3][col]
+              );
+            }
+            // big WT behind big WT  |  |x|  |  |x|
+            else if (this.cells[j + 3][col] == this.windTurbineBigId) {
               this.groupBigD++;
               this.calculateEnergyLoss(
                 col,
                 j,
+                this.elBigBigTwo,
+                this.energyLoss[j + 3][col]
+              );
+            }
+            // big WT behind big WT  |x|  |  |  |x|
+            else if (this.cells[j + 4][col] == this.windTurbineBigId) {
+              this.calculateEnergyLoss(
+                col,
+                j,
                 this.elBigBigThree,
-                this.energyLoss[j - 4][col]
+                this.energyLoss[j + 4][col]
               );
             }
           }
