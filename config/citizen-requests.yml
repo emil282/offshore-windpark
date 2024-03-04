@@ -21,8 +21,8 @@ citizenRequests:
     group: zoning
     urgent: true
   zone-balance-e-low:
-    en: "*More S[energy]!* We need more energy to produce."
-    de: "*Mehr S[Energie]!* Wir brauchen mehr Windenergie."
+    en: "*More S[wind turbines]!* We need more wind turbines to produce energy."
+    de: "*Mehr S[Windkraftanlagen]!* Wir brauchen mehr Windenergie, um die Versorgung langfristig zu sichern."
     group: zoning
     urgent: true
   zone-balance-r-high:
@@ -31,8 +31,8 @@ citizenRequests:
     group: zoning
     urgent: false
   zone-balance-e-high:
-    en: "*Less S[energy]!* A lot of energy is unused and wind turbines destroy the landscape."
-    de: "*Weniger S[Energie]!* Viel Energie bleibt ungenutzt und die Anlagen zerstören das Landschaftsbild."
+    en: "*Less S[wind turbines]!* A lot of energy is unused and wind turbines destroy the landscape."
+    de: "*Weniger S[Windkraftanlagen]!* Viel Energie bleibt ungenutzt und die Anlagen zerstören das Landschaftsbild."
     group: zoning
     urgent: false
   wind-turbine-distance-road-water-low:
