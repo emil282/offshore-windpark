@@ -39,9 +39,9 @@ class TileCounterView {
           let energy = 0;
           this.stats.get("energy-losses").forEach((item) => {
             if (item[1] == windTurbineSmallId) {
-              energy += small_turbine_function(speed_m_s * item[0]);
+              energy += small_turbine_function(speed_m_s * (1 - item[0]));
             } else if (item[1] == windTurbineBigId) {
-              energy += big_turbine_function(speed_m_s * item[0]);
+              energy += big_turbine_function(speed_m_s * (1 - item[0]));
             }
           });
 
