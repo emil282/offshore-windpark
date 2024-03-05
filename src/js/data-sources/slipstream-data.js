@@ -678,6 +678,7 @@ class SlipstreamData extends DataSource {
                 j,
                 this.elSmallBigZero,
                 this.energyLoss[j + 1][col]
+                this.energyLoss[j + 1][col]
               );
               // big WT behind big WT  |  |  |  |x|x|
             } else if (this.cells[j + 1][col] == this.windTurbineBigId) {
@@ -687,15 +688,19 @@ class SlipstreamData extends DataSource {
                 j,
                 this.elBigBigZero,
                 this.energyLoss[j + 1][col]
+                this.energyLoss[j + 1][col]
               );
             }
             // big WT behind small WT  |  |  |x|  |x|
+            else if (this.cells[j + 2][col] == this.windTurbineSmallId) {
+              this.groupSmallB++;
             else if (this.cells[j + 2][col] == this.windTurbineSmallId) {
               this.groupSmallB++;
               this.calculateEnergyLoss(
                 col,
                 j,
                 this.elSmallBigOne,
+                this.energyLoss[j + 2][col]
                 this.energyLoss[j + 2][col]
               );
             }
@@ -712,10 +717,13 @@ class SlipstreamData extends DataSource {
             // big WT behind small WT  |  |x|  |  |x|
             else if (this.cells[j + 3][col] == this.windTurbineSmallId) {
               this.groupSmallC++;
+            else if (this.cells[j + 3][col] == this.windTurbineSmallId) {
+              this.groupSmallC++;
               this.calculateEnergyLoss(
                 col,
                 j,
                 this.elSmallBigTwo,
+                this.energyLoss[j + 3][col]
                 this.energyLoss[j + 3][col]
               );
             }
@@ -727,6 +735,7 @@ class SlipstreamData extends DataSource {
                 j,
                 this.elBigBigTwo,
                 this.energyLoss[j + 3][col]
+                this.energyLoss[j + 3][col]
               );
             }
             // big WT behind big WT  |x|  |  |  |x|
@@ -736,6 +745,7 @@ class SlipstreamData extends DataSource {
                 col,
                 j,
                 this.elBigBigThree,
+                this.energyLoss[j + 4][col]
                 this.energyLoss[j + 4][col]
               );
             }
