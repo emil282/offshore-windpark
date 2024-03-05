@@ -58,23 +58,26 @@ class SlipstreamData extends DataSource {
     //  |  |  |x|  |x| : 0.19            //  |  |  |x|  |x| : 0.08
     //  |  |x|  |  |x| : 0.09            //  |  |x|  |  |x| : 0.018
 
-    this.elBigBigZero = 0.5;
-    this.elBigBigOne = 0.39;
-    this.elBigBigTwo = 0.18;
-    this.elBigBigThree = 0.05;
+    this.elBigBigZero = this.config.wind.winddirection.slipstream.big[0];
+    this.elBigBigOne = this.config.wind.winddirection.slipstream.big[1];
+    this.elBigBigTwo = this.config.wind.winddirection.slipstream.big[2];
+    this.elBigBigThree = this.config.wind.winddirection.slipstream.big[3];
 
-    this.elBigSmallZero = 0.25;
-    this.elBigSmallOne = 0.195;
-    this.elBigSmallTwo = 0.09;
-    this.elBigSmallThree = 0.025;
+    this.elBigSmallZero =
+      this.config.wind.winddirection.slipstream.big_small[0];
+    this.elBigSmallOne = this.config.wind.winddirection.slipstream.big_small[1];
+    this.elBigSmallTwo = this.config.wind.winddirection.slipstream.big_small[2];
+    this.elBigSmallThree =
+      this.config.wind.winddirection.slipstream.big_small[3];
 
-    this.elSmallSmallZero = 0.25;
-    this.elSmallSmallOne = 0.195;
-    this.elSmallSmallTwo = 0.09;
+    this.elSmallSmallZero = this.config.wind.winddirection.slipstream.small[0];
+    this.elSmallSmallOne = this.config.wind.winddirection.slipstream.small[1];
+    this.elSmallSmallTwo = this.config.wind.winddirection.slipstream.small[2];
 
-    this.elSmallBigZero = 0.175;
-    this.elSmallBigOne = 0.08;
-    this.elSmallBigTwo = 0.018;
+    this.elSmallBigZero =
+      this.config.wind.winddirection.slipstream.small_big[0];
+    this.elSmallBigOne = this.config.wind.winddirection.slipstream.small_big[1];
+    this.elSmallBigTwo = this.config.wind.winddirection.slipstream.small_big[2];
 
     this.windTurbineSmallId = getTileTypeId(this.config, "windTurbineSmall");
     this.windTurbineBigId = getTileTypeId(this.config, "windTurbineBig");
