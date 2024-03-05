@@ -1579,6 +1579,7 @@ class SlipstreamData extends DataSource {
             this.energyLoss[firstNeighbour][col]
           );
         }
+        break;
       case 13:
         // small WT behind small WT  |  |  |  |x|x|
         if (this.windTurbineSmallId == this.cells[firstNeighbour][col]) {
@@ -1717,6 +1718,7 @@ class SlipstreamData extends DataSource {
             this.energyLoss[firstNeighbour][col]
           );
         }
+        break;
       case 13:
         // big WT behind small WT  |  |  |  |x|x|
         if (this.windTurbineSmallId == this.cells[firstNeighbour][col]) {
