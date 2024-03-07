@@ -6,6 +6,11 @@ wind:
     divisions: 4
     labels: ["N", "O", "S", "W"]
     default: "N"
+    slipstream:
+      small: [0.25, 0.195, 0.09]
+      big: [0.5, 0.39, 0.18, 0.05]
+      small_big: [0.175, 0.08, 0.018]
+      big_small: [0.25, 0.195, 0.09, 0.025]
   windspeed:
     id: "wind_speed"
     name_de: Windgeschwindigkeit
