@@ -105,8 +105,7 @@ class SlipstreamData extends DataSource {
     switch (windDirection) {
       // NORTH
       case "N":
-        this.calculateSmallSlipstreamN();
-        this.calculateBigSlipstreamN();
+        this.calculateSlipstreamN();
         break;
       // EAST
       case "O":
@@ -197,24 +196,33 @@ class SlipstreamData extends DataSource {
   }
 
   /**
-   * calculates the energy loss of
-   * SMALL WTs caused by slipstreams from other windturbines when the main wind direction is
+   * calculates the energy loss
+   * caused by slipstreams from other windturbines when the main wind direction is
    * NORTH
    * for-loops: >  v
    * goes from left to right (west-east) through the city columns
    * and looks at each cell from top to bottom (north-south)
    */
-  calculateSmallSlipstreamN() {
+  calculateSlipstreamN() {
     for (let col = 0; col < 16; col++) {
       for (let j = 1; j < 16; j++) {
         let type = this.cells[j][col];
-        if (j < 4 && type == this.windTurbineSmallId) {
+        if (
+          j < 4 &&
+          (type == this.windTurbineSmallId || type == this.windTurbineBigId)
+        ) {
           this.checkFirstFourSmallN(j, col, j, type, j - 1, j - 2, j - 3);
           this.checkFirstFourBigN(j, col, j, type, j - 1, j - 2, j - 3);
         } else {
-          if (type == this.windTurbineSmallId) {
+          if (
+            type == this.windTurbineSmallId ||
+            type == this.windTurbineBigId
+          ) {
             // small WT behind small WT  |  |  |  |x|x|
-            if (this.cells[j - 1][col] == this.windTurbineSmallId) {
+            if (
+              this.cells[j - 1][col] == this.windTurbineSmallId &&
+              this.cells[j][col] == this.windTurbineSmallId
+            ) {
               this.groupSmallA++;
               this.calculateEnergyLoss(
                 col,
@@ -223,7 +231,10 @@ class SlipstreamData extends DataSource {
                 this.energyLoss[j - 1][col]
               );
               // small WT behind big WT  |  |  |  |x|x|
-            } else if (this.cells[j - 1][col] == this.windTurbineBigId) {
+            } else if (
+              this.cells[j - 1][col] == this.windTurbineBigId &&
+              this.cells[j][col] == this.windTurbineSmallId
+            ) {
               this.groupBigB++;
               this.calculateEnergyLoss(
                 col,
@@ -232,8 +243,36 @@ class SlipstreamData extends DataSource {
                 this.energyLoss[j - 1][col]
               );
             }
+            // big WT behind small WT  |  |  |  |x|x|
+            else if (
+              this.cells[j - 1][col] == this.windTurbineSmallId &&
+              this.cells[j][col] == this.windTurbineBigId
+            ) {
+              this.groupSmallB++;
+              this.calculateEnergyLoss(
+                col,
+                j,
+                this.elSmallBigZero,
+                this.energyLoss[j - 1][col]
+              );
+              // big WT behind big WT  |  |  |  |x|x|
+            } else if (
+              this.cells[j - 1][col] == this.windTurbineBigId &&
+              this.cells[j][col] == this.windTurbineBigId
+            ) {
+              this.groupBigA++;
+              this.calculateEnergyLoss(
+                col,
+                j,
+                this.elBigBigZero,
+                this.energyLoss[j - 1][col]
+              );
+            }
             // small WT behind small WT  |  |  |x|  |x|
-            else if (this.cells[j - 2][col] == this.windTurbineSmallId) {
+            else if (
+              this.cells[j - 2][col] == this.windTurbineSmallId &&
+              this.cells[j][col] == this.windTurbineSmallId
+            ) {
               this.groupSmallB++;
               this.calculateEnergyLoss(
                 col,
@@ -243,7 +282,10 @@ class SlipstreamData extends DataSource {
               );
             }
             // small WT behind big WT  |  |  |x|  |x|
-            else if (this.cells[j - 2][col] == this.windTurbineBigId) {
+            else if (
+              this.cells[j - 2][col] == this.windTurbineBigId &&
+              this.cells[j][col] == this.windTurbineSmallId
+            ) {
               this.groupBigC++;
               this.calculateEnergyLoss(
                 col,
@@ -252,8 +294,37 @@ class SlipstreamData extends DataSource {
                 this.energyLoss[j - 2][col]
               );
             }
+            // big WT behind small WT  |  |  |x|  |x|
+            else if (
+              this.cells[j - 2][col] == this.windTurbineSmallId &&
+              this.cells[j][col] == this.windTurbineBigId
+            ) {
+              this.groupSmallC++;
+              this.calculateEnergyLoss(
+                col,
+                j,
+                this.elSmallBigOne,
+                this.energyLoss[j - 2][col]
+              );
+            }
+            // big WT behind big WT  |  |  |x|  |x|
+            else if (
+              this.cells[j - 2][col] == this.windTurbineBigId &&
+              this.cells[j][col] == this.windTurbineBigId
+            ) {
+              this.groupBigB++;
+              this.calculateEnergyLoss(
+                col,
+                j,
+                (this.elBigBigOne = 0.39),
+                this.energyLoss[j - 1][col]
+              );
+            }
             // small WT behind small WT  |  |x|  |  |x|
-            else if (this.cells[j - 3][col] == this.windTurbineSmallId) {
+            else if (
+              this.cells[j - 3][col] == this.windTurbineSmallId &&
+              this.cells[j][col] == this.windTurbineSmallId
+            ) {
               this.groupSmallC++;
               this.calculateEnergyLoss(
                 col,
@@ -263,7 +334,10 @@ class SlipstreamData extends DataSource {
               );
             }
             // small WT behind big WT  |  |x|  |  |x|
-            else if (this.cells[j - 3][col] == this.windTurbineBigId) {
+            else if (
+              this.cells[j - 3][col] == this.windTurbineBigId &&
+              this.cells[j][col] == this.windTurbineSmallId
+            ) {
               this.groupBigD++;
               this.calculateEnergyLoss(
                 col,
@@ -272,12 +346,53 @@ class SlipstreamData extends DataSource {
                 this.energyLoss[j - 3][col]
               );
             }
+            // big WT behind small WT  |  |x|  |  |x|
+            else if (
+              this.cells[j - 3][col] == this.windTurbineSmallId &&
+              this.cells[j][col] == this.windTurbineBigId
+            ) {
+              this.calculateEnergyLoss(
+                col,
+                j,
+                this.elSmallBigTwo,
+                this.energyLoss[j - 3][col]
+              );
+            }
+            // big WT behind big WT  |  |x|  |  |x|
+            else if (
+              this.cells[j - 3][col] == this.windTurbineBigId &&
+              this.cells[j][col] == this.windTurbineBigId
+            ) {
+              this.groupBigC++;
+              this.calculateEnergyLoss(
+                col,
+                j,
+                this.elBigBigTwo,
+                this.energyLoss[j - 3][col]
+              );
+            }
             // small WT behind big WT  |x|  |  |  |x|
-            else if (this.cells[j - 4][col] == this.windTurbineBigId) {
+            else if (
+              this.cells[j - 4][col] == this.windTurbineBigId &&
+              this.cells[j][col] == this.windTurbineSmallId
+            ) {
               this.calculateEnergyLoss(
                 col,
                 j,
                 this.elBigSmallThree,
+                this.energyLoss[j - 4][col]
+              );
+            }
+            // big WT behind big WT  |x|  |  |  |x|
+            else if (
+              this.cells[j - 4][col] == this.windTurbineBigId &&
+              this.cells[j][col] == this.windTurbineBigId
+            ) {
+              this.groupBigD++;
+              this.calculateEnergyLoss(
+                col,
+                j,
+                this.elBigBigThree,
                 this.energyLoss[j - 4][col]
               );
             }
@@ -709,7 +824,7 @@ class SlipstreamData extends DataSource {
                 col,
                 j,
                 this.elBigBigOne,
-                this.energyLoss[j + 1][col]
+                this.energyLoss[j + 2][col]
               );
             }
             // big WT behind small WT  |  |x|  |  |x|
