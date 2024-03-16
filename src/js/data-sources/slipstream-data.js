@@ -80,21 +80,6 @@ class SlipstreamData extends DataSource {
     this.elSmallBigOne = small_wake_effect(2) / 2;
     this.elSmallBigTwo = small_wake_effect(3) / 2;
 
-    console.log(this.elBigBigZero);
-    console.log(this.elBigBigOne);
-    console.log(this.elBigBigTwo);
-    console.log(this.elBigBigThree);
-    console.log(this.elBigSmallZero);
-    console.log(this.elBigSmallOne);
-    console.log(this.elBigSmallTwo);
-    console.log(this.elBigSmallThree);
-    console.log(this.elSmallSmallZero);
-    console.log(this.elSmallSmallOne);
-    console.log(this.elSmallSmallTwo);
-    console.log(this.elSmallBigZero);
-    console.log(this.elSmallBigOne);
-    console.log(this.elSmallBigTwo);
-
     this.windTurbineSmallId = getTileTypeId(this.config, "windTurbineSmall");
     this.windTurbineBigId = getTileTypeId(this.config, "windTurbineBig");
   }
@@ -164,7 +149,6 @@ class SlipstreamData extends DataSource {
         }
       }
     }
-    console.log(this.arrayOfLoss);
   }
   /**
    * calculates the average life span of a windturbine
