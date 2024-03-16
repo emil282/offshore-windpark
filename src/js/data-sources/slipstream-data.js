@@ -2,6 +2,10 @@ const DataSource = require("../data-source");
 const { allDistancesToTileType } = require("../lib/distance");
 const { getTileTypeId } = require("../lib/config-helpers");
 const Array2D = require("../lib/array-2d");
+const {
+  small_wake_effect,
+  big_wake_effect,
+} = require("../lib/energy-calculation");
 
 class SlipstreamData extends DataSource {
   constructor(city, config) {
@@ -58,26 +62,38 @@ class SlipstreamData extends DataSource {
     //  |  |  |x|  |x| : 0.19            //  |  |  |x|  |x| : 0.08
     //  |  |x|  |  |x| : 0.09            //  |  |x|  |  |x| : 0.018
 
-    this.elBigBigZero = this.config.wind.winddirection.slipstream.big[0];
-    this.elBigBigOne = this.config.wind.winddirection.slipstream.big[1];
-    this.elBigBigTwo = this.config.wind.winddirection.slipstream.big[2];
-    this.elBigBigThree = this.config.wind.winddirection.slipstream.big[3];
+    this.elBigBigZero = big_wake_effect(1);
+    this.elBigBigOne = big_wake_effect(2);
+    this.elBigBigTwo = big_wake_effect(3);
+    this.elBigBigThree = big_wake_effect(4);
 
-    this.elBigSmallZero =
-      this.config.wind.winddirection.slipstream.big_small[0];
-    this.elBigSmallOne = this.config.wind.winddirection.slipstream.big_small[1];
-    this.elBigSmallTwo = this.config.wind.winddirection.slipstream.big_small[2];
-    this.elBigSmallThree =
-      this.config.wind.winddirection.slipstream.big_small[3];
+    this.elBigSmallZero = big_wake_effect(1) / 2;
+    this.elBigSmallOne = big_wake_effect(2) / 2;
+    this.elBigSmallTwo = big_wake_effect(3) / 2;
+    this.elBigSmallThree = big_wake_effect(4) / 2;
 
-    this.elSmallSmallZero = this.config.wind.winddirection.slipstream.small[0];
-    this.elSmallSmallOne = this.config.wind.winddirection.slipstream.small[1];
-    this.elSmallSmallTwo = this.config.wind.winddirection.slipstream.small[2];
+    this.elSmallSmallZero = small_wake_effect(1);
+    this.elSmallSmallOne = small_wake_effect(2);
+    this.elSmallSmallTwo = small_wake_effect(3);
 
-    this.elSmallBigZero =
-      this.config.wind.winddirection.slipstream.small_big[0];
-    this.elSmallBigOne = this.config.wind.winddirection.slipstream.small_big[1];
-    this.elSmallBigTwo = this.config.wind.winddirection.slipstream.small_big[2];
+    this.elSmallBigZero = small_wake_effect(1) / 2;
+    this.elSmallBigOne = small_wake_effect(2) / 2;
+    this.elSmallBigTwo = small_wake_effect(3) / 2;
+
+    console.log(this.elBigBigZero);
+    console.log(this.elBigBigOne);
+    console.log(this.elBigBigTwo);
+    console.log(this.elBigBigThree);
+    console.log(this.elBigSmallZero);
+    console.log(this.elBigSmallOne);
+    console.log(this.elBigSmallTwo);
+    console.log(this.elBigSmallThree);
+    console.log(this.elSmallSmallZero);
+    console.log(this.elSmallSmallOne);
+    console.log(this.elSmallSmallTwo);
+    console.log(this.elSmallBigZero);
+    console.log(this.elSmallBigOne);
+    console.log(this.elSmallBigTwo);
 
     this.windTurbineSmallId = getTileTypeId(this.config, "windTurbineSmall");
     this.windTurbineBigId = getTileTypeId(this.config, "windTurbineBig");
@@ -148,6 +164,7 @@ class SlipstreamData extends DataSource {
         }
       }
     }
+    console.log(this.arrayOfLoss);
   }
   /**
    * calculates the average life span of a windturbine

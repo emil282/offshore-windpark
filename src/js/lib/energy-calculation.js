@@ -67,7 +67,33 @@ function big_turbine_function(x) {
   }
 }
 
+/**
+ * Describes the loss of velocity in a wake from Jensen "A simple model for the cluster efficiency".
+ * Here the diameter of the small wind turbine "Enercon E-141 EP4" is used (71m).
+ * The function is scaled with the factor 0.001064.
+ * Source: https://api.semanticscholar.org/CorpusID:107856223
+ * @param {*} x distance from wind turbine
+ * @returns the loss of velocity
+ */
+function small_wake_effect(x) {
+  return 1 / (1 + (0.15 * x) / 0.001064 / 71);
+}
+
+/**
+ * Describes the loss of velocity in a wake from Jensen "A simple model for the cluster efficiency".
+ * Here the diameter of the small wind turbine "Enercon E-70 E4 2.300" is used (71m).
+ * The function is scaled with the factor 0.001064.
+ * Source: https://api.semanticscholar.org/CorpusID:107856223
+ * @param {*} x distance from wind turbine
+ * @returns the loss of velocity
+ */
+function big_wake_effect(x) {
+  return 1 / (1 + (0.15 * x) / 0.001064 / 141);
+}
+
 module.exports = {
   small_turbine_function,
   big_turbine_function,
+  small_wake_effect,
+  big_wake_effect,
 };
