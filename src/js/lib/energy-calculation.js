@@ -76,7 +76,7 @@ function big_turbine_function(x) {
  * @returns the loss of velocity
  */
 function small_wake_effect(x) {
-  return 1 / (1 + (0.15 * x) / 0.001064 / 71);
+  return (1 + (0.15 * x) / 0.0026 / 71) ** -2;
 }
 
 /**
@@ -88,7 +88,7 @@ function small_wake_effect(x) {
  * @returns the loss of velocity
  */
 function big_wake_effect(x) {
-  return 1 / (1 + (0.15 * x) / 0.001064 / 141);
+  return (1 + (0.15 * x) / 0.0026 / 141) ** -2;
 }
 
 module.exports = {
