@@ -316,7 +316,7 @@ class SlipstreamData extends DataSource {
               this.calculateEnergyLoss(
                 col,
                 j,
-                (this.elBigBigOne = 0.39),
+                this.elBigBigOne,
                 this.energyLoss[j - 1][col]
               );
             }
@@ -523,7 +523,7 @@ class SlipstreamData extends DataSource {
               this.calculateEnergyLoss(
                 j,
                 row,
-                (this.elBigBigOne = 0.39),
+                this.elBigBigOne,
                 this.energyLoss[row][j + 2]
               );
             }
@@ -941,7 +941,7 @@ class SlipstreamData extends DataSource {
               this.calculateEnergyLoss(
                 j,
                 row,
-                (this.elBigBigOne = 0.39),
+                this.elBigBigOne,
                 this.energyLoss[row][j - 2]
               );
             }
@@ -1225,7 +1225,7 @@ class SlipstreamData extends DataSource {
           this.calculateEnergyLoss(
             col,
             row,
-            (this.elBigBigOne = 0.39),
+            this.elBigBigOne,
             this.energyLoss[secondNeighbour][col]
           );
         }
@@ -1331,7 +1331,7 @@ class SlipstreamData extends DataSource {
           this.calculateEnergyLoss(
             col,
             row,
-            (this.elBigBigOne = 0.39),
+            this.elBigBigOne,
             this.energyLoss[secondNeighbour][col]
           );
         }
@@ -1567,7 +1567,7 @@ class SlipstreamData extends DataSource {
           this.calculateEnergyLoss(
             col,
             row,
-            (this.elBigBigOne = 0.39),
+            this.elBigBigOne,
             this.energyLoss[row][secondNeighbour]
           );
         }
@@ -1673,7 +1673,7 @@ class SlipstreamData extends DataSource {
           this.calculateEnergyLoss(
             col,
             row,
-            (this.elBigBigOne = 0.39),
+            this.elBigBigOne,
             this.energyLoss[row][secondNeighbour]
           );
         }
@@ -1905,7 +1905,7 @@ class SlipstreamData extends DataSource {
           this.calculateEnergyLoss(
             col,
             row,
-            (this.elBigBigOne = 0.39),
+            this.elBigBigOne,
             this.energyLoss[secondNeighbour][col]
           );
         }
@@ -2004,7 +2004,7 @@ class SlipstreamData extends DataSource {
           this.calculateEnergyLoss(
             col,
             row,
-            (this.elBigBigOne = 0.39),
+            this.elBigBigOne,
             this.energyLoss[secondNeighbour][col]
           );
         } else if (
@@ -2226,7 +2226,7 @@ class SlipstreamData extends DataSource {
           this.calculateEnergyLoss(
             col,
             row,
-            (this.elBigBigOne = 0.39),
+            this.elBigBigOne,
             this.energyLoss[row][secondNeighbour]
           );
         }
@@ -2324,7 +2324,7 @@ class SlipstreamData extends DataSource {
           this.calculateEnergyLoss(
             col,
             row,
-            (this.elBigBigOne = 0.39),
+            this.elBigBigOne,
             this.energyLoss[row][secondNeighbour]
           );
         } else if (
