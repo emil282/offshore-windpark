@@ -15,7 +15,7 @@ Install http-server with the following command at the path `C:/Users/Public/Docu
 `npm install --global http-server`
 
 Make sure all the environment variables are defined like so:
-![Alt text](uv.png "Environment Variables")
+![Alt text](uv.PNG "Environment Variables")
 
 Before starting the python skripts install the following packages with `pip install`:
 
